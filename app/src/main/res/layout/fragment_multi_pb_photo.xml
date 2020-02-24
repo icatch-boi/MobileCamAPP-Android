@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.icatch.mobilecam.ui.Fragment.RemoteMultiPbPhotoFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/no_content_txv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_content"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/first_title_size"
+            android:visibility="gone"/>
+        <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+            android:id="@+id/multi_pb_photo_grid_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:numColumns="4"
+            android:horizontalSpacing="1dip"
+            android:verticalSpacing="1dip"
+            >
+
+        </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>
+        <FrameLayout
+            android:id="@+id/multi_pb_photo_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            >
+
+            <ListView
+                android:id="@+id/multi_pb_photo_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:visibility="visible"
+                android:dividerHeight="0.5dp"
+                android:divider="@color/divider"
+                ></ListView>
+            <include layout="@layout/item_local_photo_wall_list_header" />
+        </FrameLayout>
+
+    </RelativeLayout>
+</LinearLayout>

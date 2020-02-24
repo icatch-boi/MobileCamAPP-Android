@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".LocalVideoWallActivity">
+    <item android:id="@+id/menu_video_wall_type"
+        android:title="Grid"
+        android:icon="@drawable/ic_view_grid_white_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+</menu>

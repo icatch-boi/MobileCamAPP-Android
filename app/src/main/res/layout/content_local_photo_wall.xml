@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_local_photo_wall"
+    tools:context="com.icatch.mobilecam.ui.activity.LocalPhotoWallActivity">
+    <TextView
+        android:id="@+id/no_content_txv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_content"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/first_title_size"
+        android:visibility="gone"/>
+
+    <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+        android:id="@+id/local_photo_wall_grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:numColumns="4"
+        android:horizontalSpacing="1dip"
+        android:verticalSpacing="1dip"
+        >
+
+    </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>
+    <FrameLayout
+        android:id="@+id/local_photo_wall_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        >
+
+        <ListView
+            android:id="@+id/local_photo_wall_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:visibility="visible"
+            android:dividerHeight="0.5dp"
+            android:divider="@color/divider"
+            ></ListView>
+        <include layout="@layout/item_local_photo_wall_list_header" />
+    </FrameLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/greyish_white"
+    android:paddingBottom="1dp">
+    <include
+        android:id="@+id/local_video_wall_header_layout"
+        layout="@layout/item_local_photo_wall_list_header"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/local_video_item_selector"
+        android:layout_below="@id/local_video_wall_header_layout"
+        >
+        <ImageView
+            android:id="@+id/local_video_wall_list_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_box_blank_grey"
+            android:layout_gravity="center"
+            />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/local_video_thumbnail_list"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pictures_no" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:src="@drawable/videooverlay" />
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+           >
+
+            <TextView
+                android:id="@+id/local_video_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="6dp"
+                android:text="photo name"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/first_title_size" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/local_video_name">
+                <TextView
+                    android:id="@+id/local_video_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="12.5M"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/second_title_size" />
+                <TextView
+                    android:id="@+id/local_video_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2015-09-02 11:33"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/second_title_size" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

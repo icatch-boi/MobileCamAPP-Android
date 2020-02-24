@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:showIn="@layout/activity_panorama_photo_pb">
+
+
+    <SurfaceView
+        android:id="@+id/surface_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        />
+
+    <com.icatch.mobilecam.ui.ExtendComponent.ProgressWheel
+        android:id="@+id/progress_wheel"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        ProgressWheel:barColor="#0097D6"
+        ProgressWheel:barLengthP="50dp"
+        ProgressWheel:rimColor="#330097D6"
+        ProgressWheel:rimWidth="5dp"
+        ProgressWheel:textColor="@android:color/white"
+        ProgressWheel:contourColor="#330097D6"
+        android:layout_centerInParent="true"/>
+
+    <ImageButton
+        android:id="@+id/do_previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/btn_previous"
+        />
+
+    <ImageButton
+        android:id="@+id/do_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/btn_next"
+        />
+
+    <LinearLayout
+        android:id="@+id/pb_bottom_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/half_transparent_grey"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/photo_pb_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transparent2gray"
+            android:padding="10dp"
+            android:src="@drawable/ic_delete_white_24dp"
+            />
+
+        <ImageButton
+            android:id="@+id/photo_pb_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transparent2gray"
+            android:padding="10dp"
+            android:src="@drawable/ic_file_download_white_24dp"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/pb_top_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@color/half_transparent_grey"
+        >
+
+        <ImageButton
+            android:id="@+id/pb_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/selector_transparent2gray"
+            android:padding="14dp"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            />
+
+        <TextView
+            android:id="@+id/pb_index_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            android:textColor="@color/graywhite"
+            android:textSize="16sp"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

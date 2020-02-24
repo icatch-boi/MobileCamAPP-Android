@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.icatch.mobilecam">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STAT"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIMAX_STATE"/>
+
+    <application
+        android:name="com.icatch.mobilecam.Application.PanoramaApp"
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/FullScreenTheme">
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.LaunchActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
+            </intent-filter>
+
+            <!--<meta-data-->
+                <!--android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"-->
+                <!--android:resource="@xml/device_filter"/>-->
+        </activity>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.PreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_preview"
+            android:launchMode="singleTask"
+            android:theme="@style/FullScreenTheme.NoActionBar"/>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.LocalVideoPbActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_pb_local_video"
+            android:launchMode="singleTask"
+            android:theme="@style/FullScreenTheme.NoActionBar"/>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.RemoteMultiPbActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_multi_pb"
+            android:theme="@style/FullScreenTheme.NoActionBar"/>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.PhotoPbActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_photo_pb"
+            android:theme="@style/FullScreenTheme.NoActionBar"/>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.VideoPbActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_panorama_video_pb"
+            android:theme="@style/FullScreenTheme.NoActionBar"/>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.LocalPhotoPbActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_local_photo"
+            android:theme="@style/FullScreenTheme.NoActionBar"/>
+        <activity android:name="com.icatch.mobilecam.ui.activity.WifiApActivity">
+        </activity>
+        <activity android:name="com.icatch.mobilecam.ui.activity.LoginFacebookActivity"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.icatch.mobilecam.ui.activity.LoginGoogleActivity">
+        </activity>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.PvParamSettingActivity"
+            android:screenOrientation="sensorPortrait"
+            android:label="@string/title_activity_pv_param_setting"
+            android:launchMode="singleTask"
+            >
+        </activity>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.USBPreviewActivity"
+            android:screenOrientation="sensorPortrait"
+            android:label="@string/title_activity_usbpreview"
+            android:launchMode="singleTask"
+            android:theme="@style/FullScreenTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name="com.icatch.mobilecam.ui.activity.LocalMultiPbActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_local_pb"
+            android:launchMode="singleTask"
+            android:theme="@style/FullScreenTheme.NoActionBar">
+        </activity>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.icatch.mobilecam.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_path" />
+        </provider>
+    </application>
+
+</manifest>

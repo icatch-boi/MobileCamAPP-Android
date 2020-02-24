@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:context="com.icatch.mobilecam.ui.activity.PhotoPbActivity"
+                tools:showIn="@layout/activity_photo_pb">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <SurfaceView
+            android:id="@+id/m_surfaceView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="visible"/>
+
+        <com.icatch.mobilecam.ui.ExtendComponent.HackyViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            >
+        </com.icatch.mobilecam.ui.ExtendComponent.HackyViewPager>
+
+
+        <ImageButton
+            android:id="@+id/do_previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_previous"
+            />
+
+        <ImageButton
+            android:id="@+id/do_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_next"
+            />
+
+        <LinearLayout
+            android:id="@+id/pb_bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/half_transparent_grey"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/photo_pb_delete"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/selector_transparent2gray"
+                android:src="@drawable/ic_delete_white_24dp"
+                />
+
+            <ImageButton
+                android:id="@+id/photo_pb_download"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/selector_transparent2gray"
+                android:src="@drawable/ic_file_download_white_24dp"
+                />
+            <TextView
+                android:id="@+id/panorama_type_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="@string/text_panorama"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/pb_top_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:background="@color/half_transparent_grey"
+            >
+
+            <ImageButton
+                android:id="@+id/pb_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/selector_transparent2gray"
+                android:padding="14dp"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                />
+
+            <TextView
+                android:id="@+id/pb_index_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="10dp"
+                android:textColor="@color/graywhite"
+                android:textSize="16sp"
+                />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

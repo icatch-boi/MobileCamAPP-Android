@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto">
+
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/photo"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitCenter"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <com.icatch.mobilecam.ui.ExtendComponent.ProgressWheel
+        android:id="@+id/progress_wheel"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        ProgressWheel:barColor="#0097D6"
+        ProgressWheel:barLengthP="50dp"
+        ProgressWheel:rimColor="#330097D6"
+        ProgressWheel:rimWidth="5dp"
+        ProgressWheel:textColor="@android:color/white"
+        ProgressWheel:contourColor="#330097D6"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:context="com.icatch.mobilecam.ui.activity.PreviewActivity"
+                tools:showIn="@layout/activity_preview">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+
+        <SurfaceView
+            android:id="@+id/preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/not_support_preview_txv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:text="@string/text_not_support_preview"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/navigation_size"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/status_bar1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        >
+
+        <ImageView
+            android:id="@+id/battery_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/ic_battery_full_green_24dp"/>
+
+        <ImageView
+            android:id="@+id/wifi_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+
+            android:layout_toLeftOf="@+id/battery_status"
+            android:background="@drawable/ic_signal_wifi_1_bar_24dp"/>
+
+        <RelativeLayout
+            android:id="@+id/image_size_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/image_size_txv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:text="4M"
+                android:textColor="@color/white"
+                android:textSize="@dimen/first_title_size"
+                />
+
+            <TextView
+                android:id="@+id/separator1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_toRightOf="@+id/image_size_txv"
+                android:text="/"
+                android:textColor="@color/white"
+                android:textSize="@dimen/first_title_size"/>
+
+            <TextView
+                android:id="@+id/remain_capture_count_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/separator1"
+                android:text="1123"
+                android:textColor="@color/white"
+                android:textSize="@dimen/first_title_size"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/video_size_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/video_size_txv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FHD 30"
+                android:textColor="@color/white"
+                android:textSize="@dimen/first_title_size"
+                />
+
+            <TextView
+                android:id="@+id/separator2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_toRightOf="@+id/video_size_txv"
+                android:text="/"
+                android:textColor="@color/white"
+                android:textSize="@dimen/first_title_size"/>
+
+            <TextView
+                android:id="@+id/remain_recording_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/separator2"
+                android:text="40:10"
+                android:textColor="@color/white"
+                android:textSize="@dimen/first_title_size"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/status_bar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/status_bar1"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/wb_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/awb_auto"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/burst_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/wb_status"
+            android:background="@drawable/continuous_shot_1"
+            android:visibility="gone"
+            />
+
+
+        <ImageView
+            android:id="@+id/timelapse_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/burst_status"
+            android:background="@drawable/flag_timelapse_video"
+            android:visibility="gone"
+            />
+
+
+        <ImageView
+            android:id="@+id/slow_motion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/timelapse_mode"
+            android:background="@drawable/slow_motion"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/car_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/slow_motion"
+            android:background="@drawable/te_car_mode"
+            android:visibility="gone"
+            />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/status_bar3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/status_bar2"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/recording_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="00:00:00"
+            android:textColor="@color/white"
+            android:textSize="@dimen/space_16"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/auto_download_imageview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/status_bar2"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:id="@+id/delay_capture_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/status_bar1"
+        android:layout_marginRight="10dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/delay_capture_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/capture_delay_btn"
+            android:visibility="visible"
+            />
+
+        <TextView
+            android:id="@+id/delay_capture_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/delay_capture_iv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/space_16"
+            android:visibility="visible"/>
+
+    </RelativeLayout>
+
+
+    <com.icatch.mobilecam.ui.ExtendComponent.ZoomView
+        android:id="@+id/zoom_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttomBar"
+        android:visibility="gone"/>
+
+
+    <LinearLayout
+        android:id="@+id/live_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttomBar"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/google_account_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:text="@string/google_account"
+            android:textSize="@dimen/space_10"
+            android:theme="@style/ThemeOverlay.MyDarkButton"/>
+
+        <Button
+            android:id="@+id/youtube_live_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:text="@string/start_youtube_live"
+            android:textSize="@dimen/space_10"
+            android:theme="@style/ThemeOverlay.MyDarkButton"/>
+
+        <Button
+            android:id="@+id/facebook_live_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:text="@string/facebook_start_live"
+            android:textSize="@dimen/space_10"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttomBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/full_transparent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/multi_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/pb_btn"/>
+
+        <!-- Capture -->
+
+        <ImageButton
+            android:id="@+id/doCapture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/video_start"
+            />
+        <ImageButton
+            android:id="@+id/panorama_type_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/panorama"
+            android:background="@color/full_transparent"
+            android:layout_toRightOf="@+id/doCapture"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:visibility="gone"/>
+
+        <ImageButton
+            android:id="@+id/pv_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/video_on"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttomBar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/auto_download_imageview"
+        android:layout_margin="10dp"
+        android:visibility="gone">
+        <!-- Mode switch toggle -->
+
+
+        <ImageButton
+            android:id="@+id/stillToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/camera_off"/>
+
+        <ImageButton
+            android:id="@+id/videoToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/stillToggle"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/video_toggle_btn_on"
+            android:visibility="gone"/>
+
+        <ImageButton
+            android:id="@+id/timeLapseToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stillToggle"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/timelapse_off"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <include layout="@layout/setting_menu"/>
+
+</RelativeLayout>

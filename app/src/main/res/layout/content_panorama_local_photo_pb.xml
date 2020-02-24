@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.PanoramaLocalPhotoPbActivity"
+    tools:showIn="@layout/activity_panorama_local_photo_pb">
+
+
+    <SurfaceView
+        android:id="@+id/m_surfaceView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" />
+
+    <com.icatch.mobilecam.ui.ExtendComponent.ZoomView
+        android:id="@+id/zoom_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_above="@+id/local_pb_bottom_layout"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/local_pb_bottom_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/half_transparent_grey"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+
+        <ImageButton
+            android:id="@+id/local_photo_outside_panorama"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transparent2gray"
+            android:src="@drawable/ic_all_out_ball_white_24dp" />
+
+        <ImageButton
+            android:id="@+id/local_photo_inside_panorama"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transparent2gray"
+            android:src="@drawable/ic_inside_ball_white_24dp" />
+        <ImageButton
+            android:id="@+id/local_photo_pb_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transparent2gray"
+            android:src="@drawable/ic_delete_white_24dp" />
+
+        <ImageButton
+            android:id="@+id/local_photo_pb_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transparent2gray"
+            android:src="@drawable/ic_share_white_24dp" />
+
+        <ImageButton
+            android:id="@+id/local_photo_pb_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transparent2gray"
+            android:src="@drawable/ic_info_white_36dp"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/local_pb_top_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@color/half_transparent_grey"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/local_pb_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/selector_transparent2gray"
+            android:padding="14dp"
+            android:src="@drawable/ic_arrow_back_white_24dp" />
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:background="@color/greyish_white" />
+
+        <TextView
+            android:id="@+id/local_pb_photo_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="@color/graywhite"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</RelativeLayout>

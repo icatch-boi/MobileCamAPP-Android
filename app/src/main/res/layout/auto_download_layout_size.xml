@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height"
+    android:padding="10dp"
+    android:background="@drawable/selector_white"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setting_auto_download_size_limit"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/first_title_size" />
+
+    <TextView
+        android:id="@+id/download_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.0GB"
+        android:layout_below="@+id/item_text"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/second_title_size" />
+</RelativeLayout>

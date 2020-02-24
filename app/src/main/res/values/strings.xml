@@ -1,0 +1,509 @@
+<resources>
+    <string name="app_name" translatable="false">MobileCam</string>
+    <string name="action_search">Search</string>
+    <string name="action_setting">Setting</string>
+    <string name="preview">Preview</string>
+    <string name="capture">capture</string>
+    <string name="mpb">Multiple Playback</string>
+    <string name="spb">Single Playback</string>
+    <string name="camera_setting">Setting</string>
+    <string name="title_activity_view_style_selector">ViewStyleSelector</string>
+    <string name="function_not_impl">Sorry, it\'s in construction !</string>
+    <string name="app_exit_confirm">Press again to exit !</string>
+    <string name="app_exit">Application exited !</string>
+    <string name="title_activity_app_start">AppStart</string>
+    <string name="title_activity_file_list">FileListActivity</string>
+    <string name="inner_err">Warning! Inner error.</string>
+
+    <string name="ga_trackingId">UA-36501679-1</string>
+    <string name="invalid_device">Please download correct APP</string>
+    <string name="title_car_mode">Car Mode</string>
+    <string name="setting_slow_mo">Slow-Motion Function</string>
+    <string name="setting_on">ON</string>
+    <string name="setting_off">OFF</string>
+    <string name="setting_timelapse_set">Please turn off Timelapse to set this value</string>
+    <string name="setting_car_mode_set">Please turn off Car Mode to set this value</string>
+    <string name="setting_burst_set">Please turn off Burst Capture to set this value</string>
+    <string name="setting_slow_motion_set">Please turn off Slow Motion to set this value</string>
+    <string name="stream_title">Camera Preview</string>
+    <string name="stream_set_complete">Set Success</string>
+    <string name="stream_set_timer">Set Self Timer</string>
+    <string name="stream_set_timer_off">Off</string>
+    <string name="stream_set_res_vid">Set Video Resolution</string>
+    <string name="stream_set_res_photo">Set Photo Resolution</string>
+    <string name="stream_set_error">Set Failed</string>
+    <string name="ptp_connected">PTP Connected</string>
+    <string name="stream_error_cannot_open_gallery">Disabled while capturing or recording</string>
+    <string name="stream_error_capturing">Capturing cannot switch</string>
+    <string name="stream_error_not_enough_space">Not enough space!</string>
+    <string name="stream_error_recording">Recording cannot switch</string>
+    <string name="stream_error_capturing_capture">Processing...</string>
+    <string name="stream_capturing">Capturing...</string>
+    <string name="stream_capture_failed">Capture failed, please retry</string>
+    <string name="stream_wait_for_video">Please wait</string>
+    <string name="stream_exit_wait">Please wait</string>
+    <string name="stream_exit_recording">Press again to stop recording and exit</string>
+    <string name="stream_exiting">Exiting...</string>
+    <string name="stream_failed">Video stream lost, please get closer to the device and reconnect.</string>
+    <string name="stream_reconnect">Reconnect</string>
+    <string name="stream_zoom_wait">Setting...</string>
+    <string name="setting">Setting</string>
+    <string name="setting_yes">Yes</string>
+    <string name="setting_no">No</string>
+    <string name="setting_power_supply">Frequency</string>
+    <string name="setting_format">Format Camera</string>
+    <string name="setting_format_confirm">Format Camera</string>
+    <string name="setting_format_desc">Do you want to format SD, all your data will be lost?</string>
+    <string name="setting_formating">Formating...</string>
+    <string name="setting_formatted">Format completed</string>
+    <string name="setting_capture_delay">Capture delay</string>
+    <string name="setting_image_size">Image size</string>
+    <string name="setting_video_size">Video size</string>
+    <string name="title_burst">Continuous Shooting</string>
+    <string name="setting_burst_interval">Continuous Shooting Interval</string>
+    <string name="setting_cap_timescape_interval">Timelapse Interval</string>
+    <string name="setting_cap_timescape_duration">Timelapse Duration</string>
+    <string name="setting_vid_timescape_interval">Video Timelapse Interval</string>
+    <string name="setting_vid_timescape_duration">Video Timelapse Duration</string>
+    <string name="setting_datestamp">Date Stamp</string>
+    <string name="setting_about">About</string>
+    <string name="setting_app_version">App Version</string>
+    <string name="setting_product_name">Product Name</string>
+    <string name="setting_firmware_version">FW Version</string>
+    <string name="title_awb">White Balance</string>
+    <string name="dialog_no_sd">No SD card, please insert one and retry</string>
+    <string name="setting_no_sd">No SD card to format</string>
+    <string name="dialog_refreshing">Refreshing Wi-Fi...</string>
+    <string name="dialog_connect_failed">Connection failed, please retry.</string>
+    <string name="dialog_failed">Operation failed!</string>
+    <string name="dialog_capturing">Capturing</string>
+    <string name="dialog_preview">Preview Loading...</string>
+    <string name="dialog_connecting">Connecting...</string>
+    <string name="dialog_connecting_to_cam">Connecting with camera...</string>
+    <string name="dialog_reconnect">Reconnecting</string>
+    <string name="dialog_configuring">Configuring, please wait...</string>
+    <string name="dialog_invalid_ap">"Doesn't seem to be connecting to a camera, please select another Wi-Fi!"</string>
+    <string name="dialog_deleting">Deleting...</string>
+    <string name="dialog_delete_failed_single">Error while deleting</string>
+    <string name="dialog_deleting_failed_multi">Error while deleting, $1$ items not deleted,please check whether the files are locked or not</string>
+    <string name="dialog_downloading">Downloading $1$/$2$...</string>
+    <string name="dialog_downloaded">"$2$ pictures downloaded to 
+$3$"</string>
+    <string name="dialog_downloaded_2">"$2$ items downloaded to 
+$3$"</string>
+    <string name="dialog_downloaded_skipped">"$2$ pictures downloaded.
+(Skipped $1$ videos and $4$ downloaded pictures)"</string>
+    <string name="dialog_downloaded_skipped_2">"$2$ items downloaded.
+(Skipped $1$ downloaded items)"</string>
+    <string name="dialog_downloaded_single">"Picture has been downloaded to
+$1$"</string>
+    <string name="dialog_downloading_single">Downloading...</string>
+    <string name="dialog_cancel_downloading_succeeded">"Succeeded to cancel downloading"</string>
+    <string name="dialog_cancel_downloading_failed">"Failed to cancel downloading""</string>
+    <string name="dialog_wifi_lost">Cannot connect to Wi-Fi, please retry.</string>
+    <string name="dialog_btn_reconnect">Reconnect</string>
+    <string name="dialog_btn_continue">Continue</string>
+    <string name="dialog_btn_exit">Exit</string>
+    <string name="dialog_not_enough_space">Handset does not have enough storage, please delete some files and restart.</string>
+    <string name="dialog_recording_card_full">Warning: SD card full, video recording stopped.</string>
+    <string name="dialog_sd_card_is_full">Warning: SD card full, cannot record or take pictures.</string>
+    <string name="dialog_card_error">SD card error!</string>
+    <string name="dialog_card_not_exist">SD card is not inserted, cannot perform capture/recording.</string>
+    <string name="dialog_card_inserted">SD card inserted</string>
+    <string name="dialog_card_removed">SD card is removed</string>
+    <string name="dialog_card_full">SD card is full</string>
+    <string name="dialog_card_lose">SD card is lost!</string>
+    <string name="dialog_timeout">Connection to camera failed, please ensure Wi-Fi connection is working.</string>
+    <string name="ok">OK</string>
+    <string name="gallery_view_video_not_supported">Video viewing not supported</string>
+    <string name="gallery_download_video_not_supported">Video downloading not supported</string>
+    <string name="gallery_no_image">No files to download</string>
+    <string name="gallery_selection_count">$1$/$2$ Selected</string>
+    <string name="gallery_delete_des">Confirm deleting $1$ files?</string>
+    <string name="gallery_download_msg">Confirm download $1$ files?</string>
+    <string name="gallery_download_with_vid_msg">"Total Files: $1$
+Download Time: $2$ mins and $3$ seconds
+
+Confirm download?"</string>
+    <string name="gallery_download_pic_msg">Confirm download $1$ pictures?</string>
+    <string name="gallery_download_msg_2">"Confirm download $1$ files?
+($2$ skipped videos)"</string>
+    <string name="gallery_download">Download</string>
+    <string name="gallery_delete">Delete</string>
+    <string name="gallery_cancel">Cancel</string>
+    <string name="gallery_no_file_selected">No file selected</string>
+    <string name="gallery_share_wifi">Please select Wi-Fi</string>
+    <string name="gallery_share_to">Share to...</string>
+    <string name="gallery_cannot_view_video">Video viewing not supported</string>
+    <string name="gallery_cannot_download_video">Cannot download video</string>
+    <string name="image_delete_des">Confirm delete this picture?</string>
+    <string name="image_download_msg">Confirm download?</string>
+    <string name="no_pics">No picture to view</string>
+    <string name="low_battery">Low battery, please recharge the device.</string>
+    <string name="unsupported_mode">The device does not support this mode of operation</string>
+    <string name="app_browser">iCatchWifiCam</string>
+    <string name="app_controller">iCatchWifiCam</string>
+    <string name="pb_video">Video playback</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_decode">DecodeActivity</string>
+    <string name="camera_awake_success">Succeed to awake camera</string>
+    <string name="camera_awake_failed">Failed to awake camera</string>
+    <string name="dialog_delete_all">All delete</string>
+    <string name="dialog_awake_all">All awake</string>
+    <string name="camera_awake">Awake camera</string>
+    <string name="camera_sleep">Sleep camera</string>
+    <string name="camera_sleep_alert">Connect to camera will lose if sleep camera,comfirm to do?</string>
+    <string name="wb_auto">AUTO</string>
+    <string name="wb_daylight">Daylight</string>
+    <string name="wb_cloudy">Cloudy</string>
+    <string name="wb_fluorescent">Fluorescent</string>
+    <string name="wb_incandescent">Incandescent</string>
+    <string name="burst_off">OFF</string>
+    <string name="burst_3">3 photos</string>
+    <string name="burst_5">5 photos</string>
+    <string name="burst_10">10 photos</string>
+    <string name="burst_7">7 photos</string>
+    <string name="burst_15">15 photos</string>
+    <string name="burst_30">30 photos</string>
+    <string name="burst_hs">Continuous</string>
+    <string name="dateStamp_off">OFF</string>
+    <string name="dateStamp_date">Date</string>
+    <string name="dateStamp_date_and_time">Date and time</string>
+    <string name="frequency_50HZ">50HZ</string>
+    <string name="frequency_60HZ">60HZ</string>
+    <string name="download_manager">Download Manager</string>
+    <string name="download_progress">Has done: $1$    Wait: $2$    Failed: $3$</string>
+    <string name="downloading_quit">All task of downloading will be cancelled,are you sure?</string>
+    <string name="check_wifi_policy">Please keep to always connecting Wi-Fi</string>
+    <string name="setting_preview_cache_duration">Preview cache duration</string>
+    <string name="setting_time_lapse_interval">Time lapse interval</string>
+    <string name="setting_time_lapse_interval_off">OFF</string>
+    <string name="setting_time_lapse_interval_2s">2 Sec</string>
+    <string name="setting_time_lapse_interval_5s">5 Sec</string>
+    <string name="setting_time_lapse_interval_10s">10 Sec</string>
+    <string name="setting_time_lapse_interval_20s">20 Sec</string>
+    <string name="setting_time_lapse_interval_30s">30 Sec</string>
+    <string name="setting_time_lapse_interval_1M">1 Min</string>
+    <string name="setting_time_lapse_interval_5M">5 Min</string>
+    <string name="setting_time_lapse_interval_10M">10 Min</string>
+    <string name="setting_time_lapse_interval_30M">30 Min</string>
+    <string name="setting_time_lapse_interval_1HR">60 Min</string>
+    <string name="setting_time_lapse_duration">Time lapse duration</string>
+    <string name="setting_time_lapse_duration_2M">2 Min</string>
+    <string name="setting_time_lapse_duration_5M">5 Min</string>
+    <string name="setting_time_lapse_duration_10M">10 Min</string>
+    <string name="setting_time_lapse_duration_15M">15 Min</string>
+    <string name="setting_time_lapse_duration_20M">20 Min</string>
+    <string name="setting_time_lapse_duration_30M">30 Min</string>
+    <string name="setting_time_lapse_duration_60M">60 Min</string>
+    <string name="setting_time_lapse_duration_unlimit">Unlimited</string>
+    <string name="capture_start">Start capturing...</string>
+    <string name="capture_completed"> Capture completed...</string>
+    <string name="title_timeLapse_mode">Timelapse mode</string>
+    <string name="timeLapse_capture_mode">Timelapse capture mode</string>
+    <string name="timeLapse_video_mode">Timelapse video mode</string>
+    <string name="timeLapse_not_allow">Operation failed,please check the interval(be not OFF)</string>
+    <string name="timeLapse_stop">Timelapse stopped!</string>
+    <string name="title_slow_motion">Slow motion</string>
+    <string name="slowmotion">Slow-motion fuction</string>
+    <string name="upside">Upside</string>
+
+
+    <string name="action_processing">Processing...</string>
+    <string name="message_reconnect">newwork is abnormal ,is reconnectting...</string>
+    <string name="event_stream_abnormal">camera stream is abnormal!</string>
+    <string name="not_support_preview">Camera preview do not supportted for this size,confirm it?</string>
+    <string name="camera_wifi_configuration">Camera Wi-Fi configuration</string>
+    <string name="camera_configuration_set">Set</string>
+    <string name="password_limit">Password must be digit, and length must between 8 and 10</string>
+    <string name="camera_wifi_name">Camera Wi-Fi name</string>
+    <string name="camera_wifi_password">Camera Wi-Fi password</string>
+    <string name="camera_name_limit">Wi-Fi Name length must not more  between 1 and 20</string>
+    <string name="connect_control">Connect and Control</string>
+    <string name="title_activity_local_photo_wall">Local photowall </string>
+    <string name="title_activity_local_video_wall">Local videowall </string>
+    <string name="download_complete_result">"Download completed,successed:$1$, failed:$2$"</string>
+    <string name="no_files_found">No files found!</string>
+    <string name="title_activity_app_start_old">AppStartOldActivity</string>
+    <string name="need_permition">No permition!</string>
+    <string name="check_mac_fail">No permition in DEMO APP!  Please contact with your APP Supplier! </string>
+    <string name="title_activity_wifi_connect">WifiConnectActivity</string>
+    <string name="setting_updateFW_prompt">Do you want to update FW?</string>
+    <string name="setting_update_fw">Update FW</string>
+    <string name="setting_updatefw_title">Automatic update FW</string>
+    <string name="setting_updatefw_start">Updating FW...</string>
+    <string name="setting_updatefw_success">Successfully Updated FW</string>
+    <string name="setting_updatefw_failed">Updated failed</string>
+    <string name="setting_updatefw_closeAppInfo">FW update has completed, please restart your application</string>
+    <string name="setting_updatefw_completedInfo">FW update has completed</string>
+    <string name="setting_updatefw_failedInfo">FW update has failed,please restart your application</string>
+    <string name="setting_auto_download">Auto download</string>
+    <string name="setting_audio_switch">Audio switch</string>
+    <string name="setting_auto_download_size_limit">Limit of Auto download Size </string>
+    <string name="setting_card_removed">No SD card to update FW</string>
+    <string name="title_activity_pb_photo">PbPhotoActivity</string>
+    <string name="title_activity_pb_video">PbVideoActivity</string>
+    <string name="camera_pwd_setting">camera pwd setting</string>
+    <string name="title_activity_sport_cam_main">SportCamMainActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_qrcode_scan">QRCodeScanActivity</string>
+    <string name="alert_pwd_needed">Please input password!</string>
+    <string name="alert_uid_needed">Please input Uid!</string>
+    <string name="alert_camera_name_needed">Please input camera name!</string>
+    <string name="alert_uid_repeated">Uid has already exsited!</string>
+    <string name="alert_no_camera_found">No camera found!</string>
+    <string name="alert_is_capturing_or_recording">Failed! Camera is capturing or recording!</string>
+    <string name="text_resolution_lowest">Stream resolution has been the lowest!</string>
+    <string name="text_resolution_adjust">Adjusting stream resolution...</string>
+    <string name="text_operation_success">Opertaion succeed</string>
+    <string name="dialog_reconnect_failed">Failed to reconnecting!</string>
+    <string name="text_operation_failed">Opertaion failed!</string>
+    <string name="text_stream_launch_failed">Failed to launch stream!</string>
+    <string name="text_camera_not_ready">Wait for connceting</string>
+    <string name="text_camera_is_connecting">Is connceting...</string>
+    <string name="text_camera_connected">Connceted</string>
+    <string name="text_camera_connection_failed">Failed to connect</string>
+    <string name="setting_title_stream">Choose stream</string>
+    <string name="alert_old_pwd_verify_failed">Old password is not correct!</string>
+    <string name="alert_not_same_password">New passwords are not the same!</string>
+    <string name="button_check_current_wifi_list">Check current Wi-Fi</string>
+    <string name="setting_title_choose_wifi">Choose Wi-Fi</string>
+    <string name="camera_abnormal">Camera abnormal!</string>
+    <string name="nearby_camera">Nearby camera</string>
+    <string name="add_to">Add to</string>
+    <string name="dialog_init_network">Initializing Network...</string>
+    <string name="dialog_select_wifi">Select wifi!</string>
+    <string name="title_activity_local_video">LocalVideoActivity</string>
+    <string name="dialog_local_memory_not_enough">Local memory is not enough to download</string>
+    <string name="title_activity_local_photo">LocalPhotoActivity</string>
+    <string name="text_not_support_preview">Does not support preview</string>
+    <string name="current_size_not_supported_sound_off">The current size is not supported on or off sound</string>
+    <string name="title_activity_pb_local_video">PbLocalVideoActivity</string>
+    <string name="title_local_media">Media on My Phone</string>
+    <string name="title_video">Video</string>
+    <string name="title_photo">Photo</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_preview">PreviewActivity</string>
+    <string name="action_title_date_stamp">Date stamp</string>
+    <string name="delay_capture">Delay capture</string>
+    <string name="title_delay_capture">Delay capture</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_back">back</string>
+    <string name="title_audio_switch">Audio switch</string>
+    <string name="title_photo_size">Photo size</string>
+    <string name="title_video_size">Video size</string>
+    <string name="menu_icon">Icon</string>
+    <string name="menu_list">List</string>
+    <string name="title_activity_pb_local_photo">PbLocalPhotoActivity</string>
+    <string name="title_activity_settings">Settings</string>
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="text_password">Password</string>
+    <string name="text_hint_pwd_needed">Please enter password</string>
+    <string name="title_activity_multi_pb">MultiPb</string>
+    <string name="title_activity_local_pb">LocalPb</string>
+    <string name="title_setting">Setting</string>
+    <string name="title_preview">Preview</string>
+    <string name="title_preview_param">PreviewParam</string>
+    <string name="title_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="title_activity_video_pb">VideoPbActivity</string>
+    <string name="title_activity_photo_pb">PhotoPbActivity</string>
+
+    <string name="text_sd_card_memory_shortage">sd card memory shortage!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_add_new_cam">Add New Camera</string>
+    <string name="title_activity_btpair_begin">BTPairBegin</string>
+    <string name="title_fragment_btpair_begin">Pairing</string>
+    <string name="title_fragment_btpair_wifisetup">Wi-Fi setup</string>
+    <string name="title_fragment_btpair_completed">Completed</string>
+    <string name="text_btpair">Bluetooth Pair</string>
+    <string name="text_ready_pair">Make sure your camera is ready for pairing and type the right PIN.</string>
+    <string name="text_btpair_try_again">Try Again</string>
+    <string name="text_btpair_search_camera">Search</string>
+    <string name="text_btpair_search_ble">Search BLE</string>
+
+
+    <string name="text_btpair_setup">Setup</string>
+    <string name="text_btpair_skip">SKIP</string>
+    <string name="text_btpair_next">Next</string>
+    <string name="text_btpair_done">Done</string>
+    <string name="text_btpair_already_connect_cam">When you already connect to camera by Wi-Fi.</string>
+    <string name="text_btpair_connect_wifi">Wi-Fi Connect</string>
+    <string name="text_btpair_connect_cam">Connect to Your Camera</string>
+    <string name="text_btpair_support_bt">For new camera, and the camera support Bluetooth.</string>
+    <string name="text_connect_camera_by_usb">When you already connect to camera by USB.</string>
+    <string name="text_add_camaera_usb">USB Connect</string>
+    <string name="text_btpair_connect_operationsteps">Please click on the Done button to enter preview</string>
+    <string name="text_btpair_setup_camwifi">Pair camera success, you can setup camera Wi-Fi or just click Setup to keep default setting.</string>
+    <string name="text_add_new_camera">Add New Camera</string>
+    <string name="text_disconnect">Disconnect</string>
+    <string name="text_connected">Connected</string>
+    <string name="text_exception_info">Sorry, the program exception, will want to quit...</string>
+    <string name="text_init_failed">Initialization failed</string>
+    <string name="gallery_share_in_process">Share in process...</string>
+    <string name="gallery_exiting_share">Exiting Share</string>
+    <string name="gallery_test_content">Test content</string>
+    <string name="text_rich_media_management_center">Rich Media Management Center</string>
+    <string name="text_return">back</string>
+    <string name="text_no_rich_media_messages">Sorry, No rich media messages</string>
+
+    <string name="text_ble_devices">BLE Devices</string>
+    <string name="text_classic_bluetooth_devices">Classic Bluetooth Devices</string>
+    <string name="text_preview_hint_info">Only for iCatch SBC</string>
+    <string name="app_exception">APP  meets exception!</string>
+    <string name="text_reconnect_timeout">Reconnect timeout</string>
+    <string name="message_reconnect_timeout">Cannot connect to the camera Wi-Fi...</string>
+    <string name="title_activity_panorama_photo_pb">PanoramaPhotoPbActivity</string>
+    <string name="title_activity_panorama_video_pb">PanoramaVideoPbActivity</string>
+    <string name="video_format_not_support">Failed to play because of size is not supported!</string>
+    <string name="setting_live_switch">Youtube live</string>
+    <string name="setting_live_address">Live address</string>
+    <string name="input_live_url">Input live url</string>
+    <string name="wait">Wait...</string>
+    <string name="action_input_ip">Input ip</string>
+    <string name="setting_enable_wifi_hotspot">Enable Wifi Hotspot</string>
+    <string name="message_apmode_to_sta_mode_hint">Enable station mode: </string>
+    <string name="message_download_failed">Download failed</string>
+    <string name="message_download_to">Downloaded to $1$</string>
+    <string name="message_failed_to_stop_living_publish">Failed to stop living publish!</string>
+    <string name="message_succeed_to_stop_living_publish">Succeed to stop living publish!</string>
+    <string name="message_failed_to_start_living_publish">Failed to start living publish!</string>
+    <string name="message_succeed_to_start_living_publish">Succeed to start living publish!</string>
+    <string name="message_setup_false">Setup false!</string>
+    <string name="message_connecting">Connecting...</string>
+    <string name="message_btpair_search">Search...</string>
+    <string name="message_loading">Loading...</string>
+    <string name="message_binding">Binding...</string>
+    <string name="message_binding_failed">create bounded failed.</string>
+    <string name="message_binding_exception">create bounded exception</string>
+    <string name="message_failed_to_connect_wifi">failed to connect wifi.</string>
+    <string name="message_failed_to_connect_camera">failed to connect camera.</string>
+    <string name="message_failed_to_connect_please_tyragain">connect failed,please tryagain!</string>
+    <string name="message_ble_service_discovered">ble service discovered.</string>
+    <string name="message_no_ble_service_discovered">ble no service discovered.</string>
+    <string name="message_ble_device_connected">ble device connected.</string>
+    <string name="message_ble_device_not_connected_please_tryagain.">ble device not connected, please tryagain.</string>
+    <string name="message_failed_to_bounded">failed to bounded.</string>
+    <string name="message_bounded_is_ok">Bounded is ok</string>
+
+    <string name="facebook_app_id">295583287549917</string>
+    <string name="fb_login_protocol_scheme">fb295583287549917</string>
+    <!--<string name="facebook_app_id">360920377607726</string>-->
+
+    <string name="facebook_start_live">Strat facebook live</string>
+    <string name="facebook_end_live">End facebook live</string>
+    <string name="facebook_page_setting">Facebook Page setting</string>
+    <string name="facebook_input_page_name">Please enter the facebook home page</string>
+    <string name="can_not_be_empty">Can not be empty</string>
+    <string name="start_youtube_live">Start YouTube live</string>
+    <string name="google_account">Google account</string>
+    <string name="end_youtube_live">End YouTube live</string>
+
+    <string name="signed_in">Signed in</string>
+    <string name="signing_in">Signing in...</string>
+    <string name="signed_out">Signed out</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="refresh_token">GetToken</string>
+    <string name="desc_google_icon">Google Logo</string>
+    <string name="title_text">Google Sign-In\nQuickstart</string>
+    <string name="auth_code_fmt">Auth Code: %s</string>
+    <string name="no_content">No content</string>
+    <string name="open_preview_failed">Open preview failed!</string>
+    <string name="message_please_stop_live">please stop live!</string>
+    <string name="message_start_live">start live</string>
+    <string name="message_go_back_and_start_YouTube_live">Please go back and start YouTube live!</string>
+    <string name="message_login_cancel">Login cancel</string>
+    <string name="message_login_error">Login error</string>
+    <string name="message_refreshAccessToken_IOException">refreshAccessToken IOException</string>
+    <string name="message_click_disconnect_and_relogin">Failed to get accessToken , Please enter the google account click disconnect and re-login</string>
+    <string name="message_login_to_google_account">You are not logged in, please login to google account</string>
+    <string name="message_failed_to_Youtube_live_OAuth2AccessToken_is_null">Failed to Youtube live,OAuth2AccessToken is null</string>
+    <string name="message_failed_to_Youtube_live_pushUrl_is_null">Failed to Youtube live,pushUrl is null</string>
+    <string name="message_failed_to_start_publish_streaming">Failed to start publish streaming</string>
+    <string name="message_failed_to_YouTube_live_shareUrl_is_null">Failed to YouTube live,shareUrl is null</string>
+
+    <string name="stop_live_hint">Please stop live!</string>
+    <string name="stop_other_live_hint">Please stop other live!</string>
+
+    <string name="setting_type_other">Other Settings</string>
+    <string name="setting_type_custom">Custom Settings</string>
+    <string name="title_activity_pv_param_setting">PvParamSetting</string>
+    <string name="title_activity_usbpreview">USBPreview</string>
+    <string name="loading">loading...</string>
+    <string name="text_panorama">全景</string>
+    <string name="text_asteroid">小行星</string>
+    <string name="text_vr">VR</string>
+    <string name="text_stablization">Stablization</string>
+    <string name="text_usb_permission_has_been_denied">USB permission has been denied, unable to connect camera.</string>
+    <string name="text_usb_device_detected">USB device detected</string>
+    <string name="text_usb_device_not_detected">USB device not detected</string>
+    <string name="text_usb_device_disconnected">USB device has been disconnected</string>
+    <string name="non_360_picture_not_support_switch">The current picture is not a 360 image and does not support switching.</string>
+
+
+</resources>

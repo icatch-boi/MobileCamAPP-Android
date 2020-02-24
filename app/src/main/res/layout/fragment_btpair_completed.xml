@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/charcoal_gray"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary">
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@drawable/selector_primary"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back_white_24dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/back_btn"
+            android:layout_centerVertical="true"
+            android:text="@string/title_fragment_btpair_completed"
+            android:textColor="@color/icons"
+            android:textSize="@dimen/navigation_size" />
+        <TextView
+            android:id="@+id/done_txv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/text_btpair_done"
+            android:textColor="@color/primary_light"
+            android:padding="10dp"
+            android:background="@drawable/selector_primary"
+            android:textSize="@dimen/first_title_size"
+            />
+    </RelativeLayout>
+
+    <TextView
+        style="@style/customTextviewStyleLight"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center_horizontal"
+        android:text="@string/text_btpair_connect_cam"
+        android:textSize="@dimen/text_size_20" />
+
+    <TextView
+        style="@style/customTextviewStyleLight"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/text_btpair_connect_operationsteps"
+        android:textSize="@dimen/text_size_18" />
+
+</LinearLayout>

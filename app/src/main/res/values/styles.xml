@@ -1,0 +1,132 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="FullScreenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="FullscreenTheme" parent="FullScreenTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <style name="Dialog" parent="android:style/Theme.Dialog">
+        <item name="android:background">#00000000</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="FullScreenTheme.NoActionBar" parent="Theme.AppCompat">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+    </style>
+
+    <style name="FullScreenTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="FullScreenTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <!--        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:showDividers">middle|beginning|end</item>
+        <item name="android:listDivider">@color/white</item>-->
+    </style>
+
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_style</item>
+    </style>
+
+    <style name="CustomSecondaryTxvTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/second_title_size</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="NumberProgressBar_Relax_Blue">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+
+        <item name="progress_max">100</item>
+        <item name="progress_current">0</item>
+
+        <item name="progress_unreached_color">#CCCCCC</item>
+        <item name="progress_reached_color">#6DBCDB</item>
+        <item name="progress_text_size">10sp</item>
+        <item name="progress_text_color">#6DBCDB</item>
+
+        <item name="progress_reached_bar_height">1.5dp</item>
+        <item name="progress_unreached_bar_height">0.75dp</item>
+    </style>
+
+    <style name="MyTabLayoutTextAppearanceInverse" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">@dimen/first_title_size</item>
+        <item name="android:textColor">@color/primary_light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="customButtonStyle01" parent="@android:style/Widget.Button">
+        <item name="android:layout_height">55dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:background">@drawable/selector_btn_bg_color_grad</item>
+    </style>
+
+    <style name="customButtonStyle02" parent="@android:style/Widget.Button">
+        <item name="android:layout_height">55dp</item>
+        <item name="android:textColor">@color/cambridge_blue</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:background">@color/full_transparent</item>
+    </style>
+
+    <style name="customTextviewStyleLight" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/primary_light</item>
+        <item name="android:textSize">@dimen/first_title_size</item>
+    </style>
+
+    <style name="customTextviewStyleDack" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/first_title_size</item>
+    </style>
+
+    <style name="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="colorButtonNormal">@color/blue_grey_500</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+</resources>

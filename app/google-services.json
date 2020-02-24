@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "168811923581",
+    "project_id": "uvc-demo-app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168811923581:android:70090ec45fd2e182",
+        "android_client_info": {
+          "package_name": "com.icatch.mobilecam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168811923581-pue3fd7coa5t5ol66o81j83ip0nuasr5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.icatch.panorama",
+            "certificate_hash": "dfb0aacf8c5e067074b543f77a68ef1d27fa3261"
+          }
+        },
+        {
+          "client_id": "168811923581-u0njo0me7v4dd2ihb1n1c5hbkk0d1v9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCp0m3CTBHGLcMWzKgOf68K4fC5Vv9ksQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

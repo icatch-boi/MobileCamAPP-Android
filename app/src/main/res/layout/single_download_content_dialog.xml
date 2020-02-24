@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:text="filename"
+        android:textSize="@dimen/first_title_size"
+        android:textColor="@color/primary_text"/>
+    <TextView
+        android:id="@+id/downloadStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:layout_marginLeft="10dp"
+        android:textSize="@dimen/second_title_size"
+        android:textColor="@color/secondary_text"/>
+    <com.icatch.mobilecam.ui.ExtendComponent.NumberProgressBar
+        android:id="@+id/numberbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        custom:progress_current="0"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        style="@style/NumberProgressBar_Relax_Blue"
+        />
+
+    <!--<com.wificammobileappalbum.ExtendComponent.NumberProgressBar-->
+        <!--android:id="@+id/numberbar"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="20dp"/>-->
+
+</LinearLayout>

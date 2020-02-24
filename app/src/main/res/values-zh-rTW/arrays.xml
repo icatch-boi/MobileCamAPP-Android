@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="setting_power_supply_list">
+        <item>50Hz</item>
+        <item>60Hz</item>
+    </string-array>
+    <string-array name="setting_awb_list">
+        <item>自動</item>
+        <item>日光</item>
+        <item>陰天</item>
+        <item>熒光燈</item>
+        <item>白熾燈</item>
+    </string-array>
+</resources>

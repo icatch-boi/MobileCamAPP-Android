@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/zoom_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <ImageButton
+        android:id="@+id/zoom_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/ic_remove_white_24dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        />
+
+    <ImageButton
+        android:id="@+id/zoom_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/ic_add_white_24dp"
+        android:contentDescription="zoom in"
+        android:layout_centerVertical="true"
+        />
+
+
+
+    <TextView
+        android:id="@+id/zoom_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:text="x 1.5"
+        android:textSize="@dimen/text_size_20"
+        android:layout_alignTop="@+id/zoomBar"
+        />
+    <SeekBar
+        android:id="@+id/zoomBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/zoom_in"
+        android:layout_toRightOf="@+id/zoom_out"
+        android:maxHeight="3dp"
+        android:minHeight="3dp"
+        android:progressDrawable="@color/white"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:layout_centerVertical="true"
+        android:thumb="@drawable/seekbar_thumb"
+        />
+</RelativeLayout>

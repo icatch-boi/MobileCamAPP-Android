@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity"
+    android:padding="10dp"
+    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants">
+    <LinearLayout
+        android:id="@+id/download_state_layout"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:id="@+id/fileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:text="filename"
+            android:textSize="@dimen/first_title_size"
+            android:textColor="@color/primary_text"/>
+        <TextView
+            android:id="@+id/downloadStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:layout_marginLeft="10dp"
+            android:textSize="@dimen/second_title_size"
+            android:textColor="@color/secondary_text"/>
+        <com.icatch.mobilecam.ui.ExtendComponent.NumberProgressBar
+            android:id="@+id/numberbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            custom:progress_current="0"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            style="@style/NumberProgressBar_Relax_Blue"
+            />
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progressBar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--style="?android:attr/progressBarStyleHorizontal"-->
+            <!--android:layout_height="6dp"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:max="100"-->
+            <!--android:progress="0" />-->
+
+
+    </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/doAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_close_black"
+            android:padding="20dp"
+            android:focusable="false"
+            android:background="@drawable/selector_transparent2gray"
+            />
+
+
+</LinearLayout>

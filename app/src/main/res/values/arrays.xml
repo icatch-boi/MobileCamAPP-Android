@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="burst_values">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+    </integer-array>
+    <integer-array name="setting_burst_list_shots">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>1</item>
+    </integer-array>
+    <integer-array name="setting_burst_interval_fps">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>10</item>
+    </integer-array>
+
+    <string-array name="setting_power_supply_list">
+        <item>50Hz</item>
+        <item>60Hz</item>
+    </string-array>
+    <string-array name="setting_power_supply_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="setting_burst_list">
+        <item>OFF</item>
+        <item>3 photos</item>
+        <item>5 photos</item>
+        <item>10 photos</item>
+        <item>Continuous</item>
+        
+    </string-array>
+    <string-array name="setting_burst_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>65535</item>
+    </string-array>
+    <string-array name="setting_burst_interval_list">
+        <item>1 fps</item>
+        <item>2 fps</item>
+        <item>3 fps</item>
+        <item>4 fps</item>
+        <item>5 fps</item>
+        <item>10 fps</item>
+    </string-array>
+    <string-array name="setting_burst_interval_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+    <string-array name="setting_cap_timescape_interval_list">
+        <item>OFF</item>
+        <item>1 Sec</item>
+        <item>5 Sec</item>
+        <item>10 Sec</item>
+        <item>20 Sec</item>
+        <item>30 Sec</item>
+        <item>1 Min</item>
+        <item>5 Min</item>
+        <item>10 Min</item>
+        <item>30 Min</item>
+        <item>1 Hr</item>
+    </string-array>
+    <string-array name="setting_cap_timescape_interval_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+    </string-array>
+    <string-array name="setting_cap_timescape_duration_list">
+        <item>OFF</item>
+        <item>5 Min</item>
+        <item>10 Min</item>
+        <item>15 Min</item>
+        <item>20 Min</item>
+        <item>30 Min</item>
+        <item>1 Hr</item>
+        <item>Unlimited</item>
+    </string-array>
+    <string-array name="setting_cap_timescape_duration_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>65535</item>
+    </string-array>
+    <string-array name="setting_vid_timescape_interval_list">
+        <item>OFF</item>
+        <item>1 Min</item>
+        <item>5 Min</item>
+        <item>10 Min</item>
+        <item>Event</item>
+    </string-array>
+    <string-array name="setting_vid_timescape_interval_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="setting_vid_timescape_duration_list">
+        <item>OFF</item>
+        <item>5 Sec</item>
+        <item>10 Sec</item>
+        <item>15 Sec</item>
+        <item>20 Sec</item>
+        <item>30 Sec</item>
+        <item>1 Min</item>
+        <item>5 Min</item>
+        <item>10 Min</item>
+    </string-array>
+    <string-array name="setting_vid_timescape_duration_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+    <string-array name="setting_datestamp_list">
+        <item>OFF</item>
+        <item>Date</item>
+        <item>Date and Time</item>
+    </string-array>
+    <string-array name="setting_datestamp_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="setting_awb_list">
+        <item>AUTO</item>
+        <item>Daylight</item>
+        <item>Cloudy</item>
+        <item>Fluorescent</item>
+        <item>Incandescent</item>
+    </string-array>
+    <string-array name="setting_awb_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <!-- add by me -->
+    <string-array name="setting_delaytime_list_values">
+        <item>OFF</item>
+        <item>2s</item>
+        <item>10s</item>
+    </string-array>
+
+</resources>

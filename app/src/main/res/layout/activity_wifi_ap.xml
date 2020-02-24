@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:gravity="right"
+            android:text="SSID"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/et_ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_weight="1"
+            android:hint="请输入ssid"
+            android:imeOptions="actionDone"
+            android:ems="10" >
+
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:gravity="right"
+            android:text="Password"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:ems="10" >
+        </EditText>
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rg_security"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/rd_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="no" />
+
+        <RadioButton
+            android:id="@+id/rd_wpa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="wpa" />
+
+        <RadioButton
+            android:id="@+id/rd_wpa2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="wpa2" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/bt_start_wifiap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="开启wifi热点"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/bt_stop_wifiap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="关闭wifi热点"
+        android:textSize="25sp" />
+    <TextView
+        android:id="@+id/tv_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textSize="25sp"/>
+</LinearLayout>

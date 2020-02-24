@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="setting_power_supply_list">
+        <item>50Hz</item>
+        <item>60Hz</item>
+    </string-array>
+    <string-array name="setting_burst_list">
+        <item>OFF</item>
+        <item>3 photos</item>
+        <item>5 photos</item>
+        <item>10 photos</item>
+        <item>Continuous</item>
+    </string-array>
+    <string-array name="setting_burst_interval_list">
+        <item>1 fps</item>
+        <item>2 fps</item>
+        <item>3 fps</item>
+        <item>4 fps</item>
+        <item>5 fps</item>
+        <item>10 fps</item>
+    </string-array>
+    <string-array name="setting_cap_timescape_interval_list">
+        <item>OFF</item>
+        <item>1 Sec</item>
+        <item>5 Sec</item>
+        <item>10 Sec</item>
+        <item>20 Sec</item>
+        <item>30 Sec</item>
+        <item>1 Min</item>
+        <item>5 Min</item>
+        <item>10 Min</item>
+        <item>30 Min</item>
+        <item>1 Hr</item>
+    </string-array>
+    <string-array name="setting_cap_timescape_duration_list">
+        <item>OFF</item>
+        <item>5 Min</item>
+        <item>10 Min</item>
+        <item>15 Min</item>
+        <item>20 Min</item>
+        <item>30 Min</item>
+        <item>1 Hr</item>
+        <item>无限</item>
+    </string-array>
+    <string-array name="setting_vid_timescape_interval_list">
+        <item>OFF</item>
+        <item>1 Min</item>
+        <item>5 Min</item>
+        <item>10 Min</item>
+        <item>事件</item>
+    </string-array>
+    <string-array name="setting_vid_timescape_duration_list">
+        <item>OFF</item>
+        <item>5 Sec</item>
+        <item>10 Sec</item>
+        <item>15 Sec</item>
+        <item>20 Sec</item>
+        <item>30 Sec</item>
+        <item>1 Min</item>
+        <item>5 Min</item>
+        <item>10 Min</item>
+    </string-array>
+    <string-array name="setting_datestamp_list">
+        <item>OFF</item>
+        <item>日期</item>
+        <item>日期和时间</item>
+    </string-array>
+    <string-array name="setting_awb_list">
+        <item>自动</item>
+        <item>阳光</item>
+        <item>多云</item>
+        <item>荧光灯</item>
+        <item>白炽灯</item>
+    </string-array>
+</resources>
