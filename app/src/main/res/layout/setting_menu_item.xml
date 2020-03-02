@@ -6,8 +6,9 @@
     android:background="@drawable/selector_white"
     android:gravity="center_vertical">
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/item_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/item_height"
         android:padding="10dp"
         android:orientation="vertical">
         <TextView

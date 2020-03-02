@@ -269,6 +269,8 @@ public class LaunchPresenter extends BasePresenter {
         String photoPath = MFileTools.getNewestPhotoFromDirectory(Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO);
         if (photoPath != null) {
             launchView.setLocalPhotoThumbnail(photoPath);
+        }else {
+            launchView.loadDefaultLocalPhotoThumbnail();
         }
         if (MFileTools.getPhotosSize(Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO) > 0) {
             launchView.setNoPhotoFilesFoundVisibility(View.GONE);
@@ -280,6 +282,8 @@ public class LaunchPresenter extends BasePresenter {
         String videoPath = MFileTools.getNewestVideoFromDirectory(Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO);
         if (videoPath != null) {
             launchView.setLocalVideoThumbnail(videoPath);
+        }else{
+            launchView.loadDefaultLocalVideoThumbnail();
         }
         if (MFileTools.getVideosSize(Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO) > 0) {
             launchView.setNoVideoFilesFoundVisibility(View.GONE);

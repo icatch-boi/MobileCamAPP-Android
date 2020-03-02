@@ -299,4 +299,5 @@ $3$"</string>
     <string name="text_usb_device_not_detected">未检测到USB设备</string>
     <string name="text_usb_device_disconnected">USB设备已断开</string>
     <string name="non_360_picture_not_support_switch">当前图片不是360图片，不支持切换</string>
+    <string name="permission_is_denied_info">必要的权限被拒绝，应用无法正常使用!</string>
 </resources>

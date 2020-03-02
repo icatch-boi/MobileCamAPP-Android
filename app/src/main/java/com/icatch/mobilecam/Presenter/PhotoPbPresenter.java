@@ -609,7 +609,7 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
         AppLog.d(TAG, "start initSurface");
         iCatchSurfaceContext = new ICatchSurfaceContext(surface);
         panoramaPhotoPlayback.setSurface(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE, iCatchSurfaceContext);
-        panoramaPhotoPlayback.pancamGLSetFormat(ICatchCodec.ICH_CODEC_BITMAP, 1080, 720);
+
         AppLog.d(TAG, "end initSurface");
     }
 
@@ -803,8 +803,10 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
         }
         if (curPhotoIdx >= 0) {
             int fileHandle = fileList.get(curPhotoIdx).getFileHandle();
+            boolean isPanorama = fileList.get(curPhotoIdx).isPanorama();
             Bitmap bitmap = getBitmapFromLruCache(fileHandle);
-            if (bitmap != null) {
+            if (isPanorama && bitmap != null) {
+                panoramaPhotoPlayback.pancamGLSetFormat(ICatchCodec.ICH_CODEC_BITMAP, bitmap.getWidth(), bitmap.getHeight());
                 panoramaPhotoPlayback.update(new ICatchGLImage(bitmap));
             }
         }

@@ -12,7 +12,7 @@ public interface  LaunchView {
     void setLocalPhotoThumbnail(Bitmap bitmap);
     void setLocalVideoThumbnail(Bitmap bitmap);
     void loadDefaultLocalPhotoThumbnail();
-    void loadDefaultLocalVideooThumbnail();
+    void loadDefaultLocalVideoThumbnail();
     void setNoPhotoFilesFoundVisibility(int visibility);
     void setNoVideoFilesFoundVisibility(int visibility);
     void setPhotoClickable(boolean clickable);

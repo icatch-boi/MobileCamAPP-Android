@@ -33,6 +33,7 @@ import com.icatch.mobilecam.data.AppInfo.ConfigureInfo;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.ui.Interface.LaunchView;
 import com.icatch.mobilecam.ui.adapter.CameraSlotAdapter;
+import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.utils.GlideUtils;
 import com.icatch.mobilecam.utils.LruCacheTool;
 import com.icatch.mobilecam.utils.PermissionTools;
@@ -98,10 +99,10 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
 
         LruCacheTool.getInstance().initLruCache();
         presenter.initUsbMonitor();
-        if (Build.VERSION.SDK_INT < 23 || PermissionTools.CheckSelfPermission(this)) {
+        if (Build.VERSION.SDK_INT < 23 || PermissionTools.checkAllSelfPermission(this)) {
             ConfigureInfo.getInstance().initCfgInfo(this.getApplicationContext());
         } else {
-            PermissionTools.RequestPermissions(LaunchActivity.this);
+            PermissionTools.requestAllPermissions(LaunchActivity.this);
         }
         AppLog.i(TAG, "end onCreate");
     }
@@ -121,7 +122,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         AppLog.i(TAG, "Start onResume");
         super.onResume();
 //        presenter.submitAppInfo();
-        if (Build.VERSION.SDK_INT < 23 || PermissionTools.CheckSelfPermission(this)) {
+        if (Build.VERSION.SDK_INT < 23 || PermissionTools.checkAllSelfPermission(this)) {
             presenter.loadLocalThumbnails02();
         }
         presenter.registerWifiReceiver();
@@ -267,7 +268,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void loadDefaultLocalVideooThumbnail() {
+    public void loadDefaultLocalVideoThumbnail() {
         localVideo.setImageResource(R.drawable.local_default_thumbnail);
     }
 
@@ -331,16 +332,14 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PermissionTools.WRITE_OR_READ_EXTERNAL_STORAGE_REQUEST_CODE:
+            case PermissionTools.ALL_REQUEST_CODE:
                 AppLog.i(TAG, "permissions.length = " + permissions.length);
                 AppLog.i(TAG, "grantResults.length = " + grantResults.length);
-                boolean retValue = false;
+                boolean retValue = true;
                 for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(this, "Request write storage ", Toast.LENGTH_SHORT).show();
-                        retValue = true;
-                    } else {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                         retValue = false;
+                        break;
                     }
                 }
                 if (retValue) {
@@ -348,7 +347,8 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
                     ConfigureInfo.getInstance().initCfgInfo(this.getApplicationContext());
                 } else {
 //                    AppDialog.showDialogQuit(this, R.string.permission_is_denied_info);
-                    Toast.makeText(this, "Request write storage failed!", Toast.LENGTH_SHORT).show();
+                    AppDialog.showDialogQuit(this, R.string.permission_is_denied_info);
+//                    Toast.makeText(this, "Request write storage failed!", Toast.LENGTH_SHORT).show();
                 }
 
                 break;

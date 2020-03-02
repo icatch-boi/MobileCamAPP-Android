@@ -3,15 +3,20 @@ package com.icatch.mobilecam.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.icatch.mobilecam.Log.AppLog;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class PermissionTools {
     private static String TAG = PermissionTools.class.getSimpleName();
     public static final int WRITE_OR_READ_EXTERNAL_STORAGE_REQUEST_CODE = 102;
-    public static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 103;
+//    public static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 103;
+    public static final int ALL_REQUEST_CODE = 102;
 
     public static void RequestPermissions(final Activity activity) {
         AppLog.d(TAG, "Start RequestPermissions");
@@ -32,9 +37,41 @@ public class PermissionTools {
 
     public static boolean CheckSelfPermission(final Activity activity){
         return (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED)&
+                == PackageManager.PERMISSION_GRANTED)&&
                 (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED);
+    }
+
+    public static void requestAllPermissions(final Activity activity) {
+        AppLog.d(TAG, "Start request all necessary permissions");
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            return;
+        }
+        List<String> requestList = new LinkedList<>();
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            requestList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            requestList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            requestList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            requestList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+        if(requestList.size() > 0){
+            String[] systemRequestArray = requestList.toArray(new String[requestList.size()]);
+            ActivityCompat.requestPermissions(activity, systemRequestArray,ALL_REQUEST_CODE);
+        } else {
+            AppLog.d(TAG, "permission has granted!");
+        }
+        AppLog.d(TAG, "End requestPermissions");
+    }
+
+    public static boolean checkAllSelfPermission(final Activity activity){
+        return ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
     }
 
 }

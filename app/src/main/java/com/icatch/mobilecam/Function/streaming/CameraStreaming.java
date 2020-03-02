@@ -101,9 +101,10 @@ public class CameraStreaming {
     private void startDecoderThread(int previewLaunchMode, ICatchVideoFormat videoFormat) {
         AppLog.i(TAG, "start startDecoderThread");
         if (videoFormat == null) {
-            AppLog.i(TAG, "start startDecoderThread videoFormat=" + videoFormat);
+            AppLog.i(TAG, "start startDecoderThread videoFormat is null");
             return;
         }
+        AppLog.i(TAG, "start startDecoderThread videoFormat:" + videoFormat.toString());
         boolean enableAudio = streamProvider.containsAudioStream();
         previewCodec = videoFormat.getCodec();
         AppLog.i(TAG, "start startDecoderThread previewCodec=" + previewCodec + " enableAudio=" + enableAudio);

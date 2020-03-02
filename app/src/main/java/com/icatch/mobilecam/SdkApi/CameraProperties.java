@@ -1595,7 +1595,7 @@ public class CameraProperties {
     }
 
     public boolean setCameraPassword(String password) {
-        AppLog.i(tag, "start setCameraSsid date = " + password);
+        AppLog.i(tag, "start setCameraPassword date = " + password);
         boolean retValue = false;
         try {
             retValue = cameraProperty.setStringPropertyValue(PropertyId.CAMERA_PASSWORD, password);
@@ -1616,7 +1616,7 @@ public class CameraProperties {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        AppLog.i(tag, "end setCameraSsid retValue =" + retValue);
+        AppLog.i(tag, "end setCameraPassword retValue =" + retValue);
         return retValue;
     }
 

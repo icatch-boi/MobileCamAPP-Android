@@ -504,6 +504,7 @@ Confirm download?"</string>
     <string name="text_usb_device_not_detected">USB device not detected</string>
     <string name="text_usb_device_disconnected">USB device has been disconnected</string>
     <string name="non_360_picture_not_support_switch">The current picture is not a 360 image and does not support switching.</string>
+    <string name="permission_is_denied_info">The necessary permissions are denied, the application can not be used normally!</string>
 
 
 </resources>

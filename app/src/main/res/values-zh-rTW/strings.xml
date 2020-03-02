@@ -290,6 +290,7 @@ $1$"</string>
     <string name="text_usb_device_not_detected">未檢測到USB設備</string>
     <string name="text_usb_device_disconnected">USB設備已斷開</string>
     <string name="non_360_picture_not_support_switch">當前圖片不是360圖片，不支持切換</string>
+    <string name="permission_is_denied_info">必要的權限被拒絕，應用無法正常使用!</string>
 
 
 </resources>
