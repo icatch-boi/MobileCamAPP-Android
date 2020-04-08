@@ -4,19 +4,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
@@ -28,19 +27,20 @@ import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.FileOperation;
 import com.icatch.mobilecam.SdkApi.PanoramaPhotoPlayback;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
-import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.data.Mode.TouchMode;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
+import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
-import com.icatch.mobilecam.ui.ExtendComponent.ProgressWheel;
 import com.icatch.mobilecam.ui.Interface.PhotoPbView;
+import com.icatch.mobilecam.ui.RemoteFileHelper;
 import com.icatch.mobilecam.ui.adapter.PhotoPbViewPagerAdapter;
-import com.icatch.mobilecam.utils.BitmapTools;
+import com.icatch.mobilecam.utils.MediaRefresh;
 import com.icatch.mobilecam.utils.fileutils.FileOper;
 import com.icatch.mobilecam.utils.fileutils.FileTools;
-import com.icatch.mobilecam.utils.MediaRefresh;
+import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
+import com.icatch.mobilecam.utils.imageloader.TutkUriUtil;
 import com.icatchtek.pancam.customer.exception.IchGLSurfaceNotSetException;
 import com.icatchtek.pancam.customer.surface.ICatchSurfaceContext;
 import com.icatchtek.pancam.customer.type.ICatchGLImage;
@@ -48,7 +48,6 @@ import com.icatchtek.pancam.customer.type.ICatchGLPanoramaType;
 import com.icatchtek.pancam.customer.type.ICatchGLPoint;
 import com.icatchtek.reliant.customer.type.ICatchCodec;
 import com.icatchtek.reliant.customer.type.ICatchFile;
-import com.icatchtek.reliant.customer.type.ICatchFrameBuffer;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -56,8 +55,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import uk.co.senab.photoview.PhotoView;
 
 public class PhotoPbPresenter extends BasePresenter implements SensorEventListener {
     private String TAG = PhotoPbPresenter.class.getSimpleName();
@@ -70,9 +67,6 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
     private int lastItem = -1;
     private int tempLastItem = -1;
     private boolean isScrolling = false;
-
-    private int slideDirection = DIRECTION_RIGHT;
-
     private final static int DIRECTION_RIGHT = 0x1;
     private final static int DIRECTION_LEFT = 0x2;
     private final static int DIRECTION_UNKNOWN = 0x4;
@@ -80,10 +74,6 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
     public String downloadingFilename;
     public long downloadProcess;
     public long downloadingFilesize;
-    LinkedList<Asytask> asytaskList;
-    Asytask curAsytask;
-    private LruCache<Integer, Bitmap> mLruCache;
-    private List<View> viewList;
     private ExecutorService executor;
     private Future<Object> future;
     private PanoramaPhotoPlayback panoramaPhotoPlayback = CameraManager.getInstance().getCurCamera().getPanoramaPhotoPlayback();
@@ -108,80 +98,37 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
     private Sensor gyroscopeSensor;
     private ICatchSurfaceContext iCatchSurfaceContext;
     private String curFilePath = "";
-    private int curPanoramaType= ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE;
+    private int curPanoramaType = ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE;
+    private boolean hasDeleted = false;
+    private boolean surfaceCreated = false;
 
 
     public PhotoPbPresenter(Activity activity) {
         super(activity);
         this.activity = activity;
         handler = new Handler();
-        viewList = new LinkedList<View>();
-        initLruCache();
-        slideDirection = DIRECTION_UNKNOWN;
     }
 
     public void setView(PhotoPbView photoPbView) {
         this.photoPbView = photoPbView;
         initCfg();
-        fileList = GlobalInfo.getInstance().getRemotePhotoList();
+        fileList = new LinkedList<>();
+        List<MultiPbItemInfo> tempList = RemoteFileHelper.getInstance().getLocalFileList(FileType.FILE_PHOTO);
+        if (tempList != null) {
+            fileList.addAll(tempList);
+        }
         Bundle data = activity.getIntent().getExtras();
         curPhotoIdx = data.getInt("curfilePosition");
     }
 
-    private void initLruCache() {
-        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int cacheMemory = maxMemory / 8;
-        AppLog.d(TAG, "initLruCache maxMemory=" + maxMemory);
-        AppLog.d(TAG, "initLruCache cacheMemory=" + cacheMemory);
-        mLruCache = new LruCache<Integer, Bitmap>(cacheMemory) {
-            @Override
-            protected int sizeOf(Integer key, Bitmap value) {
-                AppLog.d(TAG, "cacheMemory value.getByteCount()=" + value.getByteCount());
-                return value.getByteCount();
-            }
-
-            @Override
-            protected void entryRemoved(boolean evicted, Integer key, Bitmap oldValue, Bitmap newValue) {
-                // TODO Auto-generated method stub
-                super.entryRemoved(evicted, key, oldValue, newValue);
-                if (oldValue != null) {
-                    AppLog.d(TAG, "cacheMemory entryRemoved key=" + key);
-                    //回收bitmap占用的内存空间
-                    oldValue.recycle();
-                    oldValue = null;
-                }
-            }
-        };
-    }
-
-    public Bitmap getBitmapFromLruCache(int fileHandle) {
-        AppLog.d(TAG, "getBitmapFromLruCache fileHandle=" + fileHandle);
-        return mLruCache.get(fileHandle);
-    }
-
-    protected void addBitmapToLruCache(int fileHandle, Bitmap bm) {
-        if (bm.getByteCount() > mLruCache.maxSize()) {
-            AppLog.d(TAG, "addBitmapToLruCache greater than mLruCache size fileHandle=" + fileHandle);
-            return;
-        }
-        if (getBitmapFromLruCache(fileHandle) == null) {
-            if (bm != null && fileHandle != 0) {
-                AppLog.d(TAG, "addBitmapToLruCache fileHandle=" + fileHandle);
-                mLruCache.put(fileHandle, bm);
-            }
-        }
-    }
 
     public void loadPanoramaImage() {
-        loadBitmaps(curPhotoIdx);
+        int curIndex = photoPbView.getViewPagerCurrentItem();
+        loadPanoramaPhoto(fileList.get(curIndex));
     }
 
     public void initView() {
-
-        for (int ii = 0; ii < fileList.size(); ii++) {
-            viewList.add(ii, null);
-        }
-        viewPagerAdapter = new PhotoPbViewPagerAdapter(activity, fileList, viewList, mLruCache);
+        viewPagerAdapter = new PhotoPbViewPagerAdapter(activity, fileList);
         viewPagerAdapter.setOnPhotoTapListener(new PhotoPbViewPagerAdapter.OnPhotoTapListener() {
             @Override
             public void onPhotoTap() {
@@ -190,8 +137,7 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
         });
         photoPbView.setViewPagerAdapter(viewPagerAdapter);
         photoPbView.setViewPagerCurrentItem(curPhotoIdx);
-        ShowCurPageNum();
-        loadBitmaps(curPhotoIdx);
+        updateUi();
         photoPbView.setOnPageChangeListener(new MyViewPagerOnPagerChangeListener());
     }
 
@@ -215,76 +161,12 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
         showDownloadEnsureDialog();
     }
 
-    void loadBitmaps(int curPhotoIdx) {
-        AppLog.i(TAG, "add task loadBitmaps curPhotoIdx=" + curPhotoIdx);
-        if (curPhotoIdx < 0) {
-            return;
-        }
-        if (curAsytask != null && !curAsytask.isCancelled()) {
-            AppLog.i(TAG, "add task curAsytask cancel curAsytask position" + curAsytask.position);
-            curAsytask.cancel(true);
-        }
-        if (asytaskList == null) {
-            asytaskList = new LinkedList<Asytask>();
-        } else {
-            asytaskList.clear();
-        }
-        if (fileList == null || fileList.size() < 0) {
-            AppLog.e(TAG, "fileList is null or size < 0");
-            return;
-        }
-        if (curPhotoIdx == 0) {
-            Asytask task1 = new Asytask(fileList.get(curPhotoIdx).iCatchFile, curPhotoIdx);
-            asytaskList.add(task1);
-            if (fileList.size() > 1) {
-                Asytask task2 = new Asytask(fileList.get(curPhotoIdx + 1).iCatchFile, curPhotoIdx + 1);
-                asytaskList.add(task2);
-            }
-
-        } else if (curPhotoIdx == fileList.size() - 1) {
-            Asytask task1 = new Asytask(fileList.get(curPhotoIdx).iCatchFile, curPhotoIdx);
-            Asytask task2 = new Asytask(fileList.get(curPhotoIdx - 1).iCatchFile, curPhotoIdx - 1);
-            asytaskList.add(task1);
-            asytaskList.add(task2);
-        } else {
-            AppLog.d(TAG, "loadBitmaps slideDirection=" + slideDirection);
-            if (slideDirection == DIRECTION_RIGHT) {
-                Asytask task1 = new Asytask(fileList.get(curPhotoIdx).iCatchFile, curPhotoIdx);
-                Asytask task2 = new Asytask(fileList.get(curPhotoIdx - 1).iCatchFile, curPhotoIdx - 1);
-                Asytask task3 = new Asytask(fileList.get(curPhotoIdx + 1).iCatchFile, curPhotoIdx + 1);
-                asytaskList.add(task1);
-                asytaskList.add(task2);
-                asytaskList.add(task3);
-            } else {
-                Asytask task1 = new Asytask(fileList.get(curPhotoIdx).iCatchFile, curPhotoIdx);
-                Asytask task2 = new Asytask(fileList.get(curPhotoIdx + 1).iCatchFile, curPhotoIdx + 1);
-                Asytask task3 = new Asytask(fileList.get(curPhotoIdx - 1).iCatchFile, curPhotoIdx - 1);
-                asytaskList.add(task1);
-                asytaskList.add(task2);
-                asytaskList.add(task3);
-            }
-        }
-        if (asytaskList != null && asytaskList.size() > 0) {
-            curAsytask = asytaskList.removeFirst();
-            curAsytask.execute();
-//            asytaskList.removeFirst().execute();
-        }
-    }
-
-    public void reloadBitmap() {
-        photoPbView.setViewPagerAdapter(viewPagerAdapter);
-        photoPbView.setViewPagerCurrentItem(curPhotoIdx);
-        ShowCurPageNum();
-        loadBitmaps(curPhotoIdx);
-    }
 
     public void loadPreviousImage() {
         AppLog.d(TAG, "loadPreviousImage=");
         if (curPhotoIdx > 0) {
             curPhotoIdx--;
         }
-        slideDirection = DIRECTION_LEFT;
-        loadBitmaps(curPhotoIdx);
         photoPbView.setViewPagerCurrentItem(curPhotoIdx);
     }
 
@@ -293,94 +175,16 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
         if (curPhotoIdx < fileList.size() - 1) {
             curPhotoIdx++;
         }
-        slideDirection = DIRECTION_RIGHT;
-        loadBitmaps(curPhotoIdx);
         photoPbView.setViewPagerCurrentItem(curPhotoIdx);
     }
 
-    class Asytask extends AsyncTask<String, Integer, Bitmap> {
-
-        ICatchFile iCatchFile;
-        int fileHandle;
-        int position;
-        ICatchFrameBuffer buffer;
-        boolean isZoom = false;
-
-        public Asytask(ICatchFile iCatchFile, int position) {
-            super();
-            this.iCatchFile = iCatchFile;
-            this.fileHandle = iCatchFile.getFileHandle();
-            this.position = position;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {//处理后台执行的任务，在后台线程执行
-            Bitmap bm = getBitmapFromLruCache(fileHandle);
-            AppLog.d(TAG, "getBitmapFromLruCache bm=" + bm);
-            if (bm != null) {
-                return bm;
-            } else {
-                buffer = fileOperation.getQuickview(iCatchFile);
-                if (buffer == null || buffer.getFrameSize() <= 0) {
-                    AppLog.e(TAG, "buffer == null  send _LOAD_BITMAP_FAILED 01");
-                    buffer = fileOperation.downloadFile(iCatchFile);
-                    isZoom = true;
-                }
-
-                if (buffer == null || buffer.getFrameSize() <= 0) {
-                    AppLog.e(TAG, "buffer == null  send _LOAD_BITMAP_FAILED 02");
-                    return null;
-                }
-                bm = BitmapTools.decodeByteArray(buffer.getBuffer());
-                AppLog.d(TAG, "position=" + position + " bm.getWidth()=" + bm.getWidth() + " bm.getHeight()" + bm.getHeight());
-                AppLog.d(TAG, "position=" + position + " iCatchFile.getFileWidth()=" + iCatchFile.getFileWidth() + " iCatchFile.getFileHeight()=" +
-                        iCatchFile.getFileHeight());
-                if (bm == null) {
-                    return null;
-                }
-                AppLog.d(TAG, "11 position=" + position + "fileHandle=" + fileHandle + " buffer size=" + buffer.getFrameSize() + " bm size=" + bm
-                        .getByteCount());
-                addBitmapToLruCache(fileHandle, bm);
-                return bm;
-            }
-        }
-
-        protected void onProgressUpdate(Integer... progress) {//在调用publishProgress之后被调用，在ui线程执行
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            //后台任务执行完之后被调用，在ui线程执行
-            if (position == photoPbView.getViewPagerCurrentItem()) {//current show
-                if (result != null) {
-                    if (fileList.get(position).isPanorama()) {
-                        clearOrRestoreSurface(false);
-                        panoramaPhotoPlayback.pancamGLClearFormat();
-//                        panoramaPhotoPlayback.pancamGLSetFormat(ICatchCodec.ICH_CODEC_BITMAP, (int) iCatchFile.getFileWidth(), (int) iCatchFile.getFileHeight
-//                                ());
-                        panoramaPhotoPlayback.pancamGLSetFormat(ICatchCodec.ICH_CODEC_BITMAP, result.getWidth(), result.getHeight());
-                        startRendering(new ICatchGLImage(result));
-                        return;
-                    }
-                    clearOrRestoreSurface(true);
-                    photoPbView.setViewPagerVisibility(View.VISIBLE);
-                    View view = viewList.get(position);
-                    if (view != null) {
-                        PhotoView photoView = (PhotoView) view.findViewById(R.id.photo);
-                        ProgressWheel progressBar = (ProgressWheel) view.findViewById(R.id.progress_wheel);
-                        if (photoView != null && !result.isRecycled()) {
-                            photoView.setImageBitmap(result);
-                        }
-                        if (progressBar != null) {
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-            if (asytaskList != null && asytaskList.size() > 0) {
-                curAsytask = asytaskList.removeFirst();
-                curAsytask.execute();
-            }
-        }
+    public void back() {
+        clearImage(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
+        Intent intent = new Intent();
+        intent.putExtra("hasDeleted", hasDeleted);
+        intent.putExtra("fileType", FileType.FILE_PHOTO.ordinal());
+        activity.setResult(1000, intent);
+        activity.finish();
     }
 
 
@@ -388,7 +192,7 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
 
         @Override
         public void onPageScrollStateChanged(int arg0) {
-
+//            AppLog.d(TAG,"onPageScrollStateChanged arg0:" + arg0);
             switch (arg0) {
                 case ViewPager.SCROLL_STATE_DRAGGING:
                     isScrolling = true;
@@ -401,25 +205,24 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
 
                     curPhotoIdx = photoPbView.getViewPagerCurrentItem();
                     isScrolling = false;
-                    loadBitmaps(photoPbView.getViewPagerCurrentItem());
-                    ShowCurPageNum();
+//                    updateUi();
                     break;
                 case ViewPager.SCROLL_STATE_IDLE:
                     break;
+
+                default:
             }
         }
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
+//            AppLog.d(TAG,"onPageScrolled arg0:" + arg0 + " arg1:" + arg1 + " arg2:" + arg2);
             if (isScrolling) {
                 if (lastItem > arg2) {
                     // 递减，向右侧滑动
-                    slideDirection = DIRECTION_RIGHT;
                 } else if (lastItem < arg2) {
                     // 递减，向右侧滑动
-                    slideDirection = DIRECTION_LEFT;
                 } else if (lastItem == arg2) {
-                    slideDirection = DIRECTION_RIGHT;
                 }
             }
             lastItem = arg2;
@@ -427,7 +230,8 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
 
         @Override
         public void onPageSelected(int arg0) {
-            ShowCurPageNum();
+            AppLog.d(TAG, "onPageSelected arg0:" + arg0);
+            updateUi();
         }
     }
 
@@ -518,14 +322,13 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
                     @Override
                     public void run() {
                         MyProgressDialog.closeProgressDialog();
+                        RemoteFileHelper.getInstance().remove(fileList.get(curPhotoIdx), FileType.FILE_PHOTO);
                         fileList.remove(curPhotoIdx);
-                        viewList.remove(curPhotoIdx);
                         viewPagerAdapter.notifyDataSetChanged();
                         photoPbView.setViewPagerAdapter(viewPagerAdapter);
                         int photoNums = fileList.size();
                         if (photoNums == 0) {
-                            GlobalInfo.getInstance().setRemotePhotoList(null);
-                            activity.finish();
+                            back();
                             return;
                         } else {
                             if (curPhotoIdx == photoNums) {
@@ -533,8 +336,7 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
                             }
                             AppLog.d(TAG, "photoNums=" + photoNums + " curPhotoIdx=" + curPhotoIdx);
                             photoPbView.setViewPagerCurrentItem(curPhotoIdx);
-                            ShowCurPageNum();
-                            loadBitmaps(curPhotoIdx);
+                            updateUi();
                         }
                     }
                 });
@@ -543,10 +345,16 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
         }
     }
 
-    private void ShowCurPageNum() {
-        int curPhoto = photoPbView.getViewPagerCurrentItem() + 1;
-        String indexInfo = curPhoto + "/" + fileList.size();
+    private void updateUi() {
+        int curIndex = photoPbView.getViewPagerCurrentItem();
+        String indexInfo = (curIndex + 1) + "/" + fileList.size();
         photoPbView.setIndexInfoTxv(indexInfo);
+        MultiPbItemInfo itemInfo = fileList.get(curIndex);
+        photoPbView.setSurfaceviewVisibility(itemInfo.isPanorama() ? View.VISIBLE : View.GONE);
+        photoPbView.setViewPagerVisibility(itemInfo.isPanorama() ? View.GONE : View.VISIBLE);
+        if(itemInfo.isPanorama() && surfaceCreated){
+            loadPanoramaPhoto(itemInfo);
+        }
     }
 
     public void showDownloadEnsureDialog() {
@@ -591,8 +399,8 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
             public void onClick(DialogInterface dialog, int whichButton) {
                 // 这里添加点击确定后的逻辑
                 MyProgressDialog.showProgressDialog(activity, R.string.dialog_deleting);
-                asytaskList.clear();
                 executor = Executors.newSingleThreadExecutor();
+                hasDeleted = true;
                 future = executor.submit(new DeleteThread(), null);
             }
         });
@@ -609,29 +417,8 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
         AppLog.d(TAG, "start initSurface");
         iCatchSurfaceContext = new ICatchSurfaceContext(surface);
         panoramaPhotoPlayback.setSurface(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE, iCatchSurfaceContext);
-
         AppLog.d(TAG, "end initSurface");
-    }
-
-    public void startRendering(ICatchGLImage image) {
-        AppLog.d(TAG, "start startRendering panoramaPhotoPlayback=" + panoramaPhotoPlayback);
-        photoPbView.setViewPagerVisibility(View.GONE);
-        if (panoramaPhotoPlayback == null) {
-            return;
-        }
-        registerGyroscopeSensor();
-        panoramaPhotoPlayback.update(image);
-        insidePanorama();
-        AppLog.d(TAG, "end startRendering");
-    }
-
-    public void stopRendering() {
-        AppLog.d(TAG, "start stopRendering");
-        if (panoramaPhotoPlayback == null) {
-            return;
-        }
-        panoramaPhotoPlayback.clear();
-        AppLog.d(TAG, "end stopRendering");
+        surfaceCreated = true;
     }
 
     public void insidePanorama() {
@@ -644,14 +431,15 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
     }
 
 
-    public void destroyImage(int iCatchSphereType) {
+    public void clearImage(int iCatchSphereType) {
+        surfaceCreated = false;
         removeGyroscopeListener();
         if (panoramaPhotoPlayback != null) {
             if (iCatchSurfaceContext != null) {
                 panoramaPhotoPlayback.removeSurface(iCatchSphereType, iCatchSurfaceContext);
+                iCatchSurfaceContext = null;
             }
             panoramaPhotoPlayback.clear();
-            panoramaPhotoPlayback.release();
         }
     }
 
@@ -801,58 +589,68 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
                 e.printStackTrace();
             }
         }
-        if (curPhotoIdx >= 0) {
-            int fileHandle = fileList.get(curPhotoIdx).getFileHandle();
-            boolean isPanorama = fileList.get(curPhotoIdx).isPanorama();
-            Bitmap bitmap = getBitmapFromLruCache(fileHandle);
-            if (isPanorama && bitmap != null) {
-                panoramaPhotoPlayback.pancamGLSetFormat(ICatchCodec.ICH_CODEC_BITMAP, bitmap.getWidth(), bitmap.getHeight());
-                panoramaPhotoPlayback.update(new ICatchGLImage(bitmap));
-            }
-        }
         AppLog.d(TAG, "end setDrawingArea");
     }
 
-    public void init(int sphereType) {
-        panoramaPhotoPlayback.pancamGLInit();
-    }
-
-    public void uninit() {
-        if (panoramaPhotoPlayback == null) {
+    private void loadPanoramaPhoto(final MultiPbItemInfo itemInfo) {
+        if (itemInfo == null) {
             return;
         }
-        panoramaPhotoPlayback.release();
+        if (itemInfo.isPanorama()) {
+            String url = TutkUriUtil.getTutkOriginalUri(itemInfo.iCatchFile);
+            ImageLoaderUtil.loadImage(url, new ImageLoaderUtil.OnLoadListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    AppLog.d(TAG, "onLoadingStarted imageUri:" + imageUri);
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view) {
+                    AppLog.d(TAG, "onLoadingFailed imageUri:" + imageUri);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    AppLog.d(TAG, "onLoadingComplete imageUri:" + imageUri);
+                    ICatchFile iCatchFile = TutkUriUtil.getInfoOfUri(imageUri);
+                    if (loadedImage != null && iCatchFile != null && iCatchFile.getFileHandle() == itemInfo.getFileHandle()) {
+                        photoPbView.setViewPagerVisibility(View.GONE);
+                        panoramaPhotoPlayback.pancamGLSetFormat(ICatchCodec.ICH_CODEC_BITMAP, loadedImage.getWidth(), loadedImage.getHeight());
+                        panoramaPhotoPlayback.update(new ICatchGLImage(loadedImage));
+                        registerGyroscopeSensor();
+                        insidePanorama();
+                    }
+                }
+            });
+        }
+    }
+
+    public void release() {
+        if (panoramaPhotoPlayback != null) {
+            panoramaPhotoPlayback.release();
+        }
     }
 
     public void initPanorama() {
-        uninit();
-        init(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
-    }
-
-    public void clearOrRestoreSurface(boolean value) {
-        AppLog.d(TAG, "clearOrRestoreSurface value=" + value);
-        if (value == true) {
-            destroyImage(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
-        }
-        photoPbView.setSurfaceviewTransparent(value);
+        panoramaPhotoPlayback.pancamGLInit();
     }
 
     public void setPanoramaType() {
-        if(!fileList.get(curPhotoIdx).isPanorama()){
-            MyToast.show(activity,R.string.non_360_picture_not_support_switch);
+        if (!fileList.get(curPhotoIdx).isPanorama()) {
+            MyToast.show(activity, R.string.non_360_picture_not_support_switch);
             return;
         }
-        if(curPanoramaType == ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE ){
+        if (curPanoramaType == ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE) {
             panoramaPhotoPlayback.changePanoramaType(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_ASTEROID);
             curPanoramaType = ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_ASTEROID;
             photoPbView.setPanoramaTypeTxv(R.string.text_asteroid);
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        }else if(curPanoramaType == ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_ASTEROID){
+        } else if (curPanoramaType == ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_ASTEROID) {
             panoramaPhotoPlayback.changePanoramaType(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_VIRTUAL_R);
             curPanoramaType = ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_VIRTUAL_R;
             photoPbView.setPanoramaTypeTxv(R.string.text_vr);
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        }else{
+        } else {
             panoramaPhotoPlayback.changePanoramaType(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
             curPanoramaType = ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE;
             photoPbView.setPanoramaTypeTxv(R.string.text_panorama);

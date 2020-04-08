@@ -116,7 +116,7 @@ public class MjpgDecoderThread {
                 try {
                     ret = streamProvider.getNextVideoFrame(buffer);
                 } catch (IchTryAgainException e) {
-                    AppLog.e(TAG, "IchTryAgainException");
+//                    AppLog.e(TAG, "IchTryAgainException");
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                     continue;

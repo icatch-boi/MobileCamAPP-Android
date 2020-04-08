@@ -20,7 +20,7 @@ import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.data.entity.LimitQueue;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
-import com.icatch.mobilecam.data.type.PhotoWallPreviewType;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.Listener.OnAddAsytaskListener;
@@ -146,7 +146,7 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
         operationMode = OperationMode.MODE_BROWSE;
         int curWidth = 0;
         isFirstEnterThisActivity = true;
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
             videoView.setGridViewVisibility(View.GONE);
             videoView.setListViewVisibility(View.VISIBLE);
             photoWallListAdapter = new MultiPbPhotoWallListAdapter(activity, videoInfoList, mLruCache, FileType.FILE_VIDEO);
@@ -168,10 +168,10 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
     }
 
     public void changePreviewType() {
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
-            AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_GRID;
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+            AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
         } else {
-            AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_LIST;
+            AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
         }
         loadVideoWall();
 //        setAdaper();
@@ -179,7 +179,7 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
 
 
     public void refreshPhotoWall() {
-        Log.i("1122", "refreshPhotoWall AppInfo.photoWallPreviewType=" + AppInfo.photoWallPreviewType);
+        Log.i("1122", "refreshPhotoWall AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
         videoInfoList = getVideoList();
         if (videoInfoList == null || videoInfoList.size() <= 0) {
             videoView.setGridViewVisibility(View.GONE);
@@ -306,7 +306,7 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
         if (operationMode == OperationMode.MODE_EDIT) {
             operationMode = OperationMode.MODE_BROWSE;
             videoView.changeMultiPbMode(operationMode);
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.quitEditMode();
             } else {
                 photoWallGridAdapter.quitEditMode();
@@ -330,7 +330,7 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
     }
 
     public void gridViewSelectOrCancelOnce(final int position) {
-        Log.d(TAG, "gridViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallPreviewType);
+        Log.d(TAG, "gridViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
         if (operationMode == OperationMode.MODE_BROWSE) {
             Log.d(TAG, "gridViewSelectOrCancelOnce operationMode=" + operationMode);
 
@@ -371,7 +371,7 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
         }
         int selectNum;
         if (isSelectAll) {
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.selectAllItems();
                 selectNum = photoWallListAdapter.getSelectedCount();
             } else {
@@ -380,7 +380,7 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
             }
             videoView.setVideoSelectNumText(selectNum);
         } else {
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.cancelAllSelections();
                 selectNum = photoWallListAdapter.getSelectedCount();
             } else {
@@ -392,7 +392,7 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
     }
 
     public List<MultiPbItemInfo> getSelectedList() {
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
             return photoWallListAdapter.getSelectedList();
         } else {
             return photoWallGridAdapter.getCheckedItemsList();
@@ -443,7 +443,7 @@ public class MultiPbVideoFragmentPresenter extends BasePresenter {
             }
             //后台任务执行完之后被调用，在ui线程执行
             ImageView imageView;
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_GRID) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_GRID) {
                 imageView = (ImageView) videoView.gridViewFindViewWithTag(fileHandle);
             } else {
                 imageView = (ImageView) videoView.listViewFindViewWithTag(fileHandle);

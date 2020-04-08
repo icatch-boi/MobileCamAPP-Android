@@ -39,4 +39,15 @@ public class PropertyId {
     public final static int AP_MODE_TO_STA_MODE = 0xD7FB;
 
     public final static int SUPPORT_PREVIEW = 0xD7FF;
+    //新增属性 20200317
+    //曝光补偿
+    public final static int EXPOSURE_COMPENSATION = 0xD723;
+    //图像防抖
+    public final static int IMAGE_STABILIZATION = 0xD724;
+    //录像时长
+    public final static int VIDEO_FILE_LENGTH = 0xD725;
+    //是否进入pv页面
+    public final static int DEFALUT_TO_PREVIEW = 0xD72C;
+    //pb 分段获取文件
+    public final static int CAMERA_PB_LIMIT_NUMBER = 0xD83F;
 }

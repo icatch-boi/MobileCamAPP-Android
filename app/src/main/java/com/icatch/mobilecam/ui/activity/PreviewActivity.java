@@ -39,6 +39,8 @@ import com.icatch.mobilecam.Presenter.PreviewPresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
 import com.icatch.mobilecam.ui.Interface.PreviewView;
+import com.icatch.mobilecam.utils.imageloader.ICatchtekImageDownloader;
+import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
 import com.icatchtek.control.customer.type.ICatchCamEventID;
 
 import static com.icatch.mobilecam.data.Message.AppMessage.FACEBOOK_LOGIN_SUCCEED;

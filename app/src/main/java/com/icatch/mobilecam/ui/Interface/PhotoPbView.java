@@ -15,6 +15,6 @@ public interface PhotoPbView {
 
     void setViewPagerVisibility(int visibility);
 
-    void setSurfaceviewTransparent(boolean value);
+    void setSurfaceviewVisibility(int visibility);
     void setPanoramaTypeTxv( int resId);
 }

@@ -97,6 +97,10 @@ public class UIDisplaySource {
         if (cameraProperties.hasFuction(PropertyId.CAMERA_ESSID)) {//camera password and wifi
             settingMenuList.add(new SettingMenu(R.string.camera_wifi_configuration, ""));
         }
+        if (cameraProperties.hasFuction(PropertyId.EXPOSURE_COMPENSATION)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_exposure_compensation, baseProrertys.getExposureCompensation()
+                    .getCurrentUiStringInPreview()));
+        }
 
 
         settingMenuList.add(new SettingMenu(R.string.setting_app_version, AppInfo.APP_VERSION));
@@ -144,7 +148,16 @@ public class UIDisplaySource {
         if (cameraProperties.hasFuction(PropertyId.CAMERA_ESSID)) {//camera password and wifi
             settingMenuList.add(new SettingMenu(R.string.camera_wifi_configuration, ""));
         }
-
+        if (cameraProperties.hasFuction(PropertyId.EXPOSURE_COMPENSATION)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_exposure_compensation, baseProrertys.getExposureCompensation()
+                    .getCurrentUiStringInPreview()));
+        }
+        if (cameraProperties.hasFuction(PropertyId.IMAGE_STABILIZATION)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_image_stabilization, ""));
+        }
+        if (cameraProperties.hasFuction(PropertyId.VIDEO_FILE_LENGTH)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_video_file_length, baseProrertys.getVideoFileLength().getCurrentUiStringInPreview()));
+        }
         settingMenuList.add(new SettingMenu(R.string.setting_app_version, AppInfo.APP_VERSION));
         settingMenuList.add(new SettingMenu(R.string.setting_product_name, cameraFixedInfo.getCameraName()));
         if (cameraProperties.hasFuction(ICatchCamProperty.ICH_CAM_CAP_FW_VERSION)) {
@@ -198,6 +211,10 @@ public class UIDisplaySource {
         if (cameraProperties.hasFuction(PropertyId.CAMERA_ESSID)) {//camera password and wifi
             settingMenuList.add(new SettingMenu(R.string.camera_wifi_configuration, ""));
 
+        }
+        if (cameraProperties.hasFuction(PropertyId.EXPOSURE_COMPENSATION)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_exposure_compensation, baseProrertys.getExposureCompensation()
+                    .getCurrentUiStringInPreview()));
         }
         settingMenuList.add(new SettingMenu(R.string.setting_app_version, AppInfo.APP_VERSION));
         settingMenuList.add(new SettingMenu(R.string.setting_product_name, cameraFixedInfo.getCameraName()));

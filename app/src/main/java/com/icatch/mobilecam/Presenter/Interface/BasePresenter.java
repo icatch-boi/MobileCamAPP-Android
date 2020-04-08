@@ -7,10 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.WindowManager;
 
+import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.GlobalApp.ExitApp;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
-import com.icatch.mobilecam.Log.AppLog;
 
 import java.lang.reflect.Method;
 

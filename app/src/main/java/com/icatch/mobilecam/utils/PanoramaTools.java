@@ -105,7 +105,7 @@ public class PanoramaTools {
         if(width== 0 || height == 0){
             return false;
         }
-        if(height *2 == width){
+        if(width >= height *2){
             return true;
         }
         return false;

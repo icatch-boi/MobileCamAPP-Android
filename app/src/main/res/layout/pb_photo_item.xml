@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto">
 
     <uk.co.senab.photoview.PhotoView
         android:id="@+id/photo"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="fitCenter"
         android:gravity="center"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+    <SurfaceView
+        android:id="@+id/photo_surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"/>
 
     <com.icatch.mobilecam.ui.ExtendComponent.ProgressWheel
         android:id="@+id/progress_wheel"

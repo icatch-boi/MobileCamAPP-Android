@@ -4,6 +4,7 @@ import com.icatch.mobilecam.data.entity.ItemInfo;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.PropertyId.PropertyId;
 import com.icatch.mobilecam.SdkApi.CameraProperties;
+import com.icatch.mobilecam.utils.ConvertTools;
 import com.icatchtek.control.customer.ICatchCameraUtil;
 import com.icatchtek.reliant.customer.exception.IchInvalidArgumentException;
 
@@ -25,6 +26,10 @@ public class PropertyHashMapDynamic {
         switch (propertyId) {
             case PropertyId.CAPTURE_DELAY:
                 return getCaptureDelayMap(cameraProperties);
+            case PropertyId.EXPOSURE_COMPENSATION:
+                return getExposureCompensationMap(cameraProperties);
+            case PropertyId.VIDEO_FILE_LENGTH:
+                return getVideoFileLengthMap(cameraProperties);
 
             default:
                 return null;
@@ -56,6 +61,37 @@ public class PropertyHashMapDynamic {
             captureDelayMap.put(delyaList.get(ii), new ItemInfo(temp, temp, 0));
         }
         return captureDelayMap;
+    }
+
+    private HashMap<Integer, ItemInfo> getExposureCompensationMap(CameraProperties cameraProperties) {
+        HashMap<Integer, ItemInfo> exposureCompensationMap = new HashMap<Integer, ItemInfo>();
+        List<Integer> exposureCompensationList = cameraProperties.getSupportedPropertyValues(PropertyId.EXPOSURE_COMPENSATION);
+//        String temp;
+        for (int ii = 0; ii < exposureCompensationList.size(); ii++) {
+            int value = exposureCompensationList.get(ii);
+            String temp = ConvertTools.getExposureCompensation(value);
+
+            AppLog.d(TAG, "exposureCompensationList ii=" + ii + " value=" + value + " temp=" + temp);
+            exposureCompensationMap.put(value, new ItemInfo(temp, temp, 0));
+        }
+        return exposureCompensationMap;
+    }
+
+    private HashMap<Integer, ItemInfo> getVideoFileLengthMap(CameraProperties cameraProperties) {
+        HashMap<Integer, ItemInfo> videoFileLengthMap = new HashMap<Integer, ItemInfo>();
+        List<Integer> videoFileLengthList = cameraProperties.getSupportedPropertyValues(PropertyId.VIDEO_FILE_LENGTH);
+        String temp;
+        for (int ii = 0; ii < videoFileLengthList.size(); ii++) {
+            int value = videoFileLengthList.get(ii);
+            if (value == 0) {
+                temp = "OFF";
+            } else {
+                temp = value + "s";
+            }
+            AppLog.d(TAG, "videoFileLengthList ii=" + ii + " value=" + value);
+            videoFileLengthMap.put(value, new ItemInfo(temp, temp, 0));
+        }
+        return videoFileLengthMap;
     }
 
     private HashMap<String, ItemInfo> getImageSizeMap(CameraProperties cameraProperties) {

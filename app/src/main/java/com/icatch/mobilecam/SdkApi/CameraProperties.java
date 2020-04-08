@@ -956,6 +956,11 @@ public class CameraProperties {
         }
         AppLog.i(tag, "end getSupportedModes list =" + list);
         return list;
+
+//        List<Integer> list = new LinkedList<>();
+//        list.add(42);
+//        list.add(43);
+//        return list;
     }
 
     public List<Integer> getSupportedTimeLapseDurations() {
@@ -2239,5 +2244,31 @@ public class CameraProperties {
             isSupport = true;
         }
         return isSupport;
+    }
+
+    public int getNumberOfSensors() {
+        AppLog.i(tag, "start getNumberOfSensors");
+        int retValue = 1;
+        try {
+            retValue = cameraProperty.getNumberOfSensors();
+        } catch (Exception e) {
+            AppLog.e(tag, "Exception:" + e.getClass().getSimpleName());
+            e.printStackTrace();
+        }
+        AppLog.i(tag, "end getNumberOfSensors retValue =" + retValue);
+        return retValue;
+    }
+
+    public boolean checkCameraCapabilities(int featureID) {
+        AppLog.i(tag, "start checkCameraCapabilities featureID:" + featureID);
+        boolean retValue = false;
+        try {
+            retValue = cameraProperty.checkCameraCapabilities(featureID);
+        } catch (Exception e) {
+            AppLog.e(tag, "Exception:" + e.getClass().getSimpleName());
+            e.printStackTrace();
+        }
+        AppLog.i(tag, "end checkCameraCapabilities retValue =" + retValue);
+        return retValue;
     }
 }

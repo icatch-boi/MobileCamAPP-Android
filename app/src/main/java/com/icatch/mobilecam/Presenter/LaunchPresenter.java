@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.os.Environment;
 import android.os.Handler;
@@ -26,6 +27,7 @@ import com.icatch.mobilecam.MyCamera.CommandSession;
 import com.icatch.mobilecam.MyCamera.MyCamera;
 import com.icatch.mobilecam.Presenter.Interface.BasePresenter;
 import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.SdkApi.CameraProperties;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.AppInfo.AppSharedPreferences;
 import com.icatch.mobilecam.data.AppInfo.ConfigureInfo;
@@ -46,10 +48,14 @@ import com.icatch.mobilecam.ui.Fragment.AddNewCamFragment;
 import com.icatch.mobilecam.ui.Interface.LaunchView;
 import com.icatch.mobilecam.ui.activity.PreviewActivity;
 import com.icatch.mobilecam.ui.activity.PvParamSettingActivity;
+import com.icatch.mobilecam.ui.activity.RemoteMultiPbActivity;
 import com.icatch.mobilecam.ui.adapter.CameraSlotAdapter;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.utils.fileutils.MFileTools;
+import com.icatch.mobilecam.utils.imageloader.ICatchtekImageDownloader;
+import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
 import com.icatchtek.control.customer.type.ICatchCamEventID;
+import com.icatchtek.control.customer.type.ICatchCamFeatureID;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -72,7 +78,7 @@ public class LaunchPresenter extends BasePresenter {
     private LinkedList<SelectedCameraInfo> searchCameraInfoList;
     private int cameraSlotPosition;
     private USBMonitor mUSBMonitor;
-//    private UsbDevice usbDevice;
+    //    private UsbDevice usbDevice;
     private WifiListener wifiListener;
 
     public LaunchPresenter(Activity activity) {
@@ -114,9 +120,7 @@ public class LaunchPresenter extends BasePresenter {
         String ip = "";
         if (HotSpot.isApEnabled(activity)) {
             ip = HotSpot.getFirstConnectedHotIP();
-        } else if (!AppInfo.enableLive) {
-            ip = "192.168.1.1";
-        } else {
+        } else{
             ip = AppInfo.inputIp;
         }
         return ip;
@@ -129,7 +133,7 @@ public class LaunchPresenter extends BasePresenter {
         if (cameraType == CameraType.PANORAMA_CAMERA) {
             cameraName = MWifiManager.getSsid(activity);
         } else if (cameraType == CameraType.USB_CAMERA) {
-             usbDevice = getUsbDevice();
+            usbDevice = getUsbDevice();
             if (usbDevice != null) {
                 cameraName = getDeviceName(usbDevice);
             } else {
@@ -152,7 +156,7 @@ public class LaunchPresenter extends BasePresenter {
             }).start();
         } else {
             if (camSlotList.get(position).isOccupied) {
-                AppDialog.showDialogWarn(activity, "Please connect camera " + camSlotList.get(position).cameraName);
+                AppDialog.showDialogWarn(activity, activity.getString(R.string.text_please_connect_camera).replace("$1$", camSlotList.get(position).cameraName));
             } else if (!isRegistered(cameraName)) {
                 MyProgressDialog.showProgressDialog(activity, R.string.action_processing);
                 final String finalWifiSsid = cameraName;
@@ -167,7 +171,7 @@ public class LaunchPresenter extends BasePresenter {
                     }
                 }).start();
             } else {
-                AppDialog.showDialogWarn(activity, "Camera " + cameraName + " has been registered");
+                AppDialog.showDialogWarn(activity, activity.getString(R.string.text_camera_has_been_registered).replace("$1$", cameraName));
             }
         }
     }
@@ -186,9 +190,9 @@ public class LaunchPresenter extends BasePresenter {
                         beginConnectCamera(position, getCameraIp(), finalWifiSsid);
                     } else if (cameraType == CameraType.USB_CAMERA) {
                         UsbDevice usbDevice = getUsbDevice();
-                        if(usbDevice != null){
+                        if (usbDevice != null) {
                             beginConnectUSBCamera(position, usbDevice);
-                        }else {
+                        } else {
                             launchHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -201,7 +205,7 @@ public class LaunchPresenter extends BasePresenter {
             }).start();
         } else {
             if (camSlotList.get(position).isOccupied) {
-                AppDialog.showDialogWarn(activity, "Please connect camera " + camSlotList.get(position).cameraName);
+                AppDialog.showDialogWarn(activity, activity.getString(R.string.text_please_connect_camera).replace("$1$", camSlotList.get(position).cameraName));
             } else {
                 launchView.setLaunchLayoutVisibility(View.GONE);
                 launchView.setLaunchSettingFrameVisibility(View.VISIBLE);
@@ -231,8 +235,8 @@ public class LaunchPresenter extends BasePresenter {
         cameraSlotAdapter = new CameraSlotAdapter(GlobalInfo.getInstance().getAppContext(), camSlotList, launchHandler, SystemInfo.getMetrics
                 (activity.getApplicationContext()).heightPixels);
         UsbDevice usbDevice = getUsbDevice();
-        if(usbDevice != null){
-            setReadyState(true,getDeviceName(usbDevice));
+        if (usbDevice != null) {
+            setReadyState(true, getDeviceName(usbDevice));
         }
         launchView.setListviewAdapter(cameraSlotAdapter);
 
@@ -249,7 +253,7 @@ public class LaunchPresenter extends BasePresenter {
             return;
         }
         for (CameraSlot temp : camSlotList
-                ) {
+        ) {
             if (temp.cameraName != null && temp.cameraName.equals(cameraName)) {
                 temp.isReady = isReady;
                 break;
@@ -391,7 +395,8 @@ public class LaunchPresenter extends BasePresenter {
                     break;
                 case AppMessage.MESSAGE_CAMERA_CONNECT_SUCCESS:
                     MyProgressDialog.closeProgressDialog();
-                    redirectToAnotherActivity(activity, PreviewActivity.class);
+                    redirectToAnotherActivity(activity);
+//                    redirectToAnotherActivity(activity, PreviewActivity.class);
                     break;
                 case AppMessage.MESSAGE_DELETE_CAMERA:
                     removeCamera(msg.arg1);
@@ -426,7 +431,7 @@ public class LaunchPresenter extends BasePresenter {
                 case AppMessage.MESSAGE_CONNECTED:
                     AppLog.i(TAG, "receive MESSAGE_CONNECTED");
                     String ssid = MWifiManager.getSsid(activity);
-                    if(ssid != null){
+                    if (ssid != null) {
                         setReadyState(true, ssid);
                         notifyListview();
                     }
@@ -451,14 +456,42 @@ public class LaunchPresenter extends BasePresenter {
             @Override
             public void run() {
                 MyProgressDialog.closeProgressDialog();
-                redirectToAnotherActivity(activity, PreviewActivity.class);
+                redirectToAnotherActivity(activity);
+//                redirectToAnotherActivity(activity, PreviewActivity.class);
             }
         });
     }
 
+    public void redirectToAnotherActivity(Context context) {
+        ICatchtekImageDownloader downloader = new ICatchtekImageDownloader(activity);
+        ImageLoaderConfig.initImageLoader(activity.getApplicationContext(), downloader);
+        MyCamera camera = CameraManager.getInstance().getCurCamera();
+        CameraProperties cameraProperties = null;
+        if (camera != null) {
+            cameraProperties = camera.getCameraProperties();
+        }
+        if (cameraProperties != null
+                && cameraProperties.hasFuction(PropertyId.DEFALUT_TO_PREVIEW)
+                && !cameraProperties.checkCameraCapabilities(ICatchCamFeatureID.ICH_CAM_APP_DEFAULT_TO_PREVIEW)) {
+            if (cameraProperties.isSDCardExist()) {
+                Intent intent = new Intent();
+                AppLog.i(TAG, "intent:start PbMainActivity.class");
+                intent.setClass(context, RemoteMultiPbActivity.class);
+                context.startActivity(intent);
+            } else {
+                AppDialog.showDialogWarn(activity, R.string.dialog_card_lose);
+            }
+        } else {
+            Intent intent = new Intent();
+            intent.setClass(context, PreviewActivity.class);
+            context.startActivity(intent);
+        }
+
+    }
+
     private void beginConnectUSBCamera(int position, UsbDevice usbDevice) {
         AppLog.i(TAG, "beginConnectUSBCamera  == true");
-        if(!mUSBMonitor.hasPermission(usbDevice)){
+        if (!mUSBMonitor.hasPermission(usbDevice)) {
             mUSBMonitor.requestPermission(usbDevice);
             return;
         }
@@ -496,7 +529,7 @@ public class LaunchPresenter extends BasePresenter {
     }
 
     public void registerUSB() {
-        if(mUSBMonitor == null){
+        if (mUSBMonitor == null) {
             initUsbMonitor();
         }
         mUSBMonitor.register();
@@ -521,7 +554,7 @@ public class LaunchPresenter extends BasePresenter {
         @Override
         public void onConnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock, final boolean createNew) {
             AppLog.d(TAG, "USBMonitor onConnect getDeviceName:" + getDeviceName(device));
-            beginConnectUSBCamera(cameraSlotPosition,device);
+            beginConnectUSBCamera(cameraSlotPosition, device);
         }
 
         @Override
@@ -546,7 +579,7 @@ public class LaunchPresenter extends BasePresenter {
     };
 
     public UsbDevice getUsbDevice() {
-        AppLog.d(TAG,"getUsbDevice mUSBMonitor:" + mUSBMonitor);
+        AppLog.d(TAG, "getUsbDevice mUSBMonitor:" + mUSBMonitor);
         if (mUSBMonitor != null) {
             final List<DeviceFilter> filter = DeviceFilter.getDeviceFilters(activity, R.xml.device_filter);
             List<UsbDevice> deviceList = mUSBMonitor.getDeviceList(filter.get(0));
@@ -556,7 +589,7 @@ public class LaunchPresenter extends BasePresenter {
             } else {
                 return deviceList.get(0);
             }
-        }else {
+        } else {
             return null;
         }
     }
@@ -576,10 +609,10 @@ public class LaunchPresenter extends BasePresenter {
     }
 
 
-    private String getDeviceName(UsbDevice usbDevice){
-        if(usbDevice != null){
+    private String getDeviceName(UsbDevice usbDevice) {
+        if (usbDevice != null) {
             return "UsbDevice_" + String.valueOf(usbDevice.getVendorId());
-        }else {
+        } else {
             return "UsbDevice";
         }
 

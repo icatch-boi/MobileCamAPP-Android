@@ -93,11 +93,11 @@ public class CameraSlotAdapter extends BaseAdapter {
 
             if (camSlotItem.isReady) {
                 slotConnectStatusTV.setTextColor(context.getResources().getColor(R.color.cambridge_blue));
-                slotConnectStatusTV.setText("Connected");
+                slotConnectStatusTV.setText(R.string.text_connected);
                 slotConnectStatusIV.setImageDrawable(context.getResources().getDrawable(R.drawable.camera_wifi_connected));
             } else {
                 slotConnectStatusTV.setTextColor(context.getResources().getColor(R.color.graywhite));
-                slotConnectStatusTV.setText("Disconnect");
+                slotConnectStatusTV.setText(R.string.text_disconnect);
                 slotConnectStatusIV.setImageDrawable(context.getResources().getDrawable(R.drawable.camera_wifi_disconnected));
             }
             slotCameraName.setText(camSlotItem.cameraName);

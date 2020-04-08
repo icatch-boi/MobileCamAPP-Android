@@ -72,7 +72,6 @@ public class MultiPbPhotoWallGridAdapter extends BaseAdapter implements StickyGr
             ViewGroup.LayoutParams photoLayoutParams = mViewHolder.mImageView.getLayoutParams();
             photoLayoutParams.width = (width - 3 * 1) / 4;
             photoLayoutParams.height = (width - 3 * 1) / 4;
-
             mViewHolder.mImageView.setLayoutParams(photoLayoutParams);
             convertView.setTag(mViewHolder);
         } else {

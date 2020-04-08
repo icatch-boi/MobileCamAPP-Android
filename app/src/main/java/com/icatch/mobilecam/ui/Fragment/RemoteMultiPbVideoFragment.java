@@ -17,7 +17,7 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallGridAdapter;
 import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallListAdapter;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
-import com.icatch.mobilecam.data.type.PhotoWallPreviewType;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.icatch.mobilecam.Listener.OnStatusChangedListener;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.Mode.OperationMode;
@@ -40,7 +40,7 @@ public class RemoteMultiPbVideoFragment extends Fragment implements MultiPbVideo
     MultiPbVideoFragmentPresenter presenter;
     private OnStatusChangedListener modeChangedListener;
 
-    private PhotoWallPreviewType layoutType = PhotoWallPreviewType.PREVIEW_TYPE_GRID;
+    private PhotoWallLayoutType layoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
     public RemoteMultiPbVideoFragment() {
         // Required empty public constructor
         this.layoutType = layoutType;

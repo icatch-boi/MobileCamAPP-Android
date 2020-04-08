@@ -90,6 +90,7 @@ import com.icatch.mobilecam.utils.QRCode;
 import com.icatch.mobilecam.utils.TimeTools;
 import com.icatchtek.control.customer.type.ICatchCamDateStamp;
 import com.icatchtek.control.customer.type.ICatchCamEventID;
+import com.icatchtek.control.customer.type.ICatchCamFeatureID;
 import com.icatchtek.control.customer.type.ICatchCamMode;
 import com.icatchtek.control.customer.type.ICatchCamPreviewMode;
 import com.icatchtek.control.customer.type.ICatchCamProperty;
@@ -516,8 +517,19 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             startVideoCaptureButtomChangeTimer();
             startRecordingLapseTimeTimer(cameraProperties.getVideoRecordingTime());
         } else if (curMode == PreviewMode.APP_STATE_NONE_MODE) {
-            curMode = PreviewMode.APP_STATE_VIDEO_PREVIEW;
-            curIcatchMode = ICatchCamPreviewMode.ICH_CAM_VIDEO_PREVIEW_MODE;
+            if(cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_VIDEO)){
+                curMode = PreviewMode.APP_STATE_VIDEO_PREVIEW;
+                curIcatchMode = ICatchCamPreviewMode.ICH_CAM_VIDEO_PREVIEW_MODE;
+            }else if(cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_TIMELAPSE)){
+                curMode = APP_STATE_TIMELAPSE_VIDEO_PREVIEW;
+                curIcatchMode = ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_VIDEO_PREVIEW_MODE;
+            }else if(cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_CAMERA)){
+                curMode = PreviewMode.APP_STATE_STILL_PREVIEW;
+                curIcatchMode = ICatchCamPreviewMode.ICH_CAM_STILL_PREVIEW_MODE;
+            }else {
+                curMode = PreviewMode.APP_STATE_VIDEO_PREVIEW;
+                curIcatchMode = ICatchCamPreviewMode.ICH_CAM_VIDEO_PREVIEW_MODE;
+            }
         } else if (curMode == PreviewMode.APP_STATE_VIDEO_PREVIEW) {
             AppLog.i(TAG, "initPreview curMode == PreviewMode.APP_STATE_VIDEO_PREVIEW");
             curIcatchMode = ICatchCamPreviewMode.ICH_CAM_VIDEO_PREVIEW_MODE;
@@ -834,12 +846,9 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             return;
         }
         previewView.showPopupWindow(curMode);
-        if (cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_VIDEO)) {
-            previewView.setVideoRadioBtnVisibility(View.VISIBLE);
-        }
-        if (cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_TIMELAPSE)) {
-            previewView.setTimepLapseRadioBtnVisibility(View.VISIBLE);
-        }
+        previewView.setCaptureRadioBtnVisibility(cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_CAMERA)?View.VISIBLE :View.GONE);
+        previewView.setVideoRadioBtnVisibility(cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_VIDEO)?View.VISIBLE :View.GONE);
+        previewView.setTimepLapseRadioBtnVisibility(cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_TIMELAPSE)?View.VISIBLE:View.GONE);
         if (curMode == PreviewMode.APP_STATE_STILL_PREVIEW) {
             previewView.setCaptureRadioBtnChecked(true);
         } else if (curMode == PreviewMode.APP_STATE_VIDEO_PREVIEW) {
@@ -1614,6 +1623,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         cacheTime = 0;
         AppLog.d(TAG,"setPreviewCacheParam cacheTime:" +cacheTime);
         ICatchPancamConfig.getInstance().setPreviewCacheParam(cacheTime,200);
+//        ICatchPancamConfig.getInstance().enableRTPOverTCP();
         ICatchStreamParam iCatchStreamParam = getStreamParam();
 //        ICatchStreamParam iCatchStreamParam = new ICatchJPEGStreamParam(720, 400, 30, 4000000);
         final Tristate retValue;

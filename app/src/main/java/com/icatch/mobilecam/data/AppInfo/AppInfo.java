@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.icatch.mobilecam.Listener.MyOrientoinListener;
 import com.icatch.mobilecam.data.entity.BluetoothAppDevice;
-import com.icatch.mobilecam.data.type.PhotoWallPreviewType;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatchtek.bluetooth.customer.client.ICatchBluetoothClient;
 
@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class AppInfo {
     public static final String APP_PATH = "/MobileCam/";
-    public static final String APP_VERSION = "V1.2.0_beta6";
-    public static final String SDK_VERSION = "V3.6.0.15";
+    public static final String APP_VERSION = "V1.2.0_beta10";
+    public static final String SDK_VERSION = "V3.6.0.19";
     public static final String SDK_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_SDK_Log/";
     public static final String APP_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_APP_Log/";
     public static final String PROPERTY_CFG_FILE_NAME = "netconfig.properties";
@@ -43,7 +43,7 @@ public class AppInfo {
     public static boolean isDownloading = false;
 //    public static String liveAddress = "";
 
-    public static PhotoWallPreviewType photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_GRID;
+    public static PhotoWallLayoutType photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
     public static int currentViewpagerPosition = 0;
     public static int curVisibleItem = 0;
     public static boolean enableSoftwareDecoder = false;
@@ -56,7 +56,7 @@ public class AppInfo {
     public static double unsteadyTime = 0.1; //s
     //    public static String LIVE_URL = "rtmp://a.rtmp.youtube.com/live2/jfbb-jmsv-6gaf-52tq";
 //    public static boolean disableLive = false;
-    public static String inputIp = "";
+    public static String inputIp = "192.168.1.1";
     public static boolean isNeedReconnect = true;
     public static boolean enableDumpVideo = false;
     public static MyOrientoinListener.ScreenOrientation curScreenOrientation = MyOrientoinListener.ScreenOrientation.SCREEN_ORIENTATION_PORTRAIT;

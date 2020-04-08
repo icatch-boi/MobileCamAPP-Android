@@ -20,14 +20,11 @@
             android:orientation="vertical"
             android:visibility="visible"/>
 
-        <com.icatch.mobilecam.ui.ExtendComponent.HackyViewPager
+        <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            >
-        </com.icatch.mobilecam.ui.ExtendComponent.HackyViewPager>
-
+            android:layout_centerInParent="true"/>
 
         <ImageButton
             android:id="@+id/do_previous"

@@ -7,15 +7,6 @@
     <string name="mpb">Multiple Playback</string>
     <string name="spb">Single Playback</string>
     <string name="camera_setting">Setting</string>
-    <string name="title_activity_view_style_selector">ViewStyleSelector</string>
-    <string name="function_not_impl">Sorry, it\'s in construction !</string>
-    <string name="app_exit_confirm">Press again to exit !</string>
-    <string name="app_exit">Application exited !</string>
-    <string name="title_activity_app_start">AppStart</string>
-    <string name="title_activity_file_list">FileListActivity</string>
-    <string name="inner_err">Warning! Inner error.</string>
-
-    <string name="ga_trackingId">UA-36501679-1</string>
     <string name="invalid_device">Please download correct APP</string>
     <string name="title_car_mode">Car Mode</string>
     <string name="setting_slow_mo">Slow-Motion Function</string>
@@ -87,16 +78,11 @@
     <string name="dialog_delete_failed_single">Error while deleting</string>
     <string name="dialog_deleting_failed_multi">Error while deleting, $1$ items not deleted,please check whether the files are locked or not</string>
     <string name="dialog_downloading">Downloading $1$/$2$...</string>
-    <string name="dialog_downloaded">"$2$ pictures downloaded to 
-$3$"</string>
-    <string name="dialog_downloaded_2">"$2$ items downloaded to 
-$3$"</string>
-    <string name="dialog_downloaded_skipped">"$2$ pictures downloaded.
-(Skipped $1$ videos and $4$ downloaded pictures)"</string>
-    <string name="dialog_downloaded_skipped_2">"$2$ items downloaded.
-(Skipped $1$ downloaded items)"</string>
-    <string name="dialog_downloaded_single">"Picture has been downloaded to
-$1$"</string>
+    <string name="dialog_downloaded">"$2$ pictures downloaded to $3$"</string>
+    <string name="dialog_downloaded_2">"$2$ items downloaded to $3$"</string>
+    <string name="dialog_downloaded_skipped">"$2$ pictures downloaded.(Skipped $1$ videos and $4$ downloaded pictures)"</string>
+    <string name="dialog_downloaded_skipped_2">"$2$ items downloaded.(Skipped $1$ downloaded items)"</string>
+    <string name="dialog_downloaded_single">"Picture has been downloaded to $1$"</string>
     <string name="dialog_downloading_single">Downloading...</string>
     <string name="dialog_cancel_downloading_succeeded">"Succeeded to cancel downloading"</string>
     <string name="dialog_cancel_downloading_failed">"Failed to cancel downloading""</string>
@@ -121,13 +107,9 @@ $1$"</string>
     <string name="gallery_selection_count">$1$/$2$ Selected</string>
     <string name="gallery_delete_des">Confirm deleting $1$ files?</string>
     <string name="gallery_download_msg">Confirm download $1$ files?</string>
-    <string name="gallery_download_with_vid_msg">"Total Files: $1$
-Download Time: $2$ mins and $3$ seconds
-
-Confirm download?"</string>
+    <string name="gallery_download_with_vid_msg">"Total Files: $1$,Download Time: $2$ mins and $3$ seconds,Confirm download?"</string>
     <string name="gallery_download_pic_msg">Confirm download $1$ pictures?</string>
-    <string name="gallery_download_msg_2">"Confirm download $1$ files?
-($2$ skipped videos)"</string>
+    <string name="gallery_download_msg_2">"Confirm download $1$ files?($2$ skipped videos)"</string>
     <string name="gallery_download">Download</string>
     <string name="gallery_delete">Delete</string>
     <string name="gallery_cancel">Cancel</string>
@@ -141,11 +123,7 @@ Confirm download?"</string>
     <string name="no_pics">No picture to view</string>
     <string name="low_battery">Low battery, please recharge the device.</string>
     <string name="unsupported_mode">The device does not support this mode of operation</string>
-    <string name="app_browser">iCatchWifiCam</string>
-    <string name="app_controller">iCatchWifiCam</string>
     <string name="pb_video">Video playback</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_decode">DecodeActivity</string>
     <string name="camera_awake_success">Succeed to awake camera</string>
     <string name="camera_awake_failed">Failed to awake camera</string>
     <string name="dialog_delete_all">All delete</string>
@@ -169,8 +147,8 @@ Confirm download?"</string>
     <string name="dateStamp_off">OFF</string>
     <string name="dateStamp_date">Date</string>
     <string name="dateStamp_date_and_time">Date and time</string>
-    <string name="frequency_50HZ">50HZ</string>
-    <string name="frequency_60HZ">60HZ</string>
+    <string name="frequency_50HZ" translatable="false">50HZ</string>
+    <string name="frequency_60HZ" translatable="false">60HZ</string>
     <string name="download_manager">Download Manager</string>
     <string name="download_progress">Has done: $1$    Wait: $2$    Failed: $3$</string>
     <string name="downloading_quit">All task of downloading will be cancelled,are you sure?</string>
@@ -207,8 +185,6 @@ Confirm download?"</string>
     <string name="title_slow_motion">Slow motion</string>
     <string name="slowmotion">Slow-motion fuction</string>
     <string name="upside">Upside</string>
-
-
     <string name="action_processing">Processing...</string>
     <string name="message_reconnect">newwork is abnormal ,is reconnectting...</string>
     <string name="event_stream_abnormal">camera stream is abnormal!</string>
@@ -224,10 +200,8 @@ Confirm download?"</string>
     <string name="title_activity_local_video_wall">Local videowall </string>
     <string name="download_complete_result">"Download completed,successed:$1$, failed:$2$"</string>
     <string name="no_files_found">No files found!</string>
-    <string name="title_activity_app_start_old">AppStartOldActivity</string>
     <string name="need_permition">No permition!</string>
     <string name="check_mac_fail">No permition in DEMO APP!  Please contact with your APP Supplier! </string>
-    <string name="title_activity_wifi_connect">WifiConnectActivity</string>
     <string name="setting_updateFW_prompt">Do you want to update FW?</string>
     <string name="setting_update_fw">Update FW</string>
     <string name="setting_updatefw_title">Automatic update FW</string>
@@ -241,12 +215,7 @@ Confirm download?"</string>
     <string name="setting_audio_switch">Audio switch</string>
     <string name="setting_auto_download_size_limit">Limit of Auto download Size </string>
     <string name="setting_card_removed">No SD card to update FW</string>
-    <string name="title_activity_pb_photo">PbPhotoActivity</string>
-    <string name="title_activity_pb_video">PbVideoActivity</string>
     <string name="camera_pwd_setting">camera pwd setting</string>
-    <string name="title_activity_sport_cam_main">SportCamMainActivity</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_qrcode_scan">QRCodeScanActivity</string>
     <string name="alert_pwd_needed">Please input password!</string>
     <string name="alert_uid_needed">Please input Uid!</string>
     <string name="alert_camera_name_needed">Please input camera name!</string>
@@ -273,18 +242,19 @@ Confirm download?"</string>
     <string name="add_to">Add to</string>
     <string name="dialog_init_network">Initializing Network...</string>
     <string name="dialog_select_wifi">Select wifi!</string>
-    <string name="title_activity_local_video">LocalVideoActivity</string>
+    <string name="title_activity_local_video" translatable="false">LocalVideoActivity</string>
     <string name="dialog_local_memory_not_enough">Local memory is not enough to download</string>
-    <string name="title_activity_local_photo">LocalPhotoActivity</string>
+    <string name="title_activity_local_photo" translatable="false">LocalPhotoActivity</string>
     <string name="text_not_support_preview">Does not support preview</string>
     <string name="current_size_not_supported_sound_off">The current size is not supported on or off sound</string>
-    <string name="title_activity_pb_local_video">PbLocalVideoActivity</string>
+    <string name="title_activity_pb_local_video" translatable="false">PbLocalVideoActivity</string>
     <string name="title_local_media">Media on My Phone</string>
     <string name="title_video">Video</string>
     <string name="title_photo">Photo</string>
+    <string name="title_activity_preview" translatable="false">PreviewActivity</string>
+    <string name="title_emergency_video">Emergency video</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_preview">PreviewActivity</string>
     <string name="action_title_date_stamp">Date stamp</string>
     <string name="delay_capture">Delay capture</string>
     <string name="title_delay_capture">Delay capture</string>
@@ -297,24 +267,8 @@ Confirm download?"</string>
     <string name="title_audio_switch">Audio switch</string>
     <string name="title_photo_size">Photo size</string>
     <string name="title_video_size">Video size</string>
-    <string name="menu_icon">Icon</string>
     <string name="menu_list">List</string>
-    <string name="title_activity_pb_local_photo">PbLocalPhotoActivity</string>
-    <string name="title_activity_settings">Settings</string>
-    <!-- Strings related to Settings -->
-
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
@@ -325,11 +279,6 @@ Confirm download?"</string>
         <item>0</item>
         <item>-1</item>
     </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -346,37 +295,17 @@ Confirm download?"</string>
         <item>360</item>
         <item>-1</item>
     </string-array>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
     <string name="text_password">Password</string>
     <string name="text_hint_pwd_needed">Please enter password</string>
     <string name="title_activity_multi_pb">MultiPb</string>
     <string name="title_activity_local_pb">LocalPb</string>
     <string name="title_setting">Setting</string>
     <string name="title_preview">Preview</string>
-    <string name="title_preview_param">PreviewParam</string>
-    <string name="title_cancel">Cancel</string>
     <string name="action_save">Save</string>
-    <string name="title_activity_video_pb">VideoPbActivity</string>
-    <string name="title_activity_photo_pb">PhotoPbActivity</string>
-
+    <string name="title_activity_video_pb" translatable="false">VideoPbActivity</string>
+    <string name="title_activity_photo_pb" translatable="false">PhotoPbActivity</string>
     <string name="text_sd_card_memory_shortage">sd card memory shortage!</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="title_activity_add_new_cam">Add New Camera</string>
-    <string name="title_activity_btpair_begin">BTPairBegin</string>
     <string name="title_fragment_btpair_begin">Pairing</string>
     <string name="title_fragment_btpair_wifisetup">Wi-Fi setup</string>
     <string name="title_fragment_btpair_completed">Completed</string>
@@ -409,11 +338,9 @@ Confirm download?"</string>
     <string name="gallery_test_content">Test content</string>
     <string name="text_rich_media_management_center">Rich Media Management Center</string>
     <string name="text_return">back</string>
-    <string name="text_no_rich_media_messages">Sorry, No rich media messages</string>
 
     <string name="text_ble_devices">BLE Devices</string>
     <string name="text_classic_bluetooth_devices">Classic Bluetooth Devices</string>
-    <string name="text_preview_hint_info">Only for iCatch SBC</string>
     <string name="app_exception">APP  meets exception!</string>
     <string name="text_reconnect_timeout">Reconnect timeout</string>
     <string name="message_reconnect_timeout">Cannot connect to the camera Wi-Fi...</string>
@@ -426,7 +353,6 @@ Confirm download?"</string>
     <string name="wait">Wait...</string>
     <string name="action_input_ip">Input ip</string>
     <string name="setting_enable_wifi_hotspot">Enable Wifi Hotspot</string>
-    <string name="message_apmode_to_sta_mode_hint">Enable station mode: </string>
     <string name="message_download_failed">Download failed</string>
     <string name="message_download_to">Downloaded to $1$</string>
     <string name="message_failed_to_stop_living_publish">Failed to stop living publish!</string>
@@ -486,10 +412,8 @@ Confirm download?"</string>
     <string name="message_failed_to_Youtube_live_pushUrl_is_null">Failed to Youtube live,pushUrl is null</string>
     <string name="message_failed_to_start_publish_streaming">Failed to start publish streaming</string>
     <string name="message_failed_to_YouTube_live_shareUrl_is_null">Failed to YouTube live,shareUrl is null</string>
-
     <string name="stop_live_hint">Please stop live!</string>
     <string name="stop_other_live_hint">Please stop other live!</string>
-
     <string name="setting_type_other">Other Settings</string>
     <string name="setting_type_custom">Custom Settings</string>
     <string name="title_activity_pv_param_setting">PvParamSetting</string>
@@ -505,6 +429,12 @@ Confirm download?"</string>
     <string name="text_usb_device_disconnected">USB device has been disconnected</string>
     <string name="non_360_picture_not_support_switch">The current picture is not a 360 image and does not support switching.</string>
     <string name="permission_is_denied_info">The necessary permissions are denied, the application can not be used normally!</string>
-
-
+    <string name="current_size_not_support_image_stabilization">The current size is not support image stabilization</string>
+    <string name="setting_title_exposure_compensation">Exposure compensation</string>
+    <string name="setting_title_image_stabilization">Image stabilization</string>
+    <string name="setting_title_video_file_length">Video file length</string>
+    <string name="text_camera_has_been_registered">Camera $1$ has been registered.</string>
+    <string name="text_please_connect_camera">Please connect camera $1$.</string>
+    <string name="title_warning">Warning</string>
+    <string name="text_selected">Selected($1$)</string>
 </resources>

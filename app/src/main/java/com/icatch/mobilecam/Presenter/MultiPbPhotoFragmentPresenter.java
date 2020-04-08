@@ -19,7 +19,7 @@ import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.data.entity.LimitQueue;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
-import com.icatch.mobilecam.data.type.PhotoWallPreviewType;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.Listener.OnAddAsytaskListener;
@@ -148,7 +148,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     public void setAdaper() {
         curOperationMode = OperationMode.MODE_BROWSE;
         if (pbItemInfoList == null || pbItemInfoList.size() < 0) {
-//            multiPbPhotoView.setListViewAdapter(null);
+//            multiPbPhotoView.setRecyclerViewAdapter(null);
 //            multiPbPhotoView.setGridViewAdapter(null);
             return;
         }
@@ -157,7 +157,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         multiPbPhotoView.setListViewHeaderText(fileDate);
         int curWidth = 0;
         isFirstEnterThisActivity = true;
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
             multiPbPhotoView.setGridViewVisibility(View.GONE);
             multiPbPhotoView.setListViewVisibility(View.VISIBLE);
             photoWallListAdapter = new MultiPbPhotoWallListAdapter(activity, pbItemInfoList, mLruCache, FileType.FILE_PHOTO);
@@ -180,7 +180,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     }
 
     public void refreshPhotoWall() {
-        Log.i("1122", "refreshPhotoWall layoutType=" + AppInfo.photoWallPreviewType);
+        Log.i("1122", "refreshPhotoWall layoutType=" + AppInfo.photoWallLayoutType);
         pbItemInfoList = getPhotoInfoList();
         if (pbItemInfoList == null || pbItemInfoList.size() <= 0) {
             multiPbPhotoView.setGridViewVisibility(View.GONE);
@@ -202,10 +202,10 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     }
 
     public void changePreviewType() {
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
-            AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_GRID;
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+            AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
         } else {
-            AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_LIST;
+            AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
         }
         loadPhotoWall();
     }
@@ -303,7 +303,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         if (curOperationMode == OperationMode.MODE_EDIT) {
             curOperationMode = OperationMode.MODE_BROWSE;
             multiPbPhotoView.notifyChangeMultiPbMode(curOperationMode);
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.quitEditMode();
             } else {
                 photoWallGridAdapter.quitEditMode();
@@ -312,7 +312,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     }
 
     public void listViewSelectOrCancelOnce(int position) {
-        AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallPreviewType);
+        AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
         if (curOperationMode == OperationMode.MODE_BROWSE) {
             AppLog.i(TAG, "listViewSelectOrCancelOnce curOperationMode=" + curOperationMode);
             clealAsytaskList();
@@ -329,7 +329,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     }
 
     public void gridViewSelectOrCancelOnce(int position) {
-        AppLog.i(TAG, "gridViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallPreviewType);
+        AppLog.i(TAG, "gridViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
         if (curOperationMode == OperationMode.MODE_BROWSE) {
             clealAsytaskList();
 //            GlobalInfo.getInstance().initRemotePhotoListInfo();
@@ -352,7 +352,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         }
         int selectNum;
         if (isSelectAll) {
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.selectAllItems();
                 selectNum = photoWallListAdapter.getSelectedCount();
             } else {
@@ -361,7 +361,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
             }
             multiPbPhotoView.setPhotoSelectNumText(selectNum);
         } else {
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.cancelAllSelections();
                 selectNum = photoWallListAdapter.getSelectedCount();
             } else {
@@ -373,7 +373,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     }
 
     public List<MultiPbItemInfo> getSelectedList() {
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
             return photoWallListAdapter.getSelectedList();
         } else {
             return photoWallGridAdapter.getCheckedItemsList();
@@ -426,7 +426,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
             }
             //后台任务执行完之后被调用，在ui线程执行
             ImageView imageView;
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_GRID) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_GRID) {
                 imageView = (ImageView) multiPbPhotoView.gridViewFindViewWithTag(fileHandle);
             } else {
                 imageView = (ImageView) multiPbPhotoView.listViewFindViewWithTag(fileHandle);

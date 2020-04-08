@@ -3,13 +3,13 @@ package com.icatch.mobilecam.ui.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
-import android.util.LruCache;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.data.entity.LocalPbItemInfo;
 import com.icatch.mobilecam.ui.ExtendComponent.ProgressWheel;
-import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
 
 import java.util.List;
 
@@ -20,19 +20,12 @@ public class LocalPhotoPbViewPagerAdapter extends PagerAdapter {
     private static final String TAG = "PhotoPbViewPagerAdapter";
     private List<LocalPbItemInfo> filesList;
     private Context context;
-    LruCache<String, Bitmap> mLruCache;
-    private List<View> viewList;
     private OnPhotoTapListener onPhotoTapListener;
 
-    public LocalPhotoPbViewPagerAdapter(Context context, List<LocalPbItemInfo> filesList, List<View> viewList, LruCache<String,
-            Bitmap> mLruCache) {
+    public LocalPhotoPbViewPagerAdapter(Context context, List<LocalPbItemInfo> filesList) {
         this.filesList = filesList;
         this.context = context;
-        this.viewList = viewList;
-        this.mLruCache = mLruCache;
-
     }
-
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
@@ -44,20 +37,31 @@ public class LocalPhotoPbViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View v = View.inflate(context, R.layout.pb_photo_item, null);
-//        PhotoView photoView = (PhotoView) v.findViewById(R.id.photo);
-//        Bitmap bitmap = mLruCache.get(filesList.get(position).getFileHandle());
-//        AppLog.d("", "instantiateItem viewpager bitmap=" + bitmap  + " photoView=" + photoView);
-//        if(bitmap != null && photoView != null){
-//            photoView.setImageBitmap(bitmap);
-//        }
-
-        Bitmap bitmap = mLruCache.get(filesList.get(position).file.getPath());
+        LocalPbItemInfo itemInfo = filesList.get(position);
         PhotoView photoView = (PhotoView) v.findViewById(R.id.photo);
-        ProgressWheel progressBar = (ProgressWheel) v.findViewById(R.id.progress_wheel);
-        if(photoView != null){
-            if(bitmap != null){
-                photoView.setImageBitmap(bitmap);
-            }
+        final ProgressWheel progressBar = (ProgressWheel) v.findViewById(R.id.progress_wheel);
+        if(photoView != null && !itemInfo.isPanorama()){
+            String path = itemInfo.file.getAbsolutePath();
+//            ImageLoaderUtil.loadImageView(path, photoView);
+            ImageLoaderUtil.loadLocalImageView(itemInfo.file, photoView, new ImageLoaderUtil.OnLoadListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.startSpinning();
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view) {
+                    progressBar.setVisibility(View.GONE);
+                    progressBar.stopSpinning();
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    progressBar.setVisibility(View.GONE);
+                    progressBar.stopSpinning();
+                }
+            });
             photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
                 @Override
                 public void onPhotoTap(View view, float v, float v1) {
@@ -72,7 +76,6 @@ public class LocalPhotoPbViewPagerAdapter extends PagerAdapter {
                 }
             });
         }
-        viewList.set(position,v);
         container.addView(v, 0);
         return v;
     }

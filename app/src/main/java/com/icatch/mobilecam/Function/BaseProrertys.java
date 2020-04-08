@@ -30,6 +30,8 @@ public class BaseProrertys {
     private TimeLapseInterval timeLapseInterval;
     private TimeLapseDuration timeLapseDuration;
     private PropertyTypeInteger timeLapseMode;
+    private PropertyTypeInteger exposureCompensation;
+    private PropertyTypeInteger videoFileLength;
 
     public BaseProrertys(CameraProperties cameraProperty) {
         this.cameraProperty = cameraProperty;
@@ -61,7 +63,17 @@ public class BaseProrertys {
         timeLapseDuration = new TimeLapseDuration(cameraProperty);
         timeLapseMode = new PropertyTypeInteger(cameraProperty, PropertyHashMapStatic.timeLapseMode, PropertyId.TIMELAPSE_MODE, GlobalInfo.getInstance()
                 .getAppContext());
+        exposureCompensation = new PropertyTypeInteger(cameraProperty,PropertyId.EXPOSURE_COMPENSATION, GlobalInfo.getInstance().getAppContext());
+        videoFileLength = new PropertyTypeInteger(cameraProperty,PropertyId.VIDEO_FILE_LENGTH, GlobalInfo.getInstance().getAppContext());
         AppLog.i(TAG, "End initProperty");
+    }
+
+    public PropertyTypeInteger getExposureCompensation() {
+        return exposureCompensation;
+    }
+
+    public PropertyTypeInteger getVideoFileLength() {
+        return videoFileLength;
     }
 
     public PropertyTypeInteger getWhiteBalance() {

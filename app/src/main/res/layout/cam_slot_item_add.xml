@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/round_angle_view"
     android:layout_margin="10dp"
@@ -19,30 +19,25 @@
           <LinearLayout
 			     android:orientation="horizontal"
 			     android:layout_width="wrap_content"
-			     android:layout_height="fill_parent">
+			     android:layout_height="match_parent">
 			     <ImageView
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_marginLeft="5dp"
 			            android:layout_gravity="center_vertical"
 			            android:src = "@drawable/add_slot"/>
-
-			
 			     <TextView
 			            android:id="@+id/slot_add_camera"
 			            android:layout_width="match_parent"
 			            android:layout_height="match_parent"
 			            android:gravity="center_vertical"
 			            android:layout_gravity="center_vertical"
-			            android:text="Add New Camera"
+			            android:text="@string/text_add_new_camera"
                     	android:textColor="#8b8b8b"
 			            android:textSize="18sp"
 			            android:layout_marginLeft="5dp"/>
-					    
 				</LinearLayout>
-				   				    
 		</LinearLayout>
-				
 		<LinearLayout
                 android:orientation="vertical"
                 android:layout_width="0dp"
@@ -50,7 +45,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1">
 				<com.icatch.mobilecam.ui.ExtendComponent.RoundAngleImageView
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
                         app:roundWidth = "15dp"

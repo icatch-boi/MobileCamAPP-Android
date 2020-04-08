@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_multi_pb_preview_type"
-        android:icon="@drawable/ic_view_grid_white_24dp"
+<!--    <item android:id="@+id/menu_multi_pb_preview_type"-->
+<!--        android:icon="@drawable/ic_view_grid_white_24dp"-->
+<!--        android:title="@string/menu_list"-->
+<!--        android:orderInCategory="100"-->
+<!--        app:showAsAction="always"-->
+<!--        />-->
+    <item android:id="@+id/menu_multi_pb_filter"
+        android:icon="@drawable/ic_filter_list_white_24dp"
         android:title="@string/menu_list"
         android:orderInCategory="100"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/grid"
+        android:title="网格预览" />
+    <item
+        android:id="@+id/liner"
+        android:title="列表预览" />
+    <item
+        android:id="@+id/quick_liner"
+        android:title="列表快速预览" />
+
+
 </menu>

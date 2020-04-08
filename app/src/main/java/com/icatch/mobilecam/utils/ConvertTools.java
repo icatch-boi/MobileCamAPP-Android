@@ -103,4 +103,26 @@ public class ConvertTools {
         return ret;
     }
 
+    public static String getExposureCompensation(int value) {
+        AppLog.d(TAG, "start getExposureCompensation value=" + value);
+        String ret = "EV ";
+        int temp = 0x80000000;
+        int temp2 = 0x40000000;
+        int temp3 = 0x00ffffff;
+
+        //获取最高位的值 ，1表示负数，0表示正数
+        if ((value & temp) == temp) {
+            ret = ret + "-";
+        }
+        //获取第二位的值 ，1表示小数点左移一位负数，0表示不移位
+        int value2 = value & temp3;
+        if ((value & temp2) == temp2) {
+            ret = ret + value2 / 10.0 + "";
+        } else {
+            ret = ret + value2 / 1.0 + "";
+        }
+        AppLog.d(TAG, "End getExposureCompensation ret=" + ret);
+        return ret;
+    }
+
 }

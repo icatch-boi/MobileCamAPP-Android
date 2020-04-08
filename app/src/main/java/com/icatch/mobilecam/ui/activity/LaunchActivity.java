@@ -37,6 +37,8 @@ import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.utils.GlideUtils;
 import com.icatch.mobilecam.utils.LruCacheTool;
 import com.icatch.mobilecam.utils.PermissionTools;
+import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class LaunchActivity extends AppCompatActivity implements View.OnClickListener, LaunchView, OnFragmentInteractionListener {
     private final static String TAG = "LaunchActivity";

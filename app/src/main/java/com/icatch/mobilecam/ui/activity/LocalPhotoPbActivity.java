@@ -20,6 +20,7 @@ import com.icatch.mobilecam.Presenter.LocalPhotoPbPresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.ui.ExtendComponent.HackyViewPager;
 import com.icatch.mobilecam.ui.Interface.LocalPhotoPbView;
+import com.icatchtek.pancam.customer.type.ICatchGLPanoramaType;
 
 public class LocalPhotoPbActivity extends AppCompatActivity implements LocalPhotoPbView {
     private static final String TAG = LocalPhotoPbActivity.class.getSimpleName();
@@ -119,8 +120,7 @@ public class LocalPhotoPbActivity extends AppCompatActivity implements LocalPhot
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 AppLog.d(TAG,"surfaceCreated");
-                presenter.initPanorama();
-                presenter.setShowArea(mSurfaceView.getHolder().getSurface(),mSurfaceView.getWidth(),mSurfaceView.getHeight());
+                presenter.setShowArea(mSurfaceView.getHolder().getSurface());
                 presenter.loadPanoramaImage();
             }
 
@@ -133,7 +133,7 @@ public class LocalPhotoPbActivity extends AppCompatActivity implements LocalPhot
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 AppLog.d(TAG,"surfaceDestroyed");
-//                presenter.destroyImage( ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
+                presenter.clearImage(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
             }
         } );
 
@@ -173,6 +173,8 @@ public class LocalPhotoPbActivity extends AppCompatActivity implements LocalPhot
                 // presenter.showBar();
             }
         });
+
+        presenter.initPanorama();
     }
 
     @Override
@@ -272,15 +274,10 @@ public class LocalPhotoPbActivity extends AppCompatActivity implements LocalPhot
     }
 
     @Override
-    public void setSurfaceviewTransparent(boolean value) {
-        if(value) {
-            mSurfaceView.setVisibility( View.GONE );
-//            mSurfaceView.setZOrderOnTop( true );//设置画布  背景透明
-//            mSurfaceView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
-        }else {
-            mSurfaceView.setVisibility( View.VISIBLE );
-//            mSurfaceView.getHolder().setFormat( PixelFormat.TRANSPARENT );
-//            mSurfaceView.
+    public void setSurfaceviewVisibility(int visibility) {
+        int curVisibility= mSurfaceView.getVisibility();
+        if(curVisibility != visibility){
+            mSurfaceView.setVisibility(visibility);
         }
     }
 

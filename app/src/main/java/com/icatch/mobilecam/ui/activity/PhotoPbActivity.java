@@ -18,13 +18,12 @@ import android.widget.TextView;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.Presenter.PhotoPbPresenter;
 import com.icatch.mobilecam.R;
-import com.icatch.mobilecam.ui.ExtendComponent.HackyViewPager;
 import com.icatch.mobilecam.ui.Interface.PhotoPbView;
 import com.icatchtek.pancam.customer.type.ICatchGLPanoramaType;
 
 public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
     private static final String TAG = PhotoPbActivity.class.getSimpleName();
-    private HackyViewPager viewPager;
+    private ViewPager viewPager;
     private ImageButton downloadBtn;
     private ImageButton deleteBtn;
     private TextView indexInfoTxv;
@@ -43,7 +42,7 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_pb);
 
-        viewPager = (HackyViewPager) findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewpager);
         indexInfoTxv = (TextView) findViewById(R.id.pb_index_info);
         downloadBtn = (ImageButton) findViewById(R.id.photo_pb_download);
         deleteBtn = (ImageButton) findViewById(R.id.photo_pb_delete);
@@ -58,6 +57,7 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
         presenter = new PhotoPbPresenter(this);
         presenter.setView(this);
         viewPager.setPageMargin(30);
+        viewPager.setOffscreenPageLimit(1);
 
         panoramaTypeTxv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +86,6 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 AppLog.d(TAG, "surfaceCreated");
-                presenter.initPanorama();
                 presenter.setShowArea(mSurfaceView.getHolder().getSurface());
                 presenter.loadPanoramaImage();
             }
@@ -100,7 +99,7 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 AppLog.d(TAG, "surfaceDestroyed");
-                presenter.destroyImage(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
+                presenter.clearImage(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
             }
         });
 
@@ -132,6 +131,12 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
             }
         });
 
+        mSurfaceView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppLog.d(TAG, "mSurfaceView.setOnClickListener");
+            }
+        });
         viewPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,10 +161,11 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.destroyImage(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
-                finish();
+                presenter.back();
+
             }
         });
+        presenter.initPanorama();
     }
 
     @Override
@@ -177,8 +183,7 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
                 break;
             case KeyEvent.KEYCODE_BACK:
                 Log.d("AppStart", "back");
-                presenter.destroyImage(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
-                finish();
+                presenter.back();
                 break;
             default:
                 return super.onKeyDown(keyCode, event);
@@ -195,6 +200,7 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        presenter.release();
         presenter.removeActivity();
     }
 
@@ -248,14 +254,10 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
     }
 
     @Override
-    public void setSurfaceviewTransparent(boolean value) {
-        if (value) {
-            mSurfaceView.setVisibility(View.GONE);
-//            mSurfaceView.setZOrderOnTop( true );//设置画布  背景透明
-//            mSurfaceView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
-        } else {
-//            mSurfaceView.getHolder().
-            mSurfaceView.setVisibility(View.VISIBLE);
+    public void setSurfaceviewVisibility(int visibility) {
+        int curVisibility= mSurfaceView.getVisibility();
+        if(curVisibility != visibility){
+            mSurfaceView.setVisibility(visibility);
         }
     }
 
@@ -266,7 +268,10 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
 
     @Override
     public void setViewPagerVisibility(int visibility) {
-        viewPager.setVisibility(visibility);
+        int curVisibility= viewPager.getVisibility();
+        if(curVisibility != visibility) {
+            viewPager.setVisibility(visibility);
+        }
     }
 
 }

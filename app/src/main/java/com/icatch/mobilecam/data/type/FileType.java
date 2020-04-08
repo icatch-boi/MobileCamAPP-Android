@@ -5,5 +5,6 @@ package com.icatch.mobilecam.data.type;
  */
 public enum FileType {
     FILE_VIDEO,
-    FILE_PHOTO
+    FILE_PHOTO,
+    FILE_EMERGENCY_VIDEO
 }

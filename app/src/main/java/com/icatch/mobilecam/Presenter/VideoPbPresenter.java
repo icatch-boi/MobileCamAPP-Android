@@ -37,15 +37,17 @@ import com.icatch.mobilecam.data.Mode.VideoPbMode;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
 import com.icatch.mobilecam.data.entity.DownloadInfo;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
+import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.VideoPbView;
+import com.icatch.mobilecam.ui.RemoteFileHelper;
 import com.icatch.mobilecam.ui.appdialog.SingleDownloadDialog;
 import com.icatch.mobilecam.utils.ConvertTools;
-import com.icatch.mobilecam.utils.fileutils.FileOper;
-import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatch.mobilecam.utils.MediaRefresh;
 import com.icatch.mobilecam.utils.PanoramaTools;
+import com.icatch.mobilecam.utils.fileutils.FileOper;
+import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatchtek.pancam.customer.exception.IchGLFormatNotSupportedException;
 import com.icatchtek.pancam.customer.type.ICatchGLEventID;
 import com.icatchtek.pancam.customer.type.ICatchGLPanoramaType;
@@ -94,13 +96,15 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
     private ExecutorService executor;
     protected Timer downloadProgressTimer;
     private String downloadingFilename = "";
-    private List<MultiPbItemInfo> fileList = GlobalInfo.getInstance().remoteVideoList;
+    private List<MultiPbItemInfo> fileList;
     private SingleDownloadDialog singleDownloadDialog;
     private SDKEvent sdkEvent;
     private String curFilePath = "";
     private VideoStreaming videoStreaming;
     private boolean enableRender = AppInfo.enableRender;
     private int curPanoramaType = ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE;
+    private FileType fileType;
+    private boolean hasDeleted = false;
 
     public VideoPbPresenter(Activity activity) {
         super(activity);
@@ -108,10 +112,13 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         Intent intent = activity.getIntent();
         Bundle data = intent.getExtras();
         curVideoPosition = data.getInt("curfilePosition");
+        int fileTypeInt = data.getInt("fileType");
+        fileType = FileType.values()[fileTypeInt];
+        fileList = RemoteFileHelper.getInstance().getLocalFileList(fileType);
         if (fileList != null && fileList.isEmpty() == false) {
             this.curVideoFile = fileList.get(curVideoPosition).iCatchFile;
         }
-        AppLog.i(TAG, "cur video position=" + curVideoPosition + " video name=" + curVideoFile.getFileName());
+        AppLog.i(TAG, "cur video fileType=" + fileType + " position=" + curVideoPosition + " video name=" + curVideoFile.getFileName());
         initClint();
     }
 
@@ -136,9 +143,9 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         int start = fileName.lastIndexOf("/");
         String videoName = fileName.substring(start + 1);
         videoPbView.setVideoNameTxv(videoName);
-        if (enableRender && PanoramaTools.isPanorama(curVideoFile.getFileWidth(),curVideoFile.getFileHeight())) {
+        if (enableRender && PanoramaTools.isPanorama(curVideoFile.getFileWidth(), curVideoFile.getFileHeight())) {
             videoPbView.setPanoramaTypeBtnVisibility(View.VISIBLE);
-        }else {
+        } else {
             videoPbView.setPanoramaTypeBtnVisibility(View.GONE);
         }
     }
@@ -291,7 +298,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
 
     public void initSurface(SurfaceHolder surfaceHolder) {
         AppLog.i(TAG, "begin initSurface");
-        videoStreaming.initSurface(enableRender,surfaceHolder,curVideoFile.getFileWidth(),curVideoFile.getFileHeight());
+        videoStreaming.initSurface(enableRender, surfaceHolder, curVideoFile.getFileWidth(), curVideoFile.getFileHeight());
         if (enableRender) {
             locate(FIXED_INSIDE_DISTANCE);
         }
@@ -365,6 +372,16 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
             pauseVideoPb();
         }
         showDownloadEnsureDialog();
+    }
+
+    public void back() {
+        stopVideoStream();
+        removeEventListener();
+        Intent intent = new Intent();
+        intent.putExtra("hasDeleted", hasDeleted);
+        intent.putExtra("fileType", fileType.ordinal());
+        activity.setResult(1000,intent);
+        activity.finish();
     }
 
     private class VideoPbHandler extends Handler {
@@ -560,7 +577,12 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
                     @Override
                     public void run() {
                         MyProgressDialog.closeProgressDialog();
-                        GlobalInfo.getInstance().remoteVideoList.remove(curVideoPosition);
+                        RemoteFileHelper.getInstance().remove(fileList.get(curVideoPosition), fileType);
+                        hasDeleted  = true;
+                        Intent intent = new Intent();
+                        intent.putExtra("hasDeleted", hasDeleted);
+                        intent.putExtra("fileType", fileType.ordinal());
+                        activity.setResult(1000,intent);
                         activity.finish();
                     }
                 });
@@ -866,7 +888,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
             videoPbView.setBottomBarVisibility(View.GONE);
             videoPbView.setTopBarVisibility(View.GONE);
             videoPbView.setMoreSettingLayoutVisibility(View.VISIBLE);
-        }else {
+        } else {
             videoPbView.setBottomBarVisibility(View.VISIBLE);
             videoPbView.setTopBarVisibility(View.VISIBLE);
             videoPbView.setMoreSettingLayoutVisibility(View.GONE);
@@ -875,12 +897,12 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
 
     public void enableEIS(boolean enable) {
         StreamStablization streamStablization = panoramaVideoPlayback.getStreamStablization();
-        if(streamStablization == null){
+        if (streamStablization == null) {
             return;
         }
-        if(enable){
+        if (enable) {
             streamStablization.enableStablization();
-        }else {
+        } else {
             streamStablization.disableStablization();
         }
     }

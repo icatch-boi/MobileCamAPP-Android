@@ -2,19 +2,27 @@ package com.icatch.mobilecam.ui.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.icatch.mobilecam.Function.BaseProrertys;
+import com.icatch.mobilecam.MyCamera.CameraManager;
+import com.icatch.mobilecam.MyCamera.MyCamera;
+import com.icatch.mobilecam.SdkApi.CameraProperties;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
+import com.icatch.mobilecam.data.PropertyId.PropertyId;
 import com.icatch.mobilecam.data.entity.SettingMenu;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.Message.AppMessage;
 import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 
 import java.util.List;
 
@@ -23,6 +31,9 @@ public class SettingListAdapter extends BaseAdapter {
     private Context context;
     private List<SettingMenu> menuList;
     private Handler handler;
+    private MyCamera currCamera = CameraManager.getInstance().getCurCamera();
+    private CameraProperties cameraProperties = currCamera.getCameraProperties();
+    private BaseProrertys baseProrertys = currCamera.getBaseProrertys();
 
     public SettingListAdapter(Context context,List<SettingMenu> menuList,Handler handler) {
         this.context = context;
@@ -53,23 +64,27 @@ public class SettingListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (menuList.get(position).name == R.string.setting_auto_download) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.auto_download_layout, null);
-            final CheckBox toggleButton = (CheckBox) convertView.findViewById(R.id.switcher);
-            toggleButton.setChecked(AppInfo.autoDownloadAllow);
-            toggleButton.setOnClickListener(new OnClickListener() {
+            convertView = LayoutInflater.from(context).inflate(R.layout.setting_switch_layout, null);
+            TextView textView = (TextView) convertView.findViewById(R.id.item_name);
+            final SwitchCompat switchCompat = (SwitchCompat) convertView.findViewById(R.id.switchCompat);
+            textView.setText(R.string.setting_auto_download);
+            switchCompat.setChecked(AppInfo.autoDownloadAllow);
+            switchCompat.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View arg0) {
-                    handler.obtainMessage(AppMessage.SETTING_OPTION_AUTO_DOWNLOAD, toggleButton.isChecked()).sendToTarget();
+                    handler.obtainMessage(AppMessage.SETTING_OPTION_AUTO_DOWNLOAD, switchCompat.isChecked()).sendToTarget();
                 }
             });
 
             return convertView;
         } else if (menuList.get(position).name == R.string.setting_audio_switch) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.audio_switch_layout, null);
-            final CheckBox toggleButton = (CheckBox) convertView.findViewById(R.id.switcher);
-            toggleButton.setChecked(!AppInfo.disableAudio);
-            toggleButton.setOnClickListener(new OnClickListener() {
+            convertView = LayoutInflater.from(context).inflate(R.layout.setting_switch_layout, null);
+            TextView textView = (TextView) convertView.findViewById(R.id.item_name);
+            SwitchCompat switchCompat = (SwitchCompat) convertView.findViewById(R.id.switchCompat);
+            textView.setText(R.string.setting_audio_switch);
+            switchCompat.setChecked(!AppInfo.disableAudio);
+            switchCompat.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View arg0) {
@@ -82,13 +97,40 @@ public class SettingListAdapter extends BaseAdapter {
                 }
             });
             return convertView;
+        }else if (menuList.get(position).name == R.string.setting_title_image_stabilization) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.setting_switch_layout, null);
+            TextView textView = (TextView) convertView.findViewById(R.id.item_name);
+            final SwitchCompat switchCompat = (SwitchCompat) convertView.findViewById(R.id.switchCompat);
+            textView.setText(R.string.setting_title_image_stabilization);
+            int curValue = cameraProperties.getCurrentPropertyValue(PropertyId.IMAGE_STABILIZATION);
+            List<Integer> supportValues = cameraProperties.getSupportedPropertyValues(PropertyId.IMAGE_STABILIZATION);
+            if (supportValues == null || supportValues.size() <= 1) {
+                switchCompat.setEnabled(false);
+            }
+            boolean isCheched = curValue == 0 ? false : true;
+            switchCompat.setChecked(isCheched);
+            switchCompat.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                    if (!switchCompat.isEnabled()) {
+                        MyToast.show(context, R.string.current_size_not_support_image_stabilization);
+                    } else {
+                        int value = switchCompat.isChecked() ? 1 : 0;
+                        cameraProperties.setPropertyValue(PropertyId.IMAGE_STABILIZATION, value);
+                        // read one more time
+                        int retValue = cameraProperties.getCurrentPropertyValue(PropertyId.IMAGE_STABILIZATION);
+                        isChecked = retValue == 0 ? false : true;
+                        switchCompat.setChecked(isChecked);
+                    }
+                }
+            } );
+            return convertView;
         }
         if(menuList.get(position).name == R.string.setting_auto_download_size_limit){
             convertView = LayoutInflater.from(context).inflate(R.layout.auto_download_layout_size, null);
             final TextView autoDownloadSize = (TextView) convertView.findViewById(R.id.download_size);
             autoDownloadSize.setText(AppInfo.autoDownloadSizeLimit + "GB");
             return convertView;
-
         }
 
 //        if(menuList.get(position).name == R.string.setting_live_switch){

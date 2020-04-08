@@ -2,6 +2,7 @@ package com.icatch.mobilecam.data.entity;
 
 
 import com.icatch.mobilecam.utils.ConvertTools;
+import com.icatch.mobilecam.utils.PanoramaTools;
 import com.icatchtek.reliant.customer.type.ICatchFile;
 
 
@@ -37,7 +38,7 @@ public class MultiPbItemInfo {
     }
 
     public boolean isPanorama() {
-        return isPanorama;
+        return PanoramaTools.isPanorama(iCatchFile.getFileWidth(),iCatchFile.getFileHeight());
     }
 
     public void setSection(int section){

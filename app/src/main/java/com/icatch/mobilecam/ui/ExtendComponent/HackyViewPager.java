@@ -68,5 +68,9 @@ public class HackyViewPager extends ViewPager {
 	public boolean isLocked() {
 		return isLocked;
 	}
-	
+
+	@Override
+	public void setOffscreenPageLimit(int limit) {
+		super.setOffscreenPageLimit(limit);
+	}
 }

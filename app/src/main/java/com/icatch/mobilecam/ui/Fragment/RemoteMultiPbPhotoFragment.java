@@ -65,7 +65,6 @@ public class RemoteMultiPbPhotoFragment extends Fragment implements MultiPbPhoto
                 int firstVisible = listView.getFirstVisiblePosition();
                 int lastVisible = listView.getLastVisiblePosition();
                 AppLog.d(TAG, "listView onScrollStateChanged firstVisible=" + firstVisible + " lastVisible=" + lastVisible);
-
                 if(isVisible){
                     presenter.listViewLoadThumbnails(scrollState,firstVisible,lastVisible-firstVisible+1);
                 }

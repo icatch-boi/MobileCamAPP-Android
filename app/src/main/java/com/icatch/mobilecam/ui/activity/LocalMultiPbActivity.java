@@ -133,7 +133,7 @@ public class LocalMultiPbActivity extends AppCompatActivity implements LocalMult
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_multi_pb, menu);
+        getMenuInflater().inflate(R.menu.menu_local_multi_pb, menu);
         return true;
     }
 

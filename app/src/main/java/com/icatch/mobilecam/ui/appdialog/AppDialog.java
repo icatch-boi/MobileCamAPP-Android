@@ -23,7 +23,7 @@ public class AppDialog {
 
     public static void showDialogQuit(final Context context, final int messageID){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.warning).setTitle("Warning").setMessage(messageID);
+        builder.setIcon(R.drawable.warning).setTitle(R.string.title_warning).setMessage(messageID);
         builder.setCancelable(false);
         builder.setPositiveButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
 
@@ -38,7 +38,7 @@ public class AppDialog {
 
     public static void showDialogQuit(final Context context, final String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.warning).setTitle("Warning").setMessage(message);
+        builder.setIcon(R.drawable.warning).setTitle(R.string.title_warning).setMessage(message);
         builder.setCancelable(false);
         builder.setPositiveButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
 
@@ -56,7 +56,7 @@ public class AppDialog {
             dialog.dismiss();
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.warning).setTitle("Warning").setMessage(message);
+        builder.setIcon(R.drawable.warning).setTitle(R.string.title_warning).setMessage(message);
         builder.setCancelable(true);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
@@ -74,7 +74,7 @@ public class AppDialog {
             dialog.dismiss();
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.warning).setTitle("Warning").setMessage(messageID);
+        builder.setIcon(R.drawable.warning).setTitle(R.string.title_warning).setMessage(messageID);
         builder.setCancelable(true);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
@@ -92,7 +92,7 @@ public class AppDialog {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.warning).setTitle("Warning").setMessage(R.string.dialog_timeout);
+        builder.setIcon(R.drawable.warning).setTitle(R.string.title_warning).setMessage(R.string.dialog_timeout);
         builder.setPositiveButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
 
             @Override
@@ -113,7 +113,7 @@ public class AppDialog {
 
     public static void showLowBatteryWarning(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.warning).setTitle("Warning").setMessage(R.string.low_battery);
+        builder.setIcon(R.drawable.warning).setTitle(R.string.title_warning).setMessage(R.string.low_battery);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
             @Override

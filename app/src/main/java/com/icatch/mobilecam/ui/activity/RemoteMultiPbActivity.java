@@ -1,5 +1,7 @@
 package com.icatch.mobilecam.ui.activity;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -20,7 +22,11 @@ import android.widget.TextView;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.Presenter.RemoteMultiPbPresenter;
 import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
+import com.icatch.mobilecam.ui.Fragment.DialogFragmentFromBottom;
 import com.icatch.mobilecam.ui.Interface.MultiPbView;
+import com.icatch.mobilecam.ui.RemoteFileHelper;
+import com.icatch.mobilecam.utils.FileFilter;
 import com.icatch.mobilecam.utils.FixedSpeedScroller;
 
 import java.lang.reflect.Field;
@@ -36,10 +42,11 @@ public class RemoteMultiPbActivity extends AppCompatActivity implements MultiPbV
     TextView selectedNumTxv;
     LinearLayout multiPbEditLayout;
     TabLayout tabLayout;
-
+    MenuItem filterItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppLog.d(TAG,"onCreate ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_pb);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,13 +117,14 @@ public class RemoteMultiPbActivity extends AppCompatActivity implements MultiPbV
             AppLog.e(TAG, "FixedSpeedScroller Exception");
         }
 //        tabLayout.setTabsFromPagerAdapter();
+//        deleteBtn.setClickable(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         presenter.submitAppInfo();
-        AppLog.d(TAG,"onResume()");
+        AppLog.d(TAG, "onResume()");
     }
 
     @Override
@@ -128,31 +136,69 @@ public class RemoteMultiPbActivity extends AppCompatActivity implements MultiPbV
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.clearCache();
         presenter.reset();
         presenter.removeActivity();
-//        presenter.clealAsytaskList();
-        //-----------------
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_multi_pb, menu);
+        filterItem = menu.findItem(R.id.menu_multi_pb_filter);
+        setFilterItemVisibiliy(RemoteFileHelper.getInstance().isSupportSegmentedLoading());
         return true;
+    }
+
+    @Override
+    public void setFilterItemVisibiliy(boolean visibility) {
+        if (filterItem != null) {
+            filterItem.setVisible(visibility);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.menu_multi_pb_preview_type) {
-                menuPhotoWallType = item;
-                presenter.changePreviewType();
+        if (id == R.id.grid) {
+            presenter.changePreviewType(PhotoWallLayoutType.PREVIEW_TYPE_GRID);
+        } else if (id == R.id.quick_liner) {
+            presenter.changePreviewType(PhotoWallLayoutType.PREVIEW_TYPE_QUICK_LIST);
+        } else if (id == R.id.liner) {
+            presenter.changePreviewType(PhotoWallLayoutType.PREVIEW_TYPE_LIST);
         } else if (id == android.R.id.home) {
             presenter.reback();
             return true;
+        } else if (id == R.id.menu_multi_pb_filter) {
+            showFilterDialog();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showFilterDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragmentFromBottom newFragment = new DialogFragmentFromBottom();
+        newFragment.setOutCancel(true);
+        newFragment.setLastFilter(RemoteFileHelper.getInstance().getFileFilter());
+        newFragment.setOnSureClickListener(new DialogFragmentFromBottom.OnSureClickListener() {
+            @Override
+            public void onSureClick(FileFilter fileFilter) {
+                AppLog.d(TAG, "onSureClick fileFilter:" + fileFilter);
+                if (fileFilter != null) {
+                    AppLog.d(TAG, "onSureClick startTime:" + fileFilter.getStringTimeString());
+                    AppLog.d(TAG, "onSureClick endTime:" + fileFilter.getEndTimeString());
+                }
+                presenter.setFileFilter(fileFilter);
+
+            }
+        });
+        newFragment.show(getSupportFragmentManager(), "dialog");
     }
 
     @Override
@@ -184,7 +230,7 @@ public class RemoteMultiPbActivity extends AppCompatActivity implements MultiPbV
 
     @Override
     public void setMenuPhotoWallTypeIcon(int iconRes) {
-        menuPhotoWallType.setIcon(iconRes);
+        //menuPhotoWallType.setIcon(iconRes);
     }
 
     @Override
@@ -214,7 +260,7 @@ public class RemoteMultiPbActivity extends AppCompatActivity implements MultiPbV
 
     @Override
     public void setTabLayoutClickable(boolean value) {
-        AppLog.d(TAG,"setTabLayoutClickable value=" + value);
+        AppLog.d(TAG, "setTabLayoutClickable value=" + value);
         tabLayout.setClickable(value);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             tabLayout.setContextClickable(value);
@@ -227,5 +273,10 @@ public class RemoteMultiPbActivity extends AppCompatActivity implements MultiPbV
     @Override
     public void setEditLayoutVisibiliy(int visibiliy) {
         multiPbEditLayout.setVisibility(visibiliy);
+    }
+
+    @Override
+    public int getViewPageIndex() {
+        return viewPager.getCurrentItem();
     }
 }

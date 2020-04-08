@@ -14,7 +14,7 @@ import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.data.Mode.OperationMode;
 import com.icatch.mobilecam.data.entity.LocalPbItemInfo;
 import com.icatch.mobilecam.data.type.FileType;
-import com.icatch.mobilecam.data.type.PhotoWallPreviewType;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.Interface.LocalMultiPbFragmentView;
 import com.icatch.mobilecam.ui.activity.LocalPhotoPbActivity;
@@ -144,7 +144,7 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
             multiPbPhotoView.setListViewHeaderText(fileDate);
         }
         int curWidth = 0;
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
             multiPbPhotoView.setGridViewVisibility(View.GONE);
             multiPbPhotoView.setListViewVisibility(View.VISIBLE);
             photoWallListAdapter = new LocalMultiPbWallListAdapter(activity, pbItemInfoList, FileType.FILE_PHOTO);
@@ -159,7 +159,7 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
     }
 
     public void refreshPhotoWall() {
-        AppLog.d(TAG, "refreshPhotoWall layoutType=" + AppInfo.photoWallPreviewType);
+        AppLog.d(TAG, "refreshPhotoWall layoutType=" + AppInfo.photoWallLayoutType);
         pbItemInfoList = getPhotoInfoList(fileType);
         if (pbItemInfoList == null || pbItemInfoList.size() <= 0) {
             multiPbPhotoView.setGridViewVisibility(View.GONE);
@@ -172,10 +172,10 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
     }
 
     public void changePreviewType() {
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
-            AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_GRID;
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+            AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
         } else {
-            AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_LIST;
+            AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
         }
         loadPhotoWall();
     }
@@ -205,7 +205,7 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
         if (curOperationMode == OperationMode.MODE_EDIT) {
             curOperationMode = OperationMode.MODE_BROWSE;
             multiPbPhotoView.notifyChangeMultiPbMode(curOperationMode);
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.quitEditMode();
             } else {
                 photoWallGridAdapter.quitEditMode();
@@ -214,7 +214,7 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
     }
 
     public void listViewSelectOrCancelOnce(int position) {
-        AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallPreviewType);
+        AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
         String videoPath = pbItemInfoList.get(position).getFilePath();
         if (curOperationMode == OperationMode.MODE_BROWSE) {
             AppLog.i(TAG, "listViewSelectOrCancelOnce curOperationMode=" + curOperationMode);
@@ -239,7 +239,7 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
     }
 
     public void gridViewSelectOrCancelOnce(int position) {
-        AppLog.i(TAG, "gridViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallPreviewType);
+        AppLog.i(TAG, "gridViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
         String videoPath = pbItemInfoList.get(position).getFilePath();
         if (curOperationMode == OperationMode.MODE_BROWSE) {
             if (fileType == FileType.FILE_PHOTO) {
@@ -268,7 +268,7 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
         }
         int selectNum;
         if (isSelectAll) {
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.selectAllItems();
                 selectNum = photoWallListAdapter.getSelectedCount();
             } else {
@@ -277,7 +277,7 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
             }
             multiPbPhotoView.setPhotoSelectNumText(selectNum);
         } else {
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.cancelAllSelections();
                 selectNum = photoWallListAdapter.getSelectedCount();
             } else {
@@ -289,7 +289,7 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
     }
 
     public List<LocalPbItemInfo> getSelectedList() {
-        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
+        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
             return photoWallListAdapter.getSelectedList();
         } else {
             return photoWallGridAdapter.getCheckedItemsList();

@@ -50,7 +50,7 @@ public class OptionSetting {
     private AlertDialog alertDialog;
     private final SettingHander handler = new SettingHander();
     private SDKEvent sdkEvent;
-    static Context context;
+    private Context context;
     private Activity activity;
     private String wifiSsid, password;
     private MyCamera myCamera;
@@ -136,6 +136,14 @@ public class OptionSetting {
 
             case R.string.setting_enable_wifi_hotspot:
                 showEnableWifihotspotDialog();
+                break;
+            case R.string.setting_title_exposure_compensation:
+                AppLog.d("1111", "showExposureCompensationDialog");
+                showExposureCompensationDialog(context);
+                break;
+            case R.string.setting_title_video_file_length:
+                AppLog.d("1111", "showVideoFileLengthDialog");
+                showVideoFileLengthDialog(context);
                 break;
         }
     }
@@ -1126,5 +1134,61 @@ public class OptionSetting {
 //        }, CONNECT_WIFI_TIMEOUT);//一分钟后执行
 //        wifiListener = new WifiListener(getActivity().getApplicationContext(), handler);
 //        wifiListener.registerReceiver();
+    }
+
+    public void showExposureCompensationDialog(final Context context) {
+        // TODO Auto-generated method stub
+        CharSequence title = context.getResources().getString(R.string.setting_title_exposure_compensation);
+        final String[] exposureCompensationUIString = baseProrertys.getExposureCompensation().getValueList();
+        if (exposureCompensationUIString == null) {
+            AppLog.e(TAG, "exposureCompensationUIString == null");
+            return;
+        }
+        int length = exposureCompensationUIString.length;
+        int curIdx = 0;
+        String temp = baseProrertys.getExposureCompensation().getCurrentUiStringInPreview();
+        for (int i = 0; i < length; i++) {
+            if (exposureCompensationUIString[i].equals(temp)) {
+                curIdx = i;
+            }
+        }
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                baseProrertys.getExposureCompensation().setValueByPosition(arg1);
+                arg0.dismiss();
+                onSettingCompleteListener.onOptionSettingComplete();
+            }
+        };
+        showOptionDialog(title, exposureCompensationUIString, curIdx, listener, true);
+    }
+
+    public void showVideoFileLengthDialog(final Context context) {
+        // TODO Auto-generated method stub
+        CharSequence title = context.getResources().getString(R.string.setting_title_video_file_length);
+        final String[] videoFileLengthUIString = baseProrertys.getVideoFileLength().getValueList();
+        if (videoFileLengthUIString == null) {
+            AppLog.e(TAG, "videoFileLengthUIString == null");
+            return;
+        }
+        int length = videoFileLengthUIString.length;
+        int curIdx = 0;
+        String temp = baseProrertys.getVideoFileLength().getCurrentUiStringInPreview();
+        for (int i = 0; i < length; i++) {
+            if (videoFileLengthUIString[i].equals(temp)) {
+                curIdx = i;
+            }
+        }
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                baseProrertys.getVideoFileLength().setValueByPosition(arg1);
+                arg0.dismiss();
+                onSettingCompleteListener.onOptionSettingComplete();
+            }
+        };
+        showOptionDialog(title, videoFileLengthUIString, curIdx, listener, true);
     }
 }

@@ -113,9 +113,7 @@ public class VideoPbActivity extends AppCompatActivity implements VideoPbView {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.stopVideoStream();
-                presenter.removeEventListener();
-                finish();
+                presenter.back();
             }
         });
 
@@ -335,8 +333,7 @@ public class VideoPbActivity extends AppCompatActivity implements VideoPbView {
                 break;
             case KeyEvent.KEYCODE_BACK:
                 Log.d("AppStart", "back");
-                presenter.destroyVideo(ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE);
-                finish();
+                presenter.back();
                 break;
             default:
                 return super.onKeyDown(keyCode, event);

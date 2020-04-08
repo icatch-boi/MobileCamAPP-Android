@@ -17,7 +17,7 @@ import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.Mode.OperationMode;
 import com.icatch.mobilecam.data.entity.LocalPbItemInfo;
 import com.icatch.mobilecam.data.type.FileType;
-import com.icatch.mobilecam.data.type.PhotoWallPreviewType;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Fragment.LocalMultiPbFragment;
@@ -56,7 +56,7 @@ public class LocalMultiPbPresenter extends BasePresenter {
     }
 
     public void reset() {
-        AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_GRID;
+        AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
         AppInfo.currentViewpagerPosition = 0;
         AppInfo.curVisibleItem = 0;
     }
@@ -89,7 +89,7 @@ public class LocalMultiPbPresenter extends BasePresenter {
 
             @Override
             public void onSelectedItemsCountChanged(int SelectedNum) {
-                String temp = "Selected(" + SelectedNum + ")";
+                String temp = activity.getString(R.string.text_selected).replace("$1$",String.valueOf(SelectedNum));;
                 multiPbView.setSelectNumText(temp);
             }
 
@@ -121,7 +121,7 @@ public class LocalMultiPbPresenter extends BasePresenter {
 
             @Override
             public void onSelectedItemsCountChanged(int SelectedNum) {
-                String temp = "Selected(" + SelectedNum + ")";
+                String temp = activity.getString(R.string.text_selected).replace("$1$",String.valueOf(SelectedNum));;
                 multiPbView.setSelectNumText(temp);
             }
 
@@ -142,11 +142,11 @@ public class LocalMultiPbPresenter extends BasePresenter {
     public void changePreviewType() {
         if (curOperationMode == OperationMode.MODE_BROWSE) {
             clealAsytaskList();
-            if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
-                AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_GRID;
+            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+                AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
                 multiPbView.setMenuPhotoWallTypeIcon(R.drawable.ic_view_grid_white_24dp);
             } else {
-                AppInfo.photoWallPreviewType = PhotoWallPreviewType.PREVIEW_TYPE_LIST;
+                AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
                 multiPbView.setMenuPhotoWallTypeIcon(R.drawable.ic_view_list_white_24dp);
             }
             multiPbPhotoFragment.changePreviewType();

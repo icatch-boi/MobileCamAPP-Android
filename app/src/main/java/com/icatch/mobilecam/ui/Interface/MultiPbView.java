@@ -13,4 +13,6 @@ public interface MultiPbView {
     void setSelectNumTextVisibility(int visibility);
     void setTabLayoutClickable(boolean value);
     void setEditLayoutVisibiliy(int visibiliy);
+    int getViewPageIndex();
+    void setFilterItemVisibiliy(boolean visibility);
 }
