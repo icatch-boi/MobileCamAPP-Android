@@ -472,7 +472,7 @@ public class LaunchPresenter extends BasePresenter {
         }
         if (cameraProperties != null
                 && cameraProperties.hasFuction(PropertyId.DEFALUT_TO_PREVIEW)
-                && !cameraProperties.checkCameraCapabilities(ICatchCamFeatureID.ICH_CAM_APP_DEFAULT_TO_PREVIEW)) {
+                && cameraProperties.checkCameraCapabilities(ICatchCamFeatureID.ICH_CAM_APP_DEFAULT_TO_PLAYBACK)) {
             if (cameraProperties.isSDCardExist()) {
                 Intent intent = new Intent();
                 AppLog.i(TAG, "intent:start PbMainActivity.class");

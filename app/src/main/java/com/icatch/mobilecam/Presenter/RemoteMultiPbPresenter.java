@@ -69,7 +69,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
         CameraProperties cameraProperties = camera.getCameraProperties();
         if (cameraProperties != null
                 && cameraProperties.hasFuction(PropertyId.DEFALUT_TO_PREVIEW)
-                && !cameraProperties.checkCameraCapabilities(ICatchCamFeatureID.ICH_CAM_APP_DEFAULT_TO_PREVIEW)) {
+                && cameraProperties.checkCameraCapabilities(ICatchCamFeatureID.ICH_CAM_APP_DEFAULT_TO_PLAYBACK)) {
             camera.disconnect();
         }
     }

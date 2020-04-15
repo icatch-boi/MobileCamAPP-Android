@@ -55,7 +55,7 @@ public class RemoteFileHelper {
         }
         if (cameraProperties != null
                 && cameraProperties.hasFuction(PropertyId.CAMERA_PB_LIMIT_NUMBER)
-                && cameraProperties.checkCameraCapabilities(ICatchCamFeatureID.ICH_CAM_SUPPORT_GET_FILE_BY_PAGINATION)) {
+                && cameraProperties.checkCameraCapabilities(ICatchCamFeatureID.ICH_CAM_NEW_PAGINATION_GET_FILE)) {
             supportSegmentedLoading = true;
             supportSetFileListAttribute = true;
         } else {
