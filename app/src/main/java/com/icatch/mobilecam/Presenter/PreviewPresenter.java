@@ -727,11 +727,15 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     }
 
     public boolean disconnectCamera() {
-        return curCamera.disconnect();
+        if(curCamera != null){
+            return curCamera.disconnect();
+        }else {
+            return false;
+        }
     }
 
     public void delConnectFailureListener() {
-        GlobalInfo.getInstance().enableConnectCheck(false);
+       // GlobalInfo.getInstance().enableConnectCheck(false);
     }
 
     public void unregisterWifiSSReceiver() {
@@ -1323,20 +1327,22 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 //    }
 
 
-    public void delEvent() {
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_FULL);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_BATTERY_LEVEL_CHANGED);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_CAPTURE_COMPLETE);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_CAPTURE_START);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_VIDEO_OFF);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_ADDED);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_VIDEO_ON);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_CONNECTION_DISCONNECTED);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_TIMELAPSE_STOP);
-        sdkEvent.delCustomizeEventListener(0x5001);
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_DOWNLOAD);
+    public synchronized void delEvent() {
+        if(curCamera != null && curCamera.isConnected()){
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_FULL);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_BATTERY_LEVEL_CHANGED);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_CAPTURE_COMPLETE);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_CAPTURE_START);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_VIDEO_OFF);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_ADDED);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_VIDEO_ON);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_CONNECTION_DISCONNECTED);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_TIMELAPSE_STOP);
+            sdkEvent.delCustomizeEventListener(0x5001);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_DOWNLOAD);
 //        sdkEvent.delCustomizeEventListener(0x3701);// Insert SD card event
-        sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+        }
     }
 
     public void loadSettingMenuList() {

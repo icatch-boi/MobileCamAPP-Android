@@ -155,6 +155,7 @@ public class UIDisplaySource {
         if (cameraProperties.hasFuction(PropertyId.IMAGE_STABILIZATION)) {
             settingMenuList.add(new SettingMenu(R.string.setting_title_image_stabilization, ""));
         }
+        settingMenuList.add(new SettingMenu(R.string.setting_update_fw,""));
         if (cameraProperties.hasFuction(PropertyId.VIDEO_FILE_LENGTH)) {
             settingMenuList.add(new SettingMenu(R.string.setting_title_video_file_length, baseProrertys.getVideoFileLength().getCurrentUiStringInPreview()));
         }

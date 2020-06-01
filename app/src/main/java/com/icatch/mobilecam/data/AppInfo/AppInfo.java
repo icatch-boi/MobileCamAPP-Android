@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class AppInfo {
     public static final String APP_PATH = "/MobileCam/";
-    public static final String APP_VERSION = "V1.2.0_beta10";
-    public static final String SDK_VERSION = "V3.6.0.19";
+    public static final String APP_VERSION = "V1.2.0_beta11";
+    public static final String SDK_VERSION = "V3.6.0.23";
     public static final String SDK_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_SDK_Log/";
     public static final String APP_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_APP_Log/";
     public static final String PROPERTY_CFG_FILE_NAME = "netconfig.properties";
@@ -27,7 +27,7 @@ public class AppInfo {
     public static final String DOWNLOAD_PATH_PHOTO = "/DCIM/MobileCam/photo/";
     public static final String DOWNLOAD_PATH_VIDEO = "/DCIM/MobileCam/video/";
     public static final String AUTO_DOWNLOAD_PATH = "/DCIM/MobileCam/photo/";
-    public static final String UPDATEFW_FILENAME = APP_PATH + "Resoure/sphost.BRN";
+    public static final String FW_UPGRADE_FILENAME = "sphost.BRN";
     private static final String TAG = AppInfo.class.getSimpleName();
     public static final String FILE_GOOGLE_TOKEN = "file_googleToken.dat";
 

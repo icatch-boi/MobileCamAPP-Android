@@ -172,22 +172,30 @@ public class FileTools {
         }
         return size;
     }
-
-    public static void copyFile(int resourceId) {
-        File Folder = new File("/sdcard/SportCamResoure/");
+    public static boolean checkFwUpgradeFile(String filePath,String fileName){
+        File file = new File(filePath, fileName);
+        File Folder = new File(filePath);
         if (!Folder.exists())
         {
             Folder.mkdir();
         }
-        String filename = Environment.getExternalStorageDirectory().toString() + "/SportCamResoure/";
-        Log.d("1111", "copyFile filename ==" + filename);
-        // String filename =
-        // Environment.getExternalStorageDirectory().toString() + "/Pictures/";
+        boolean exists = file.exists();
+        return exists;
+    }
+
+    public static void copyFile(int resourceId,String filePath) {
+        File Folder = new File(filePath);
+        if (!Folder.exists())
+        {
+            Folder.mkdir();
+        }
+        //String filename = Environment.getExternalStorageDirectory().toString() + "/SportCamResoure/";
+        Log.d("1111", "copyFile filename ==" + filePath);
         InputStream in = null;
         OutputStream out = null;
         File outFile = null;
         String fileName1 = "sphost.BRN";
-        File file = new File(filename, fileName1);
+        File file = new File(filePath, fileName1);
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -199,7 +207,7 @@ public class FileTools {
         try {
             in = GlobalInfo.getInstance().getCurrentApp().getResources().openRawResource(resourceId);
 
-            outFile = new File(filename + fileName1);
+            outFile = new File(filePath + fileName1);
             Log.d("1111", "output file" + outFile.getAbsolutePath());
             out = new FileOutputStream(outFile);
             byte[] buffer = new byte[1024];

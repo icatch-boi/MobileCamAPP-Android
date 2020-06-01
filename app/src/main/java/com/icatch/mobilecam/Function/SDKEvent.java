@@ -40,6 +40,9 @@ public class SDKEvent {
     public static final int EVENT_SDCARD_INSERT = 17;
     public static final int EVENT_VIDEO_PLAY_PTS = 23;
     public static final int EVENT_VIDEO_PLAY_CLOSED = 24;
+    public static final int EVENT_FW_UPDATE_CHECK = 25;
+    public static final int EVENT_FW_UPDATE_CHKSUMERR = 26;
+    public static final int EVENT_FW_UPDATE_NG = 27;
     private CameraAction cameraAction;
     private Handler handler;
     private SdcardStateListener sdcardStateListener;
@@ -67,6 +70,10 @@ public class SDKEvent {
     private NetworkDisconnectListener networkDisconnectListener;
     private PanoramaControl panoramaControl;
     private NoEISInformationListener noEISInformationListener;
+    // add
+    private UpdateFWCheckListener updateFWCheckListener;
+    private UpdateFWCHKSumErrListener updateFWCHKSumErrListener;
+    private UpdateFWNGListener updateFWNGListener;
 
     public SDKEvent(Handler handler) {
         this.handler = handler;
@@ -128,6 +135,18 @@ public class SDKEvent {
         } else if(iCatchEventID == ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN){
             insertSdcardListener = new InsertSdcardListener();
             cameraAction.addEventListener(iCatchEventID, insertSdcardListener);
+        }
+        if (iCatchEventID == ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHECK) {
+            updateFWCheckListener = new UpdateFWCheckListener();
+            cameraAction.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHECK, updateFWCheckListener);
+        }
+        if (iCatchEventID == ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHKSUMERR) {
+            updateFWCHKSumErrListener = new UpdateFWCHKSumErrListener();
+            cameraAction.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHKSUMERR, updateFWCHKSumErrListener);
+        }
+        if (iCatchEventID == ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG) {
+            updateFWNGListener = new UpdateFWNGListener();
+            cameraAction.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG, updateFWNGListener);
         }
     }
 
@@ -296,6 +315,16 @@ public class SDKEvent {
         } else if(iCatchEventID == ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN){
             cameraAction.delEventListener(iCatchEventID, insertSdcardListener);
             insertSdcardListener = null;
+        }
+        if (iCatchEventID == ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHECK && updateFWCheckListener != null) {
+            cameraAction.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHECK, updateFWCheckListener);
+        }
+
+        if (iCatchEventID == ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHKSUMERR && updateFWCHKSumErrListener != null) {
+            cameraAction.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHKSUMERR, updateFWCHKSumErrListener);
+        }
+        if (iCatchEventID == ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG && updateFWNGListener != null) {
+            cameraAction.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG, updateFWNGListener);
         }
 
     }
@@ -537,6 +566,35 @@ public class SDKEvent {
             AppLog.d(TAG,"eventNotify iCatchCamEvent DoubleValue1:" + iCatchCamEvent.getDoubleValue1());
         }
     }
+    // add
+    public class UpdateFWCheckListener implements ICatchCameraListener {
+        @Override
+        public void eventNotify(ICatchCamEvent arg0) {
+            // TODO Auto-generated method stub
+            AppLog.i(TAG, "--------------receive UpdateFWCheckListener");
+            handler.obtainMessage(EVENT_FW_UPDATE_CHECK).sendToTarget();
+            // sendOkMsg(EVENT_FILE_ADDED);
+        }
+    }
 
+    public class UpdateFWCHKSumErrListener implements ICatchCameraListener {
+        @Override
+        public void eventNotify(ICatchCamEvent arg0) {
+            // TODO Auto-generated method stub
+            AppLog.i(TAG, "--------------receive UpdateFWCHKSumErrListener");
+            handler.obtainMessage(EVENT_FW_UPDATE_CHKSUMERR).sendToTarget();
+            // sendOkMsg(EVENT_FILE_ADDED);
+        }
+    }
+
+    public class UpdateFWNGListener implements ICatchCameraListener {
+        @Override
+        public void eventNotify(ICatchCamEvent arg0) {
+            // TODO Auto-generated method stub
+            AppLog.i(TAG, "--------------receive UpdateFWNGListener");
+            handler.obtainMessage(EVENT_FW_UPDATE_NG).sendToTarget();
+            // sendOkMsg(EVENT_FILE_ADDED);
+        }
+    }
 
 }

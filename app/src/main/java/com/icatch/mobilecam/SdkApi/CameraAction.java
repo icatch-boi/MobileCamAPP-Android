@@ -235,6 +235,9 @@ public class CameraAction {
 
     public boolean delCustomEventListener(int eventID, ICatchCameraListener listener) {
         AppLog.i(TAG, "begin delEventListener eventID=" + eventID);
+        if(cameraControl == null){
+            return false;
+        }
         boolean retValue = false;
         try {
             retValue = cameraControl.delCustomEventListener(eventID, listener);
@@ -271,6 +274,9 @@ public class CameraAction {
 
     public boolean delEventListener(int eventID, ICatchCameraListener listener) {
         AppLog.i(TAG, "begin delEventListener eventID=" + eventID);
+        if(cameraControl == null){
+            return false;
+        }
         boolean retValue = false;
         try {
             retValue = cameraControl.delEventListener(eventID, listener);

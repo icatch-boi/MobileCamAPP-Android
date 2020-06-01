@@ -437,4 +437,7 @@
     <string name="text_please_connect_camera">Please connect camera $1$.</string>
     <string name="title_warning">Warning</string>
     <string name="text_selected">Selected($1$)</string>
+    <string name="setting_updatefw_chec_sum_failed">FW update check sum error!</string>
+    <string name="setting_updatefw_upgrade_file_not_exist">The upgrade file $1$ does not exist, please put the file to this path:$2$.</string>
+
 </resources>

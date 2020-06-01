@@ -128,6 +128,15 @@ public class OptionSetting {
                     sdCardIsNotReadyAlert(context);
                     break;
                 }
+                String fwPth = Environment.getExternalStorageDirectory().toString() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;;
+                String fwUpgradeName = AppInfo.FW_UPGRADE_FILENAME;
+                if (!FileTools.checkFwUpgradeFile(fwPth,fwUpgradeName)) {
+                    String msg = context.getString(R.string.setting_updatefw_upgrade_file_not_exist)
+                            .replace("$1$",fwUpgradeName)
+                            .replace("$2$",AppInfo.PROPERTY_CFG_DIRECTORY_PATH);
+                    AppDialog.showDialogWarn(context,msg);
+                    return;
+                }
                 showUpdateFWDialog(context);
                 break;
             case R.string.setting_auto_download_size_limit:
@@ -302,13 +311,19 @@ public class OptionSetting {
                 }
                 sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_COMPLETED);
                 sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_POWEROFF);
+
+                sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHECK);
+                sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHKSUMERR);
+                sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG);
+
                 MyProgressDialog.showProgressDialog(context, R.string.setting_update_fw);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         final int messageId;
-                        FileTools.copyFile(R.raw.sphost);
-                        String fileName = Environment.getExternalStorageDirectory().toString() + AppInfo.UPDATEFW_FILENAME;
+                        String filePath = Environment.getExternalStorageDirectory().toString() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;
+                        //FileTools.copyFile(R.raw.sphost,filePath);
+                        String fileName = filePath + AppInfo.FW_UPGRADE_FILENAME;
                         if (!cameraAction.updateFW(fileName)) {
                             messageId = R.string.text_operation_success;
                             AlertDialog.Builder updateFWFailedBuilder = new AlertDialog.Builder(context);
@@ -1012,6 +1027,9 @@ public class OptionSetting {
                     AppLog.d(TAG, "receive EVENT_FW_UPDATE_POWEROFF");
                     sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_COMPLETED);
                     sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_POWEROFF);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHECK);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHKSUMERR);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG);
                     AlertDialog.Builder builder3 = new AlertDialog.Builder(context);
                     builder3.setMessage(R.string.setting_updatefw_closeAppInfo);
                     builder3.setNegativeButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
@@ -1032,6 +1050,55 @@ public class OptionSetting {
 //                    AppInfo.isNeedReconnect = false;
 //                    connectWifi()
 //                    break;
+
+                case SDKEvent.EVENT_FW_UPDATE_CHECK:
+                    AppLog.d(TAG, "receive EVENT_FW_UPDATE_CHECK");
+                    break;
+                case SDKEvent.EVENT_FW_UPDATE_CHKSUMERR:
+                    AppLog.d(TAG, "receive EVENT_FW_UPDATE_CHKSUMERR");
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_COMPLETED);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_POWEROFF);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHECK);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHKSUMERR);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG);
+                    AlertDialog.Builder builder5 = new AlertDialog.Builder(context);
+                    builder5.setMessage(R.string.setting_updatefw_chec_sum_failed);
+                    builder5.setNegativeButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("1111", "App FW updatefw chech sume failed");
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog = builder5.create();
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                    break;
+                case SDKEvent.EVENT_FW_UPDATE_NG:
+                    AppLog.d(TAG, "receive EVENT_FW_UPDATE_NG");
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_COMPLETED);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_POWEROFF);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHECK);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_CHKSUMERR);
+                    sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG);
+                    AlertDialog.Builder builder6 = new AlertDialog.Builder(context);
+                    builder6.setMessage(R.string.setting_updatefw_failed);
+                    builder6.setNegativeButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("1111", "App FW updatefw failed");
+                            dialog.dismiss();
+                            // ExitApp.getInstance().exit();
+                            // do something by yourself
+                        }
+                    });
+                    alertDialog = builder6.create();
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                    break;
+
                 case AppMessage.AP_MODE_TO_STA_MODE_FAILURE:
                     MyProgressDialog.closeProgressDialog();
                     MyToast.show(context, R.string.dialog_failed);
