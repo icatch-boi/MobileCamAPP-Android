@@ -38,8 +38,8 @@ public class ImageLoaderConfig {
             ImageLoader.getInstance().destroy();
         }
         fileNameGenerator = new Md5FileNameGeneratorMatchFaceName();
-        diskCache = DefaultConfigurationFactory
-                .createDiskCache(context, fileNameGenerator, 1024 * 1024 * 1024, 5000);
+//        diskCache = DefaultConfigurationFactory
+//                .createDiskCache(context, fileNameGenerator, 1024 * 1024 * 1024, 5000);
 //        diskCache = new UnlimitedDiskCache(cacheDir,null,fileNameGenerator);
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
 //        taskExecutor = Executors.newSingleThreadExecutor();
@@ -52,8 +52,8 @@ public class ImageLoaderConfig {
         config.denyCacheImageMultipleSizesInMemory();
 //        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
         config.diskCacheFileNameGenerator(fileNameGenerator);
-        config.diskCache(diskCache);
-//        config.diskCacheSize(50 * 1024 * 1024); // 50 MB
+        config.memoryCacheSize(1024 * 1024 * 100);
+        config.diskCacheSize(1024 * 1024 * 500); // 200 MB
         config.tasksProcessingOrder(QueueProcessingType.LIFO);
         if (imageDownloader != null) {
             config.imageDownloader(imageDownloader);
@@ -93,7 +93,7 @@ public class ImageLoaderConfig {
             synchronized (ImageLoaderConfig.class) {
                 if (options == null) {
                     options = new DisplayImageOptions.Builder()
-                            .cacheInMemory(false)
+                            .cacheInMemory(true)
                             .cacheOnDisk(true)
                             .considerExifParams(true)
                             .build();
@@ -132,8 +132,23 @@ public class ImageLoaderConfig {
 
     public static void stopLoad(){
         ImageLoader.getInstance().stop();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 //        if(taskExecutor != null){
 //            taskExecutor.shutdown();
+//            while (true){
+//                if(taskExecutor.isTerminated()){
+//                    break;
+//                }
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 //            try {
 //                taskExecutor.awaitTermination(5000,TimeUnit.MINUTES);
 //            } catch (InterruptedException e) {

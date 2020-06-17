@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.icatch.mobilecam.Listener.OnAddAsytaskListener;
+import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
+import com.icatch.mobilecam.utils.imageloader.TutkUriUtil;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersSimpleAdapter;
 import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
@@ -31,17 +33,13 @@ public class MultiPbPhotoWallGridAdapter extends BaseAdapter implements StickyGr
     private int width;
     private OperationMode operationMode = OperationMode.MODE_BROWSE;
     private FileType fileType;
-    LruCache<Integer, Bitmap> mLruCache;
-    private OnAddAsytaskListener listener;
 
-    public MultiPbPhotoWallGridAdapter(Context context, List<MultiPbItemInfo> list, int width, LruCache<Integer, Bitmap> mLruCache,FileType fileType,OnAddAsytaskListener listener) {
+    public MultiPbPhotoWallGridAdapter(Context context, List<MultiPbItemInfo> list,FileType fileType) {
         this.context = context;
         mInflater = LayoutInflater.from(context);
         this.list = list;
-        this.mLruCache = mLruCache;
         this.fileType = fileType;
         this.width = SystemInfo.getMetrics(context).widthPixels;
-        this.listener = listener;
     }
 
     @Override
@@ -104,23 +102,10 @@ public class MultiPbPhotoWallGridAdapter extends BaseAdapter implements StickyGr
             mViewHolder.mCheckImageView.setVisibility(View.GONE);
 //            mViewHolder.mImageView.showBorder(false);
         }
-
-        int fileHandle = list.get(position).getFileHandle();
-        mViewHolder.mImageView.setTag(fileHandle);
-
-        Bitmap bitmap = mLruCache.get(fileHandle);
-        if (bitmap != null){
-            AppLog.d(TAG, "position=" + position + " bitmap.isRecycled()=" + bitmap.isRecycled());
-        }
-
-        if (bitmap != null && !bitmap.isRecycled()) {
-            mViewHolder.mImageView.setImageBitmap(bitmap);
-        }
-        else {
-            if(listener != null){
-                listener.addAsytask(position);
-            }
-            mViewHolder.mImageView.setImageResource(R.drawable.pictures_no);
+        MultiPbItemInfo itemInfo = list.get(position);
+        if (itemInfo != null) {
+            String uri = TutkUriUtil.getTutkThumbnailUri(itemInfo.iCatchFile);
+            ImageLoaderUtil.loadImageView(uri, mViewHolder.mImageView, R.drawable.pictures_no);
         }
         return convertView;
     }

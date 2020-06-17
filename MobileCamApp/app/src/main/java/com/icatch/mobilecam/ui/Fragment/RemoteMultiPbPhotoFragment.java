@@ -3,6 +3,7 @@ package com.icatch.mobilecam.ui.Fragment;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.icatch.mobilecam.data.type.FileType;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallGridAdapter;
 import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallListAdapter;
@@ -28,7 +31,7 @@ import com.icatch.mobilecam.ui.Interface.MultiPbPhotoFragmentView;
 
 import java.util.List;
 
-public class RemoteMultiPbPhotoFragment extends Fragment implements MultiPbPhotoFragmentView {
+public class RemoteMultiPbPhotoFragment extends BaseMultiPbFragment implements MultiPbPhotoFragmentView {
     private static final String TAG = "RemoteMultiPbPhotoFragment";
     StickyGridHeadersGridView multiPbPhotoGridView;
     ListView listView;
@@ -39,10 +42,29 @@ public class RemoteMultiPbPhotoFragment extends Fragment implements MultiPbPhoto
     private boolean isCreated = false;
     private boolean isVisible = false;
     TextView noContentTxv;
-
+    private FileType fileType;
 
     public RemoteMultiPbPhotoFragment() {
         // Required empty public constructor
+    }
+
+    public static RemoteMultiPbPhotoFragment newInstance(int param1) {
+        RemoteMultiPbPhotoFragment fragment = new RemoteMultiPbPhotoFragment();
+        Bundle args = new Bundle();
+        args.putInt("FILE_TYPE", param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        int fileTypeInt = 0;
+        if (getArguments() != null) {
+            fileTypeInt = getArguments().getInt("FILE_TYPE");
+        }
+        this.fileType = FileType.values()[fileTypeInt];
+        AppLog.d(TAG, "onCreate fileType=" + fileType);
     }
 
     @Override
@@ -57,49 +79,8 @@ public class RemoteMultiPbPhotoFragment extends Fragment implements MultiPbPhoto
         multiPbPhotoListLayout = (FrameLayout) view.findViewById(R.id.multi_pb_photo_list_layout);
         noContentTxv = (TextView) view.findViewById(R.id.no_content_txv);
 
-        presenter = new MultiPbPhotoFragmentPresenter(getActivity());
+        presenter = new MultiPbPhotoFragmentPresenter(getActivity(),fileType);
         presenter.setView(this);
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                int firstVisible = listView.getFirstVisiblePosition();
-                int lastVisible = listView.getLastVisiblePosition();
-                AppLog.d(TAG, "listView onScrollStateChanged firstVisible=" + firstVisible + " lastVisible=" + lastVisible);
-                if(isVisible){
-                    presenter.listViewLoadThumbnails(scrollState,firstVisible,lastVisible-firstVisible+1);
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(isVisible){
-                    presenter.listViewLoadOnceThumbnails(firstVisibleItem, visibleItemCount);
-                }
-            }
-        });
-
-        multiPbPhotoGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                AppLog.d(TAG, "11333 view onScrollStateChanged firstVisible=" + view.getFirstVisiblePosition() + " lastVisible=" + view.getLastVisiblePosition());
-
-                int firstVisible = multiPbPhotoGridView.getFirstVisiblePosition();
-                int lastVisible = multiPbPhotoGridView.getLastVisiblePosition();
-                AppLog.d(TAG, "11333 onScrollStateChanged firstVisible=" + firstVisible + " lastVisible=" + lastVisible);
-                if(isVisible){
-                    presenter.gridViewLoadThumbnails(scrollState,firstVisible,lastVisible-firstVisible+1);
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                AppLog.d(TAG, "1122 onScroll firstVisibleItem=" + firstVisibleItem + " visibleItemCount=" + visibleItemCount);
-
-                if(isVisible){
-                    presenter.gridViewLoadOnceThumbnails(firstVisibleItem, visibleItemCount);
-                }
-            }
-        });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -158,15 +139,7 @@ public class RemoteMultiPbPhotoFragment extends Fragment implements MultiPbPhoto
     public void onDestroy() {
         AppLog.d(TAG, "start onDestroy()");
         super.onDestroy();
-        presenter.clealAsytaskList();
         presenter.emptyFileList();
-    }
-
-    public void changePreviewType(){
-        AppLog.d(TAG, "start changePreviewType presenter=" + presenter);
-        if(presenter != null){
-            presenter.changePreviewType();
-        }
     }
 
     public void quitEditMode(){
@@ -267,7 +240,6 @@ public class RemoteMultiPbPhotoFragment extends Fragment implements MultiPbPhoto
         }
         if (isVisibleToUser == false) {
             presenter.quitEditMode();
-            presenter.clealAsytaskList();
         }else{
             presenter.loadPhotoWall();
         }
@@ -281,17 +253,30 @@ public class RemoteMultiPbPhotoFragment extends Fragment implements MultiPbPhoto
         this.modeChangedListener = modeChangedListener;
     }
 
+    @Override
+    public void changePreviewType(PhotoWallLayoutType layoutType) {
+        if (presenter != null) {
+            presenter.changePreviewType(layoutType);
+        }
+    }
+
     public void selectOrCancelAll(boolean isSelectAll){
         presenter.selectOrCancelAll(isSelectAll);
+    }
+
+    @Override
+    public void deleteFile() {
+        presenter.deleteFile();
     }
 
     public List<MultiPbItemInfo> getSelectedList() {
         return presenter.getSelectedList();
     }
 
-    public void clealAsytaskList(){
-        presenter.clealAsytaskList();
+    @Override
+    public void loadPhotoWall() {
+        if (isVisible) {
+            presenter.loadPhotoWall();
+        }
     }
-
-
 }

@@ -21,7 +21,9 @@ import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
 import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
+import com.icatch.mobilecam.ui.Fragment.BaseMultiPbFragment;
 import com.icatch.mobilecam.ui.Fragment.RemoteMultiPbFragment;
+import com.icatch.mobilecam.ui.Fragment.RemoteMultiPbPhotoFragment;
 import com.icatch.mobilecam.ui.Interface.MultiPbView;
 import com.icatch.mobilecam.ui.RemoteFileHelper;
 import com.icatch.mobilecam.ui.adapter.ViewPagerAdapter;
@@ -39,7 +41,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
     private static final String TAG = RemoteMultiPbPresenter.class.getSimpleName();
     private MultiPbView multiPbView;
     private Activity activity;
-    private List<RemoteMultiPbFragment> fragments;
+    private List<BaseMultiPbFragment> fragments;
     OperationMode curOperationMode = OperationMode.MODE_BROWSE;
     ViewPagerAdapter adapter;
     private boolean curSelectAll = false;
@@ -109,12 +111,14 @@ public class RemoteMultiPbPresenter extends BasePresenter {
         FragmentManager manager = ((FragmentActivity) activity).getSupportFragmentManager();
         adapter = new ViewPagerAdapter(manager);
         //图片
-        RemoteMultiPbFragment multiPbPhotoFragment = RemoteMultiPbFragment.newInstance(FileType.FILE_PHOTO.ordinal());
+        BaseMultiPbFragment multiPbPhotoFragment = RemoteMultiPbFragment.newInstance(FileType.FILE_PHOTO.ordinal());
+//        BaseMultiPbFragment multiPbPhotoFragment = RemoteMultiPbPhotoFragment.newInstance(FileType.FILE_PHOTO.ordinal());
         multiPbPhotoFragment.setOperationListener(onStatusChangedListener);
         fragments.add(multiPbPhotoFragment);
         adapter.addFragment(multiPbPhotoFragment, activity.getResources().getString(R.string.title_photo));
         //视频
-        RemoteMultiPbFragment multiPbVideoFragment = RemoteMultiPbFragment.newInstance(FileType.FILE_VIDEO.ordinal());
+        BaseMultiPbFragment multiPbVideoFragment = RemoteMultiPbFragment.newInstance(FileType.FILE_VIDEO.ordinal());
+//        BaseMultiPbFragment multiPbVideoFragment = RemoteMultiPbPhotoFragment.newInstance(FileType.FILE_VIDEO.ordinal());
         multiPbVideoFragment.setOperationListener(onStatusChangedListener);
         fragments.add(multiPbVideoFragment);
         adapter.addFragment(multiPbVideoFragment, activity.getResources().getString(R.string.title_video));
@@ -140,7 +144,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
             }
             curLayoutType = layoutType;
             if (fragments != null) {
-                for (RemoteMultiPbFragment fragment : fragments
+                for (BaseMultiPbFragment fragment : fragments
                 ) {
                     fragment.changePreviewType(layoutType);
                 }
@@ -158,7 +162,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
         } else if (curOperationMode == OperationMode.MODE_EDIT) {
             curOperationMode = OperationMode.MODE_BROWSE;
             int index = multiPbView.getViewPageIndex();
-            RemoteMultiPbFragment fragment = fragments.get(index);
+            BaseMultiPbFragment fragment = fragments.get(index);
             if (fragment != null) {
                 fragment.quitEditMode();
             }
@@ -176,7 +180,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
         }
         if (fragments != null && fragments.size() > 0) {
             int index = multiPbView.getViewPageIndex();
-            RemoteMultiPbFragment fragment = fragments.get(index);
+            BaseMultiPbFragment fragment = fragments.get(index);
             if (fragment != null) {
                 fragment.selectOrCancelAll(curSelectAll);
             }
@@ -186,7 +190,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
     public void delete() {
         AppLog.d(TAG, "delete AppInfo.currentViewpagerPosition=" + AppInfo.currentViewpagerPosition);
         if (fragments != null && fragments.size() > 0) {
-            RemoteMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
+            BaseMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
             if (fragment != null) {
                 fragment.deleteFile();
             }
@@ -199,7 +203,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
         long fileSizeTotal = 0;
         AppLog.d(TAG, "delete currentViewpagerPosition=" + AppInfo.currentViewpagerPosition);
         if (fragments != null && fragments.size() > 0) {
-            RemoteMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
+            BaseMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
             if (fragment != null) {
                 list = fragment.getSelectedList();
             }
@@ -227,7 +231,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
     private void quitEditMode() {
         curOperationMode = OperationMode.MODE_BROWSE;
         if (fragments != null && fragments.size() > 0) {
-            RemoteMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
+            BaseMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
             if (fragment != null) {
                 fragment.quitEditMode();
             }
@@ -238,7 +242,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
         RemoteFileHelper.getInstance().setFileFilter(fileFilter);
         RemoteFileHelper.getInstance().clearAllFileList();
         if (fragments != null && fragments.size() > 0) {
-            RemoteMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
+            BaseMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
             if (fragment != null) {
                 fragment.loadPhotoWall();
             }

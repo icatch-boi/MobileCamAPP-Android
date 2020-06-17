@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class RemoteMultiPbFragment extends Fragment implements MultiPbFragmentView {
+public class RemoteMultiPbFragment extends BaseMultiPbFragment implements MultiPbFragmentView {
     private static final String TAG = "RemoteMultiPbFragment";
     RecyclerView recyclerView;
     MultiPbFragmentPresenter presenter;

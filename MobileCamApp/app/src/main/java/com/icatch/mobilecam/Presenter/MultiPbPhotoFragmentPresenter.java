@@ -1,43 +1,40 @@
 package com.icatch.mobilecam.Presenter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ImageView;
 
-import com.icatch.mobilecam.MyCamera.CameraManager;
-import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallGridAdapter;
-import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallListAdapter;
-import com.icatch.mobilecam.data.AppInfo.AppInfo;
-import com.icatch.mobilecam.data.type.FileType;
-import com.icatch.mobilecam.data.entity.LimitQueue;
-import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
-import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
-import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
-import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
-import com.icatch.mobilecam.Listener.OnAddAsytaskListener;
 import com.icatch.mobilecam.Log.AppLog;
-import com.icatch.mobilecam.data.Mode.OperationMode;
+import com.icatch.mobilecam.MyCamera.CameraManager;
 import com.icatch.mobilecam.Presenter.Interface.BasePresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.FileOperation;
+import com.icatch.mobilecam.data.AppInfo.AppInfo;
+import com.icatch.mobilecam.data.Mode.OperationMode;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
-import com.icatch.mobilecam.utils.PanoramaTools;
-import com.icatch.mobilecam.ui.activity.PhotoPbActivity;
+import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
+import com.icatch.mobilecam.data.type.FileType;
+import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
+import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
+import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.MultiPbPhotoFragmentView;
+import com.icatch.mobilecam.ui.RemoteFileHelper;
+import com.icatch.mobilecam.ui.activity.PhotoPbActivity;
+import com.icatch.mobilecam.ui.activity.VideoPbActivity;
+import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallGridAdapter;
+import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallListAdapter;
+import com.icatch.mobilecam.utils.PanoramaTools;
+import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
 import com.icatchtek.reliant.customer.type.ICatchFile;
 import com.icatchtek.reliant.customer.type.ICatchFileType;
-import com.icatchtek.reliant.customer.type.ICatchFrameBuffer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,18 +52,17 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     private boolean isFirstEnterThisActivity = true;
     private int topVisiblePosition = -1;
     private OperationMode curOperationMode = OperationMode.MODE_BROWSE;
-    private LimitQueue<Asytask> asytaskList;
-    private LruCache<Integer, Bitmap> mLruCache;
-    private List<MultiPbItemInfo> pbItemInfoList;
+    private List<MultiPbItemInfo> pbItemInfoList = new LinkedList<>();
     private FileOperation fileOperation = CameraManager.getInstance().getCurCamera().getFileOperation();
     private Handler handler;
+    private FileType fileType;
+    private PhotoWallLayoutType curLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
 
-    public MultiPbPhotoFragmentPresenter(Activity activity) {
+    public MultiPbPhotoFragmentPresenter(Activity activity, FileType fileType) {
         super(activity);
         this.activity = activity;
-        asytaskList = new LimitQueue<Asytask>(SystemInfo.getWindowVisibleCountMax(activity.getApplicationContext(), 4));
-        mLruCache = GlobalInfo.getInstance().mLruCache;
         handler = new Handler();
+        this.fileType = fileType;
     }
 
     public void setView(MultiPbPhotoFragmentView localPhotoWallView) {
@@ -78,14 +74,21 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         String fileDate;
         List<MultiPbItemInfo> photoInfoList = new ArrayList<MultiPbItemInfo>();
         List<ICatchFile> fileList = null;
-        if (GlobalInfo.getInstance().getRemotePhotoList() != null) {
-            photoInfoList = GlobalInfo.getInstance().getRemotePhotoList();
+        int iCatchFileType;
+        if(fileType == FileType.FILE_PHOTO){
+            iCatchFileType = ICatchFileType.ICH_FILE_TYPE_IMAGE;
+        }else {
+            iCatchFileType = ICatchFileType.ICH_FILE_TYPE_VIDEO;
+        }
+        List<MultiPbItemInfo> temp = RemoteFileHelper.getInstance().getLocalFileList(fileType);
+        if (temp != null && temp.size() > 0) {
+            photoInfoList.addAll(temp);
         } else {
-            fileList = fileOperation.getFileList(ICatchFileType.ICH_FILE_TYPE_IMAGE);
+            fileList = fileOperation.getFileList(iCatchFileType);
             AppLog.i(TAG, "fileList size=" + fileList.size());
             for (int ii = 0; ii < fileList.size(); ii++) {
                 fileDate = fileList.get(ii).getFileDate();
-                AppLog.i(TAG, "fileDate=" + fileDate);
+                //AppLog.i(TAG, "fileDate=" + fileDate);
                 if (fileDate == null || fileDate.isEmpty()) {
                     fileDate = "unknown";
                 } else if (fileDate.contains("T") == false) {
@@ -94,7 +97,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
                     int position = fileDate.indexOf("T");
                     fileDate = fileDate.substring(0, position);
                 }
-                AppLog.d(TAG, " fileDate=[" + fileDate + "]");
+                //AppLog.d(TAG, " fileDate=[" + fileDate + "]");
 
                 if (!sectionMap.containsKey(fileDate)) {
                     sectionMap.put(fileDate, section);
@@ -108,7 +111,6 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
                     photoInfoList.add(mGridItem);
                 }
             }
-            GlobalInfo.getInstance().setRemotePhotoList(photoInfoList);
         }
         return photoInfoList;
     }
@@ -118,8 +120,13 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                pbItemInfoList = getPhotoInfoList();
+                pbItemInfoList.clear();
+                List<MultiPbItemInfo> tempList = getPhotoInfoList();
+                if(tempList != null && tempList.size() > 0){
+                    pbItemInfoList.addAll(tempList);
+                }
                 AppLog.d(TAG, "pbItemInfoList=" + pbItemInfoList);
+                RemoteFileHelper.getInstance().setLocalFileList(pbItemInfoList, fileType);
                 if (pbItemInfoList == null || pbItemInfoList.size() <= 0) {
                     handler.post(new Runnable() {
                         @Override
@@ -157,31 +164,37 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         multiPbPhotoView.setListViewHeaderText(fileDate);
         int curWidth = 0;
         isFirstEnterThisActivity = true;
-        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+        if (curLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
             multiPbPhotoView.setGridViewVisibility(View.GONE);
             multiPbPhotoView.setListViewVisibility(View.VISIBLE);
-            photoWallListAdapter = new MultiPbPhotoWallListAdapter(activity, pbItemInfoList, mLruCache, FileType.FILE_PHOTO);
-            multiPbPhotoView.setListViewAdapter(photoWallListAdapter);
+            if (photoWallListAdapter != null) {
+                photoWallListAdapter.notifyDataSetChanged();
+            }else {
+                photoWallListAdapter = new MultiPbPhotoWallListAdapter(activity, pbItemInfoList, fileType);
+                multiPbPhotoView.setListViewAdapter(photoWallListAdapter);
+            }
+
         } else {
             width = SystemInfo.getMetrics(activity.getApplicationContext()).widthPixels;
             multiPbPhotoView.setGridViewVisibility(View.VISIBLE);
             multiPbPhotoView.setListViewVisibility(View.GONE);
             AppLog.d(TAG, "width=" + curWidth);
-            photoWallGridAdapter = (new MultiPbPhotoWallGridAdapter(activity, pbItemInfoList, width, mLruCache, FileType.FILE_PHOTO, new OnAddAsytaskListener
-                    () {
-                @Override
-                public void addAsytask(int position) {
-                    Asytask task = new Asytask(pbItemInfoList.get(position).iCatchFile);
-                    asytaskList.offer(task);
-                }
-            }));
-            multiPbPhotoView.setGridViewAdapter(photoWallGridAdapter);
+            if (photoWallGridAdapter != null) {
+                photoWallGridAdapter.notifyDataSetChanged();
+            }else {
+                photoWallGridAdapter = new MultiPbPhotoWallGridAdapter(activity, pbItemInfoList, fileType);
+                multiPbPhotoView.setGridViewAdapter(photoWallGridAdapter);
+            }
         }
     }
 
     public void refreshPhotoWall() {
-        Log.i("1122", "refreshPhotoWall layoutType=" + AppInfo.photoWallLayoutType);
-        pbItemInfoList = getPhotoInfoList();
+        Log.i("1122", "refreshPhotoWall layoutType=" + curLayoutType);
+        pbItemInfoList.clear();
+        List<MultiPbItemInfo> tempList = getPhotoInfoList();
+        if(tempList != null && tempList.size() > 0){
+            pbItemInfoList.addAll(tempList);
+        }
         if (pbItemInfoList == null || pbItemInfoList.size() <= 0) {
             multiPbPhotoView.setGridViewVisibility(View.GONE);
             multiPbPhotoView.setListViewVisibility(View.GONE);
@@ -190,93 +203,12 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
             multiPbPhotoView.setNoContentTxvVisibility(View.GONE);
             setAdaper();
         }
-//        if (AppInfo.photoWallPreviewType == PhotoWallPreviewType.PREVIEW_TYPE_LIST) {
-//            if (photoWallListAdapter != null) {
-//                photoWallListAdapter.notifyDataSetChanged();
-//            }
-//        } else {
-//            if (photoWallGridAdapter != null) {
-//                photoWallGridAdapter.notifyDataSetChanged();
-//            }
-//        }
     }
 
-    public void changePreviewType() {
-        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
-            AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
-        } else {
-            AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
-        }
+    public void changePreviewType(PhotoWallLayoutType layoutType) {
+        curLayoutType = layoutType;
         loadPhotoWall();
     }
-
-
-    public void listViewLoadThumbnails(int scrollState, int firstVisibleItem, int visibleItemCount) {
-        AppLog.d(TAG, "onScrollStateChanged");
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            AppLog.d(TAG, "onScrollStateChanged firstVisibleItem=" + firstVisibleItem + " visibleItemCount=" + visibleItemCount);
-            asytaskList.clear();
-            loadBitmaps(firstVisibleItem, visibleItemCount);
-        } else {
-            asytaskList.clear();
-        }
-    }
-
-    public void listViewLoadOnceThumbnails(int firstVisibleItem, int visibleItemCount) {
-        AppLog.d(TAG, "onScroll firstVisibleItem=" + firstVisibleItem);
-        if (firstVisibleItem != topVisiblePosition) {
-            topVisiblePosition = firstVisibleItem;
-            if (pbItemInfoList != null && pbItemInfoList.size() > 0) {
-                String fileDate = pbItemInfoList.get(firstVisibleItem).getFileDate();
-                AppLog.d(TAG, "fileDate=" + fileDate);
-                multiPbPhotoView.setListViewHeaderText(fileDate);
-            }
-        }
-        if (isFirstEnterThisActivity && visibleItemCount > 0) {
-            loadBitmaps(firstVisibleItem, visibleItemCount);
-            isFirstEnterThisActivity = false;
-        }
-    }
-
-
-    public void gridViewLoadThumbnails(int scrollState, int firstVisibleItem, int visibleItemCount) {
-        AppLog.d(TAG, "onScrollStateChanged scrollState=" + scrollState);
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            if (asytaskList != null && asytaskList.size() > 0) {
-                asytaskList.poll().execute();
-            }
-        }
-    }
-
-    public void gridViewLoadOnceThumbnails(int firstVisibleItem, int visibleItemCount) {
-        AppLog.d(TAG, "onScroll firstVisibleItem=" + firstVisibleItem + " visibleItemCount=" + visibleItemCount);
-        AppLog.d(TAG, "onScroll isFirstEnterThisActivity=" + isFirstEnterThisActivity);
-        if (isFirstEnterThisActivity && visibleItemCount > 0) {
-            if (asytaskList != null && asytaskList.size() > 0) {
-                asytaskList.poll().execute();
-            }
-            isFirstEnterThisActivity = false;
-        }
-    }
-
-    void loadBitmaps(int firstVisibleItem, int visibleItemCount) {
-        AppLog.i(TAG, "add task loadBitmaps firstVisibleItem=" + firstVisibleItem + " visibleItemCount" + visibleItemCount);
-        int fileHandle;
-        if (asytaskList == null) {
-            asytaskList = new LimitQueue<>(SystemInfo.getWindowVisibleCountMax(activity.getApplicationContext(), 4));
-        }
-        for (int ii = firstVisibleItem; ii < firstVisibleItem + visibleItemCount; ii++) {
-            if (pbItemInfoList != null && pbItemInfoList.size() > 0 && ii < pbItemInfoList.size()) {
-                Asytask task = new Asytask(pbItemInfoList.get(ii).iCatchFile);
-                asytaskList.offer(task);
-                AppLog.i(TAG, "add task loadBitmaps ii=" + ii);
-            }
-        }
-        if (asytaskList != null && asytaskList.size() > 0) {
-            asytaskList.poll().execute();
-        }
-    }
-
 
     public void listViewEnterEditMode(int position) {
         if (curOperationMode == OperationMode.MODE_BROWSE) {
@@ -303,7 +235,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         if (curOperationMode == OperationMode.MODE_EDIT) {
             curOperationMode = OperationMode.MODE_BROWSE;
             multiPbPhotoView.notifyChangeMultiPbMode(curOperationMode);
-            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+            if (curLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.quitEditMode();
             } else {
                 photoWallGridAdapter.quitEditMode();
@@ -312,37 +244,48 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     }
 
     public void listViewSelectOrCancelOnce(int position) {
-        AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
+        AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position + " photoWallPreviewType=" + curLayoutType);
         if (curOperationMode == OperationMode.MODE_BROWSE) {
             AppLog.i(TAG, "listViewSelectOrCancelOnce curOperationMode=" + curOperationMode);
-            clealAsytaskList();
-//            GlobalInfo.getInstance().initRemotePhotoListInfo();
-            Intent intent = new Intent();
-            intent.putExtra("curfilePosition", position);
-            intent.setClass(activity, PhotoPbActivity.class);
-            activity.startActivity(intent);
+            gotoSinglePb(position);
         } else {
             photoWallListAdapter.changeSelectionState(position);
             multiPbPhotoView.setPhotoSelectNumText(photoWallListAdapter.getSelectedCount());
         }
-
     }
 
     public void gridViewSelectOrCancelOnce(int position) {
-        AppLog.i(TAG, "gridViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
+        AppLog.i(TAG, "gridViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + curLayoutType);
         if (curOperationMode == OperationMode.MODE_BROWSE) {
-            clealAsytaskList();
-//            GlobalInfo.getInstance().initRemotePhotoListInfo();
-            Intent intent = new Intent();
-            intent.putExtra("curfilePosition", position);
-            intent.setClass(activity, PhotoPbActivity.class);
-            intent.setClass(activity, PhotoPbActivity.class);
-            activity.startActivity(intent);
+            gotoSinglePb(position);
         } else {
             photoWallGridAdapter.changeCheckBoxState(position, curOperationMode);
             multiPbPhotoView.setPhotoSelectNumText(photoWallGridAdapter.getSelectedCount());
         }
+    }
 
+    public void gotoSinglePb(final int position){
+        if (fileType == FileType.FILE_PHOTO) {
+            Intent intent = new Intent();
+            intent.putExtra("curfilePosition", position);
+            intent.putExtra("fileType", fileType.ordinal());
+            intent.setClass(activity, PhotoPbActivity.class);
+            activity.startActivity(intent);
+        } else {
+            MyProgressDialog.showProgressDialog(activity, R.string.wait);
+            stopLoad();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent();
+                    intent.putExtra("curfilePosition", position);
+                    intent.putExtra("fileType", fileType.ordinal());
+                    intent.setClass(activity, VideoPbActivity.class);
+                        activity.startActivity(intent);
+                    MyProgressDialog.closeProgressDialog();
+                }
+            }, 500);
+        }
     }
 
 
@@ -352,7 +295,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         }
         int selectNum;
         if (isSelectAll) {
-            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+            if (curLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.selectAllItems();
                 selectNum = photoWallListAdapter.getSelectedCount();
             } else {
@@ -361,7 +304,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
             }
             multiPbPhotoView.setPhotoSelectNumText(selectNum);
         } else {
-            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+            if (curLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
                 photoWallListAdapter.cancelAllSelections();
                 selectNum = photoWallListAdapter.getSelectedCount();
             } else {
@@ -373,108 +316,96 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
     }
 
     public List<MultiPbItemInfo> getSelectedList() {
-        if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
+        if (curLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_LIST) {
             return photoWallListAdapter.getSelectedList();
         } else {
             return photoWallGridAdapter.getCheckedItemsList();
         }
     }
 
-    class Asytask extends AsyncTask<String, Integer, Bitmap> {
-        int fileHandle;
-        ICatchFile file;
 
-        public Asytask(ICatchFile file) {
-            super();
-            this.file = file;
-            fileHandle = file.getFileHandle();
+
+
+    public void emptyFileList() {
+        RemoteFileHelper.getInstance().clearFileList(fileType);
+    }
+
+    public void stopLoad() {
+        ImageLoaderConfig.stopLoad();
+    }
+
+    public void deleteFile() {
+        List<MultiPbItemInfo> list = null;
+        list = getSelectedList();
+        if (list == null || list.size() <= 0) {
+            AppLog.d(TAG, "asytaskList size=" + list.size());
+            MyToast.show(activity, R.string.gallery_no_file_selected);
+        } else {
+            CharSequence what = activity.getResources().getString(R.string.gallery_delete_des).replace("$1$", String.valueOf(list.size()));
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setCancelable(false);
+            builder.setMessage(what);
+            builder.setPositiveButton(activity.getResources().getString(R.string.gallery_cancel), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            final List<MultiPbItemInfo> finalList = list;
+            final FileType finalFileType = fileType;
+            builder.setNegativeButton(activity.getResources().getString(R.string.gallery_delete), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MyProgressDialog.showProgressDialog(activity, R.string.dialog_deleting);
+                    quitEditMode();
+                    new DeleteFileThread(finalList, finalFileType).run();
+                }
+            });
+            builder.create().show();
+        }
+    }
+
+    private class DeleteFileThread implements Runnable {
+        private List<MultiPbItemInfo> fileList;
+        private List<MultiPbItemInfo> deleteFailedList;
+        private List<MultiPbItemInfo> deleteSucceedList;
+        private Handler handler;
+        private FileOperation fileOperation;
+        private FileType fileType;
+
+        public DeleteFileThread(List<MultiPbItemInfo> fileList, FileType fileType) {
+            this.fileList = fileList;
+            this.handler = new Handler();
+            this.fileOperation = CameraManager.getInstance().getCurCamera().getFileOperation();
+            this.fileType = fileType;
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {//处理后台执行的任务，在后台线程执行
-            Bitmap bm = getBitmapFromLruCache(fileHandle);
-            AppLog.d(TAG, "getBitmapFromLruCache fileHandle=" + fileHandle + " bm=" + bm);
-            if (bm != null) {
-                return bm;
-            } else {
-//                ICatchFile file = new ICatchFile(fileHandle);
-                ICatchFrameBuffer buffer = fileOperation.getThumbnail(file);
-                AppLog.d(TAG, "decodeByteArray buffer=" + buffer);
-                AppLog.d(TAG, "decodeByteArray fileHandle=" + fileHandle);
-                if (buffer == null) {
-                    AppLog.e(TAG, "buffer == null  send _LOAD_BITMAP_FAILED");
-                    return null;
+        public void run() {
+            AppLog.d(TAG, "DeleteThread");
+            deleteFailedList = new LinkedList<MultiPbItemInfo>();
+            deleteSucceedList = new LinkedList<MultiPbItemInfo>();
+            for (MultiPbItemInfo tempFile : fileList) {
+                AppLog.d(TAG, "deleteFile f.getFileHandle =" + tempFile.getFileHandle());
+                if (fileOperation.deleteFile(tempFile.iCatchFile) == false) {
+                    deleteFailedList.add(tempFile);
+                } else {
+                    deleteSucceedList.add(tempFile);
                 }
-
-                int datalength = buffer.getFrameSize();
-                if (datalength > 0) {
-                    bm = BitmapFactory.decodeByteArray(buffer.getBuffer(), 0, datalength);
+            }
+            pbItemInfoList.removeAll(deleteSucceedList);
+            RemoteFileHelper.getInstance().setLocalFileList(pbItemInfoList, fileType);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    MyProgressDialog.closeProgressDialog();
+                    quitEditMode();
+                    refreshPhotoWall();
                 }
-                if (bm != null) {
-                    addBitmapToLruCache(fileHandle, bm);
-                }
-                return bm;
-            }
+            });
         }
-
-        protected void onProgressUpdate(Integer... progress) {//在调用publishProgress之后被调用，在ui线程执行
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            if (result == null) {
-                return;
-            }
-            //后台任务执行完之后被调用，在ui线程执行
-            ImageView imageView;
-            if (AppInfo.photoWallLayoutType == PhotoWallLayoutType.PREVIEW_TYPE_GRID) {
-                imageView = (ImageView) multiPbPhotoView.gridViewFindViewWithTag(fileHandle);
-            } else {
-                imageView = (ImageView) multiPbPhotoView.listViewFindViewWithTag(fileHandle);
-            }
-            //imageView = (ImageView) mGridView.getChildAt(ii).findViewById(R.id.local_photo_wall_grid_item);
-            AppLog.i(TAG, "loadBitmaps imageView=" + imageView);
-            if (imageView != null && !result.isRecycled()) {
-                imageView.setImageBitmap(result);
-            }
-
-            if (asytaskList != null && asytaskList.size() > 0) {
-
-                Log.i("1111", "eeeee");
-                asytaskList.poll().execute();
-            }
-        }
-    }
-
-    public Bitmap getBitmapFromLruCache(int fileHandle) {
-
-        return mLruCache.get(fileHandle);
-    }
-
-    protected void addBitmapToLruCache(int fileHandle, Bitmap bm) {
-        if (getBitmapFromLruCache(fileHandle) == null) {
-            if (bm != null && fileHandle != 0) {
-                AppLog.d(TAG, "addBitmapToLruCache fileHandle=" + fileHandle);
-                mLruCache.put(fileHandle, bm);
-            }
-
-        }
-    }
-
-    public void emptyFileList() {
-        if (GlobalInfo.getInstance().getRemotePhotoList() != null) {
-            GlobalInfo.getInstance().setRemotePhotoList(null);
-        }
-    }
-
-    public void clealAsytaskList() {
-        AppLog.d(TAG, "clealAsytaskList");
-        if (asytaskList != null && asytaskList.size() > 0) {
-            asytaskList.clear();
-//            asytaskList = null;
-        }
-    }
-
-    public interface OnGetListCompleteListener {
-        void onGetFileListComplete();
     }
 }

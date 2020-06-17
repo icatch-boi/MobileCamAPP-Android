@@ -131,7 +131,7 @@ public class BitmapTools {
     }
 
     public static Bitmap decodeByteArray(byte[] data, int reqWidth, int reqHeight) {
-        AppLog.d(TAG, "start decodeByteArray");
+        //AppLog.d(TAG, "start decodeByteArray");
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(data, 0, data.length, options);
@@ -141,7 +141,7 @@ public class BitmapTools {
         //并且制定缩放比例
         options.inSampleSize = sampleSize;
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-        AppLog.d(TAG, "end decodeByteArray");
+//        AppLog.d(TAG, "end decodeByteArray");
         return zoomBitmap(bitmap, reqWidth, reqHeight);
     }
 

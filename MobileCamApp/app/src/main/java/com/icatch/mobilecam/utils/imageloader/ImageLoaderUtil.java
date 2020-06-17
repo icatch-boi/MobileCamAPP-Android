@@ -87,7 +87,8 @@ public class ImageLoaderUtil {
     }
 
     public static void loadImageView(String path, ImageView mImageView, int defaultImg) {
-        ImageLoader.getInstance().displayImage(path, mImageView, ImageLoaderConfig.getDefaultDisplayOptions(defaultImg));
+//        ImageLoader.getInstance().displayImage(path, mImageView, ImageLoaderConfig.getDefaultDisplayOptions(defaultImg));
+        ImageLoader.getInstance().displayImage(path, mImageView);
     }
 
 

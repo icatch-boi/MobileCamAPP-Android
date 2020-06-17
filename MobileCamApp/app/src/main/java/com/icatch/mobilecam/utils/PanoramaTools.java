@@ -101,7 +101,7 @@ public class PanoramaTools {
     }
 
     public static boolean isPanorama(long width, long height){
-        AppLog.e(TAG, "isPanorama width=" + width + " height=" + height);
+//        AppLog.e(TAG, "isPanorama width=" + width + " height=" + height);
         if(width== 0 || height == 0){
             return false;
         }

@@ -1,6 +1,5 @@
 package com.icatch.mobilecam.utils.imageloader;
 
-import com.icatch.mobilecam.Log.AppLog;
 import com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator;
 import com.nostra13.universalimageloader.utils.L;
 

@@ -4,9 +4,9 @@ import android.app.ActivityManager;
 import android.content.Context;
 
 import com.icatch.mobilecam.Listener.MyOrientoinListener;
+import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.entity.BluetoothAppDevice;
 import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
-import com.icatch.mobilecam.Log.AppLog;
 import com.icatchtek.bluetooth.customer.client.ICatchBluetoothClient;
 
 import java.util.List;
@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class AppInfo {
     public static final String APP_PATH = "/MobileCam/";
-    public static final String APP_VERSION = "V1.2.0_beta13";
-    public static final String SDK_VERSION = "V3.6.0.24";
+    public static final String APP_VERSION = "V1.2.0_beta14";
+    public static final String SDK_VERSION = "V3.6.0.25";
     public static final String SDK_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_SDK_Log/";
     public static final String APP_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_APP_Log/";
     public static final String PROPERTY_CFG_FILE_NAME = "netconfig.properties";

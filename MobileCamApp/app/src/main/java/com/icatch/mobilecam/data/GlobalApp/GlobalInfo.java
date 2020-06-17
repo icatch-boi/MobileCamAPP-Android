@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.LruCache;
 
+import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.entity.LocalPbItemInfo;
@@ -92,12 +93,30 @@ public class GlobalInfo {
     }
 
 
-    public List<MultiPbItemInfo> getRemotePhotoList() {
+    private List<MultiPbItemInfo> getRemotePhotoList() {
         return remotePhotoList;
     }
 
-    public void setRemotePhotoList(List<MultiPbItemInfo> remotePhotoList) {
+    public List<MultiPbItemInfo> getRemoteFileList(FileType fileType) {
+        if(fileType == FileType.FILE_PHOTO){
+            return remotePhotoList;
+        }else {
+            return remoteVideoList;
+        }
+
+    }
+
+    private void setRemotePhotoList(List<MultiPbItemInfo> remotePhotoList) {
         this.remotePhotoList = remotePhotoList;
+    }
+
+    public void setRemoteFileList(List<MultiPbItemInfo> remoteFileList,FileType fileType) {
+        if(fileType == FileType.FILE_PHOTO){
+            this.remotePhotoList = remoteFileList;
+        }else {
+            this.remoteVideoList = remoteFileList;
+        }
+
     }
 
     public void initLocalPhotoListInfo() {

@@ -222,6 +222,9 @@ public class RemoteFileHelper {
     }
 
     public void setLocalFileList(List<MultiPbItemInfo> pbItemInfoList, FileType fileType) {
+        if(pbItemInfoList == null){
+            return;
+        }
         if (listHashMap.containsKey(fileType.ordinal())) {
             listHashMap.remove(fileType.ordinal());
         }

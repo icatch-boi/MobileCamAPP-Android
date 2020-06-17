@@ -87,12 +87,12 @@ public class FileOperation {
             e.printStackTrace();
         }
 
-        if (list != null && list.size() > 0) {
-            for (ICatchFile file : list
-            ) {
-                AppLog.d(tag, "getFileList info=" + file.toString());
-            }
-        }
+//        if (list != null && list.size() > 0) {
+//            for (ICatchFile file : list
+//            ) {
+//                AppLog.d(tag, "getFileList info=" + file.toString());
+//            }
+//        }
         AppLog.d(tag, "end getFileList");
         AppLog.i(tag, "end getFileList list size=" + (list != null ? list.size() : -1));
         return list;
@@ -121,12 +121,12 @@ public class FileOperation {
             AppLog.e(tag, "IchInvalidSessionException");
             e.printStackTrace();
         }
-        if (list != null && list.size() > 0) {
-            for (ICatchFile file : list
-            ) {
-                AppLog.d(tag, "getFileList info=" + file.toString());
-            }
-        }
+//        if (list != null && list.size() > 0) {
+//            for (ICatchFile file : list
+//            ) {
+//                AppLog.d(tag, "getFileList info=" + file.toString());
+//            }
+//        }
         AppLog.i(tag, "end getFileList list size=" + (list != null ? list.size() : -1));
         return list;
     }
@@ -311,7 +311,7 @@ public class FileOperation {
      * Added by zhangyanhu C01012,2014-7-2
      */
     public ICatchFrameBuffer getThumbnail(ICatchFile file) {
-        //AppLog.i(tag, "begin getThumbnail file=" + file);
+        AppLog.i(tag, "begin getThumbnail file=" + file);
         // TODO Auto-generated method stub
         ICatchFrameBuffer frameBuffer = null;
         try {

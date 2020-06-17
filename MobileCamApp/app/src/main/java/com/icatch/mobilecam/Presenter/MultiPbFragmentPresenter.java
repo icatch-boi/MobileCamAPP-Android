@@ -241,6 +241,17 @@ public class MultiPbFragmentPresenter extends BasePresenter {
         }
     }
 
+    public void refreshPhotoWall() {
+        Log.i("1122", "refreshPhotoWall layoutType=" + AppInfo.photoWallLayoutType);
+        if (pbItemInfoList == null || pbItemInfoList.size() <= 0) {
+            multiPbPhotoView.setRecyclerViewVisibility(View.GONE);
+            multiPbPhotoView.setNoContentTxvVisibility(View.VISIBLE);
+        } else {
+            multiPbPhotoView.setNoContentTxvVisibility(View.GONE);
+            refreshAdaper();
+        }
+    }
+
     public void setLayoutType(PhotoWallLayoutType layoutType) {
         if (recyclerViewAdapter == null) {
             return;
@@ -256,17 +267,6 @@ public class MultiPbFragmentPresenter extends BasePresenter {
             multiPbPhotoView.setRecyclerViewLayoutManager(new LinearLayoutManager(activity));
         }
         multiPbPhotoView.setRecyclerViewAdapter(recyclerViewAdapter);
-    }
-
-    public void refreshPhotoWall() {
-        Log.i("1122", "refreshPhotoWall layoutType=" + AppInfo.photoWallLayoutType);
-        if (pbItemInfoList == null || pbItemInfoList.size() <= 0) {
-            multiPbPhotoView.setRecyclerViewVisibility(View.GONE);
-            multiPbPhotoView.setNoContentTxvVisibility(View.VISIBLE);
-        } else {
-            multiPbPhotoView.setNoContentTxvVisibility(View.GONE);
-            refreshAdaper();
-        }
     }
 
     public void changePreviewType(PhotoWallLayoutType layoutType) {

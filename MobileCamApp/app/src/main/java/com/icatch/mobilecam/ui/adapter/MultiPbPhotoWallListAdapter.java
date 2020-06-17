@@ -15,6 +15,8 @@ import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
 import com.icatch.mobilecam.data.Mode.OperationMode;
 import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
+import com.icatch.mobilecam.utils.imageloader.TutkUriUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,13 +27,11 @@ public class MultiPbPhotoWallListAdapter extends BaseAdapter{
     private Context context;
     private List<MultiPbItemInfo> list;
     private OperationMode curMode = OperationMode.MODE_BROWSE;
-    LruCache<Integer, Bitmap> mLruCache;
     private FileType fileType;
 
-    public MultiPbPhotoWallListAdapter(Context context, List<MultiPbItemInfo> list, LruCache<Integer, Bitmap> mLruCache,FileType fileType) {
+    public MultiPbPhotoWallListAdapter(Context context, List<MultiPbItemInfo> list,FileType fileType) {
         this.context = context;
         this.list = list;
-        this.mLruCache = mLruCache;
         this.fileType = fileType;
     }
 
@@ -93,19 +93,16 @@ public class MultiPbPhotoWallListAdapter extends BaseAdapter{
         }else {
             mCheckImageView.setVisibility(View.GONE);
         }
-        imageView.setTag(fileHandle);
         if (position == 0 || !list.get(position - 1).getFileDate().equals(curFileDate)) {
             mLayout.setVisibility(View.VISIBLE);
             mTextView.setText(list.get(position).getFileDate());
         } else {
             mLayout.setVisibility(View.GONE);
         }
-        Bitmap bitmap =  mLruCache.get(fileHandle);
-        if(bitmap != null){
-            imageView.setImageBitmap(bitmap);
-
-        }else {
-            imageView.setImageResource(R.drawable.pictures_no);
+        MultiPbItemInfo itemInfo = list.get(position);
+        if (itemInfo != null) {
+            String uri = TutkUriUtil.getTutkThumbnailUri(itemInfo.iCatchFile);
+            ImageLoaderUtil.loadImageView(uri, imageView, R.drawable.pictures_no);
         }
         return view;
     }
