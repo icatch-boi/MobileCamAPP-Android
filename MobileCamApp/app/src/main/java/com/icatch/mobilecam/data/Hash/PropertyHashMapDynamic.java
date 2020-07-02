@@ -1,5 +1,9 @@
 package com.icatch.mobilecam.data.Hash;
 
+import android.content.Context;
+
+import com.icatch.mobilecam.Application.PanoramaApp;
+import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.data.entity.ItemInfo;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.PropertyId.PropertyId;
@@ -81,13 +85,25 @@ public class PropertyHashMapDynamic {
         HashMap<Integer, ItemInfo> videoFileLengthMap = new HashMap<Integer, ItemInfo>();
         List<Integer> videoFileLengthList = cameraProperties.getSupportedPropertyValues(PropertyId.VIDEO_FILE_LENGTH);
         String temp;
+        Context context = PanoramaApp.getContext();
         for (int ii = 0; ii < videoFileLengthList.size(); ii++) {
             int value = videoFileLengthList.get(ii);
             if (value == 0) {
-                temp = "OFF";
+                temp = context.getString(R.string.text_file_length_unlimited);
+            } else if(value < 1000){
+                temp = value/60 + context.getString(R.string.time_minutes);
             } else {
-                temp = value + "s";
+                //AIBSP-1934 for CVR 20200701
+                String fileSize = value/1000  + "MB";
+                String fileLength;
+                if(value%1000 == 0){
+                    fileLength =  fileSize;
+                }else {
+                    fileLength =  (value%1000) /60+ context.getString(R.string.time_minutes);
+                }
+                temp =fileLength + " + " + fileSize;
             }
+
             AppLog.d(TAG, "videoFileLengthList ii=" + ii + " value=" + value);
             videoFileLengthMap.put(value, new ItemInfo(temp, temp, 0));
         }

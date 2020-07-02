@@ -9,9 +9,9 @@ import com.icatch.mobilecam.data.PropertyId.PropertyId;
 import com.icatch.mobilecam.data.entity.MultiPbFileResult;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
 import com.icatch.mobilecam.data.type.FileType;
+import com.icatch.mobilecam.utils.ConvertTools;
 import com.icatch.mobilecam.utils.FileFilter;
 import com.icatch.mobilecam.utils.PanoramaTools;
-import com.icatchtek.control.customer.ICatchCameraProperty;
 import com.icatchtek.control.customer.type.ICatchCamFeatureID;
 import com.icatchtek.control.customer.type.ICatchCamListFileFilter;
 import com.icatchtek.reliant.customer.type.ICatchFile;
@@ -163,16 +163,25 @@ public class RemoteFileHelper {
         if (fileList == null) {
             return null;
         }
+        String fileDate;
+        String fileSize;
+        String fileTime;
+        String fileDuration;
+        boolean isPanorama;
         for (int ii = 0; ii < fileList.size(); ii++) {
+            ICatchFile iCatchFile = fileList.get(ii);
+            fileDate = ConvertTools.getTimeByfileDate(iCatchFile.getFileDate());
+            fileSize = ConvertTools.ByteConversionGBMBKB(iCatchFile.getFileSize());;
+            fileTime = ConvertTools.getDateTimeString(iCatchFile.getFileDate());
+            fileDuration = ConvertTools.millisecondsToMinuteOrHours(iCatchFile.getFileDuration());
+            isPanorama = PanoramaTools.isPanorama(iCatchFile.getFileWidth(), iCatchFile.getFileHeight());
             if (fileFilter != null) {
-                if (fileFilter.isMatch(fileList.get(ii))) {
-                    MultiPbItemInfo mGridItem = new MultiPbItemInfo(fileList.get(ii), 0, PanoramaTools.isPanorama(fileList.get(ii)
-                            .getFileWidth(), fileList.get(ii).getFileHeight()));
+                if (fileFilter.isMatch(iCatchFile)) {
+                    MultiPbItemInfo mGridItem = new MultiPbItemInfo(iCatchFile, 0,isPanorama ,fileSize,fileTime,fileDate,fileDuration);
                     multiPbItemInfoList.add(mGridItem);
                 }
             } else {
-                MultiPbItemInfo mGridItem = new MultiPbItemInfo(fileList.get(ii), 0, PanoramaTools.isPanorama(fileList.get(ii)
-                        .getFileWidth(), fileList.get(ii).getFileHeight()));
+                MultiPbItemInfo mGridItem = new MultiPbItemInfo(iCatchFile, 0, isPanorama,fileSize,fileTime,fileDate,fileDuration);
                 multiPbItemInfoList.add(mGridItem);
             }
         }

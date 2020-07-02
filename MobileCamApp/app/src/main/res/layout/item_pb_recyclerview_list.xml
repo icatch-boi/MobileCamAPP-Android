@@ -64,11 +64,22 @@
                 android:text="photo name"
                 android:textColor="@color/primary_text"
                 android:textSize="@dimen/first_title_size" />
+            <TextView
+                android:id="@+id/local_video_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/local_video_duration"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="4dp"
+                android:text="00:00"
+                android:textColor="@color/secondary_text"
+                android:textSize="@dimen/second_title_size"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_below="@id/local_photo_name">
+                android:layout_below="@id/local_video_duration">
                 <TextView
                     android:id="@+id/local_photo_size"
                     android:layout_width="match_parent"

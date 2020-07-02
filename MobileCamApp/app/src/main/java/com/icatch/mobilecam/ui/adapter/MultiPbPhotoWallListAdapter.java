@@ -66,6 +66,7 @@ public class MultiPbPhotoWallListAdapter extends BaseAdapter{
         TextView imageNameTextView = (TextView) view.findViewById(R.id.local_photo_name);
         TextView imageSizeTextView = (TextView) view.findViewById(R.id.local_photo_size);
         TextView imageDateTextView = (TextView) view.findViewById(R.id.local_photo_date);
+        TextView imageDurationView = (TextView) view.findViewById(R.id.local_video_duration);
         ImageView mCheckImageView = (ImageView) view.findViewById(R.id.local_photo_wall_list_edit);
         ImageView videoSignImageView = (ImageView) view.findViewById(R.id.video_sign);
         ImageView mIsPanoramaSign = (ImageView) view.findViewById(R.id.is_panorama);
@@ -75,8 +76,11 @@ public class MultiPbPhotoWallListAdapter extends BaseAdapter{
 //
         if (fileType == FileType.FILE_PHOTO){
             videoSignImageView.setVisibility(View.GONE);
+            imageDurationView.setVisibility(View.GONE);
         }else{
             videoSignImageView.setVisibility(View.VISIBLE);
+            imageDurationView.setText(list.get(position).getFileDuration());
+            imageDurationView.setVisibility(View.VISIBLE);
         }
         if(list.get( position ).isPanorama()){
             mIsPanoramaSign.setVisibility( View.VISIBLE );

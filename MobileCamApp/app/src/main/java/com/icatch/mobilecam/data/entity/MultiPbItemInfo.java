@@ -1,8 +1,6 @@
 package com.icatch.mobilecam.data.entity;
 
 
-import com.icatch.mobilecam.utils.ConvertTools;
-import com.icatch.mobilecam.utils.PanoramaTools;
 import com.icatchtek.reliant.customer.type.ICatchFile;
 
 
@@ -13,7 +11,11 @@ public class MultiPbItemInfo {
     public int section;
     public boolean isItemChecked =false;
     private boolean isPanorama =false;
-    private String fileDate;
+    public String fileSize;
+    public String fileTime;
+    public String fileDate;
+    public String fileDuration;
+
 
     public MultiPbItemInfo(ICatchFile file) {
         super();
@@ -27,10 +29,16 @@ public class MultiPbItemInfo {
         this.isItemChecked = false;
     }
 
-    public MultiPbItemInfo(ICatchFile iCatchFile, int section, boolean isPanorama) {
+
+    public MultiPbItemInfo(ICatchFile iCatchFile, int section, boolean isPanorama,String fileSize,String fileTime,String fileDate,String fileDuration) {
         this.iCatchFile = iCatchFile;
         this.section = section;
         this.isPanorama = isPanorama;
+        this.isItemChecked = false;
+        this.fileSize = fileSize;
+        this.fileTime = fileTime;
+        this.fileDate = fileDate;
+        this.fileDuration = fileDuration;
     }
 
     public void setPanorama(boolean panorama) {
@@ -38,7 +46,7 @@ public class MultiPbItemInfo {
     }
 
     public boolean isPanorama() {
-        return PanoramaTools.isPanorama(iCatchFile.getFileWidth(),iCatchFile.getFileHeight());
+        return this.isPanorama;
     }
 
     public void setSection(int section){
@@ -54,21 +62,11 @@ public class MultiPbItemInfo {
     }
 
     public String getFileDate(){
-        String time = iCatchFile.getFileDate();
-        if(time == null || time.isEmpty()){
-            time = "unknown";
-        }else if(time.contains( "T" ) == false){
-
-        }else {
-            int position = time.indexOf( "T" );
-            time = time.substring( 0, position );
-        }
-        return time;
+        return fileDate;
     }
 
     public String getFileSize(){
-        int size = (int)iCatchFile.getFileSize();
-        return  ConvertTools.ByteConversionGBMBKB(size);
+        return fileSize;
     }
 
     public long getFileSizeInteger(){
@@ -76,35 +74,13 @@ public class MultiPbItemInfo {
         return  fileSize;
     }
 
+    public String getFileDuration(){
+        return fileDuration;
+    }
     public String getFileName(){
         return iCatchFile.getFileName();
     }
     public String getFileDateMMSS(){
-        return dateFormatTransform(iCatchFile.getFileDate());
-    }
-
-    public String  dateFormatTransform(String value){
-        if(value == null){
-            return "";
-        }
-        String date = "";
-        String time = "";
-        String yy = "";
-        String MM = "";
-        String dd = "";
-        String hh = "";
-        String mm = "";
-        String ss = "";
-        int position = value.indexOf("T");
-        date = value.substring(0,position);//20161021
-        time = value.substring(position +1);
-        yy = date.substring(0,4);
-        MM = date.substring(4,6);
-        dd = date.substring(6,8);
-        hh = time.substring(0,2);
-        mm = time.substring(2,4);
-        ss = time.substring(4,6);
-        date = yy+ "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss;
-        return date;
+        return fileTime;
     }
 }

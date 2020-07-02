@@ -348,4 +348,6 @@ $1$"</string>
     <string name="text_selected">選中($1$)</string>
     <string name="setting_updatefw_chec_sum_failed">FW update check sum error!</string>
     <string name="setting_updatefw_upgrade_file_not_exist">升级文件$1$不存在，请将文件放置到这个路径：$2$。</string>
+    <string name="text_file_length_unlimited">無限</string>
+    <string name="time_minutes">分鐘</string>
 </resources>

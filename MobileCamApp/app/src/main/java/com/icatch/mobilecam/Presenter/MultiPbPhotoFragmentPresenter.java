@@ -13,7 +13,6 @@ import com.icatch.mobilecam.MyCamera.CameraManager;
 import com.icatch.mobilecam.Presenter.Interface.BasePresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.FileOperation;
-import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.Mode.OperationMode;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
@@ -27,6 +26,7 @@ import com.icatch.mobilecam.ui.activity.PhotoPbActivity;
 import com.icatch.mobilecam.ui.activity.VideoPbActivity;
 import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallGridAdapter;
 import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallListAdapter;
+import com.icatch.mobilecam.utils.ConvertTools;
 import com.icatch.mobilecam.utils.PanoramaTools;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
 import com.icatchtek.reliant.customer.type.ICatchFile;
@@ -86,28 +86,24 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
         } else {
             fileList = fileOperation.getFileList(iCatchFileType);
             AppLog.i(TAG, "fileList size=" + fileList.size());
+            String fileSize;
+            String fileTime;
+            String fileDuration;
+            boolean isPanorama;
             for (int ii = 0; ii < fileList.size(); ii++) {
-                fileDate = fileList.get(ii).getFileDate();
-                //AppLog.i(TAG, "fileDate=" + fileDate);
-                if (fileDate == null || fileDate.isEmpty()) {
-                    fileDate = "unknown";
-                } else if (fileDate.contains("T") == false) {
-
-                } else {
-                    int position = fileDate.indexOf("T");
-                    fileDate = fileDate.substring(0, position);
-                }
-                //AppLog.d(TAG, " fileDate=[" + fileDate + "]");
-
+                ICatchFile iCatchFile = fileList.get(ii);
+                fileDate = ConvertTools.getTimeByfileDate(iCatchFile.getFileDate());
+                fileSize = ConvertTools.ByteConversionGBMBKB(iCatchFile.getFileSize());
+                fileTime = ConvertTools.getDateTimeString(iCatchFile.getFileDate());
+                fileDuration = ConvertTools.millisecondsToMinuteOrHours(fileList.get(ii).getFileDuration());
+                isPanorama = PanoramaTools.isPanorama(iCatchFile.getFileWidth(), iCatchFile.getFileHeight());
                 if (!sectionMap.containsKey(fileDate)) {
                     sectionMap.put(fileDate, section);
-                    MultiPbItemInfo mGridItem = new MultiPbItemInfo(fileList.get(ii), sectionMap.get(fileDate), PanoramaTools.isPanorama(fileList.get(ii)
-                            .getFileWidth(), fileList.get(ii).getFileHeight()));
+                    MultiPbItemInfo mGridItem = new MultiPbItemInfo(fileList.get(ii), sectionMap.get(fileDate), isPanorama,fileSize,fileTime,fileDate,fileDuration);
                     photoInfoList.add(mGridItem);
                     section++;
                 } else {
-                    MultiPbItemInfo mGridItem = new MultiPbItemInfo(fileList.get(ii), sectionMap.get(fileDate), PanoramaTools.isPanorama(fileList.get(ii)
-                            .getFileWidth(), fileList.get(ii).getFileHeight()));
+                    MultiPbItemInfo mGridItem = new MultiPbItemInfo(fileList.get(ii), sectionMap.get(fileDate), isPanorama,fileSize,fileTime,fileDate,fileDuration);
                     photoInfoList.add(mGridItem);
                 }
             }

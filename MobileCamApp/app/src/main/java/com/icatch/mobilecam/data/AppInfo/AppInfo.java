@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class AppInfo {
     public static final String APP_PATH = "/MobileCam/";
-    public static final String APP_VERSION = "V1.2.0_beta14";
+    public static final String APP_VERSION = "V1.2.0_beta15";
     public static final String SDK_VERSION = "V3.6.0.25";
     public static final String SDK_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_SDK_Log/";
     public static final String APP_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_APP_Log/";

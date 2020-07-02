@@ -119,8 +119,13 @@ public class MultiPbRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             listHolder.imageSizeTextView.setText(list.get(position).getFileSize());
             listHolder.imageDateTextView.setText(list.get(position).getFileDateMMSS());
             listHolder.videoSignImageView.setVisibility(fileType == FileType.FILE_PHOTO ? View.GONE : View.VISIBLE);
+            listHolder.imageDurationView.setVisibility(fileType == FileType.FILE_PHOTO ? View.GONE : View.VISIBLE);
+            if(fileType != FileType.FILE_PHOTO){
+                listHolder.imageDurationView.setText(list.get(position).getFileDuration());
+            }
             listHolder.mIsPanoramaSign.setVisibility(list.get(position).isPanorama() ? View.VISIBLE : View.GONE);
             listHolder.mCheckImageView.setVisibility(operationMode == OperationMode.MODE_EDIT ? View.VISIBLE : View.GONE);
+
             if (operationMode == OperationMode.MODE_EDIT) {
                 listHolder.mCheckImageView.setImageResource(list.get(position).isItemChecked ? R.drawable.ic_check_box_blue : R.drawable.ic_check_box_blank_grey);
             }
@@ -207,6 +212,7 @@ public class MultiPbRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         ImageView videoSignImageView;
         ImageView mIsPanoramaSign;
         FrameLayout thumbnailLayout;
+        TextView imageDurationView;
         boolean showThumbnail;
 
         RecyclerViewListHolder(View itemView, boolean showThumbnail) {
@@ -220,6 +226,7 @@ public class MultiPbRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             videoSignImageView = (ImageView) itemView.findViewById(R.id.video_sign);
             mIsPanoramaSign = (ImageView) itemView.findViewById(R.id.is_panorama);
             thumbnailLayout = (FrameLayout) itemView.findViewById(R.id.thumbnail_layout);
+            imageDurationView = (TextView) itemView.findViewById(R.id.local_video_duration);
         }
     }
 
