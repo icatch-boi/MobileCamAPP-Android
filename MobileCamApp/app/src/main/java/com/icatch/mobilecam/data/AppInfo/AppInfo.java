@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class AppInfo {
     public static final String APP_PATH = "/MobileCam/";
-    public static final String APP_VERSION = "V1.2.0_beta15";
-    public static final String SDK_VERSION = "V3.6.0.25";
+    public static final String APP_VERSION = "V1.2.0_beta17";
+    public static final String SDK_VERSION = "V3.6.0.27";
     public static final String SDK_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_SDK_Log/";
     public static final String APP_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_APP_Log/";
     public static final String PROPERTY_CFG_FILE_NAME = "netconfig.properties";
@@ -30,6 +30,7 @@ public class AppInfo {
     public static final String FW_UPGRADE_FILENAME = "sphost.BRN";
     private static final String TAG = AppInfo.class.getSimpleName();
     public static final String FILE_GOOGLE_TOKEN = "file_googleToken.dat";
+    public static final String EULA_VERSION = "1.3";
 
     public static boolean isSupportAutoReconnection = false;
     public static boolean isSupportBroadcast = false;

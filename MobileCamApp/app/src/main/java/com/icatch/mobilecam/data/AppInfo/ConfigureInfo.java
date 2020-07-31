@@ -6,7 +6,10 @@ import android.os.Environment;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.Log.SdkLog;
 import com.icatch.mobilecam.utils.fileutils.FileOper;
+import com.icatchtek.control.customer.ICatchCameraConfig;
 import com.icatchtek.pancam.customer.ICatchPancamConfig;
+import com.icatchtek.reliant.customer.exception.IchNoSuchPathException;
+import com.icatchtek.reliant.customer.exception.IchPermissionDeniedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -142,8 +145,14 @@ public class ConfigureInfo {
         }
         String streamOutputPath = Environment.getExternalStorageDirectory().toString() + AppInfo.STREAM_OUTPUT_DIRECTORY_PATH;
         FileOper.createDirectory(streamOutputPath);
-
-
+       // ICatchCameraConfig.getInstance().enableDumpMediaStream(false, streamOutputPath);
+//        try {
+//            ICatchPancamConfig.getInstance().enableDumpTransportStream(false, streamOutputPath);
+//        } catch (IchNoSuchPathException e) {
+//            e.printStackTrace();
+//        } catch (IchPermissionDeniedException e) {
+//            e.printStackTrace();
+//        }
         if (saveAppLog != null) {
             if (saveAppLog.equals("true")) {
                 AppLog.enableAppLog();
@@ -203,7 +212,7 @@ public class ConfigureInfo {
         if (saveStreamAudio != null) {
             if (saveStreamAudio.equals("true")) {
                 AppLog.d(TAG, "enableDumpMediaStream..........=" + false);
-//                ICatchCameraConfig.getInstance().enableDumpMediaStream(false, streamOutputPath);
+                //ICatchCameraConfig.getInstance().enableDumpMediaStream(false, streamOutputPath);
                 // save audio
             }
         }

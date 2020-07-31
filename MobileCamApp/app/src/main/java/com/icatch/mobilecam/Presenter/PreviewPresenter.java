@@ -705,6 +705,18 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                     }
                 }
             });
+            photoCapture.setOnCaptureListener(new PhotoCapture.OnCaptureListener() {
+                @Override
+                public void onCompleted() {
+                    curMode = PreviewMode.APP_STATE_STILL_PREVIEW;
+                    previewHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            previewView.setCaptureBtnEnability(true);
+                        }
+                    });
+                }
+            });
             photoCapture.startCapture();
         } else {
             stillCaptureStartBeep.start();
@@ -716,9 +728,11 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                 @Override
                 public void run() {
                     if(!cameraAction.capturePhoto()){
-                        curMode = PreviewMode.APP_STATE_STILL_PREVIEW;
+
                         MyToast.show(activity,R.string.text_operation_failed);
                     }
+                    curMode = PreviewMode.APP_STATE_STILL_PREVIEW;
+                    previewView.setCaptureBtnEnability(true);
 
                 }
             }, 500);

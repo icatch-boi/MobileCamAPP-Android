@@ -441,4 +441,10 @@
     <string name="setting_updatefw_upgrade_file_not_exist">The upgrade file $1$ does not exist, please put the file to this path:$2$.</string>
     <string name="text_file_length_unlimited">Unlimited</string>
     <string name="time_minutes"> MIN</string>
+    <string name="text_agree">Agree</string>
+    <string name="text_disagree">Disagree</string>
+    <string name="title_privacy_policy">Privacy policy and user agreement</string>
+    <string name="content_privacy_policy_1">Please read carefully and fully understand the terms and conditions, including but not limited to: in order to provide you with basic services, we need to collect your device information, operation log and other personal information. You can read the </string>
+    <string name="content_privacy_policy_2">Privacy Policy and User Agreement</string>
+    <string name="content_privacy_policy_3"> for more information.If you agree, please click "Agree" to enjoy our services.</string>
 </resources>

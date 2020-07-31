@@ -360,4 +360,10 @@ $3$"</string>
     <string name="setting_updatefw_upgrade_file_not_exist">升级文件$1$不存在，请将文件放置到这个路径：$2$。</string>
     <string name="text_file_length_unlimited">无限</string>
     <string name="time_minutes">分钟</string>
+    <string name="text_agree">同意</string>
+    <string name="text_disagree">不同意</string>
+    <string name="title_privacy_policy">隐私政策和用户协议</string>
+    <string name="content_privacy_policy_1">请你务必审慎阅读、充分理解各条款，包括但不限于：为了向你提供基本服务，我们需要收集你的设备信息、操作日志等个人信息。你可以阅读</string>
+    <string name="content_privacy_policy_2">《隐私政策和用户协议》</string>
+    <string name="content_privacy_policy_3">了解详细信息。如你同意，请点击“同意”开始享受我们的服务。</string>
 </resources>

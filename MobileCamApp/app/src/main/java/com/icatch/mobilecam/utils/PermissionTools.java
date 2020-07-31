@@ -58,6 +58,11 @@ public class PermissionTools {
             requestList.add(Manifest.permission.ACCESS_FINE_LOCATION);
             requestList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
+
+        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED){
+            requestList.add(Manifest.permission.RECORD_AUDIO);
+        }
         if(requestList.size() > 0){
             String[] systemRequestArray = requestList.toArray(new String[requestList.size()]);
             ActivityCompat.requestPermissions(activity, systemRequestArray,ALL_REQUEST_CODE);
@@ -68,9 +73,11 @@ public class PermissionTools {
     }
 
     public static boolean checkAllSelfPermission(final Activity activity){
-        return ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        return ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED&&
+                ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO)
                         == PackageManager.PERMISSION_GRANTED;
     }
 

@@ -23,6 +23,7 @@ public class PhotoCapture {
     private MediaPlayer delayBeep;
     private MediaPlayer continuousCaptureBeep;
     private OnStopPreviewListener onStopPreviewListener;
+    private OnCaptureListener onCaptureListener;
     private static final int TYPE_BURST_CAPTURE = 1;
     private static final int TYPE_NORMAL_CAPTURE = 2;
     private CameraProperties cameraProperties;
@@ -112,6 +113,9 @@ public class PhotoCapture {
             DelayTimerTask delayTimerTask2 = new DelayTimerTask(count, delayTimer2);
             delayTimer2.schedule(delayTimerTask2, timerDelay - timerDelay / 4, 250);
             cameraAction.triggerCapturePhoto();
+            if(onCaptureListener != null){
+                onCaptureListener.onCompleted();
+            }
             AppLog.i(TAG, "delayTime = " + delayTime + " needCaptureCount=" + needCaptureCount);
             AppLog.i(TAG, "end CameraCaptureThread");
         }
@@ -124,6 +128,15 @@ public class PhotoCapture {
     public interface OnStopPreviewListener {
         void onStop();
     }
+
+    public void setOnCaptureListener(OnCaptureListener onCaptureListener) {
+        this.onCaptureListener = onCaptureListener;
+    }
+
+    public interface OnCaptureListener {
+        void onCompleted();
+    }
+
 
     private class CaptureAudioTask extends TimerTask {
         private int burstNumber;

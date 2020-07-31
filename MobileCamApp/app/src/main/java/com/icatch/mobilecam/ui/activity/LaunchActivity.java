@@ -1,6 +1,10 @@
 package com.icatch.mobilecam.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -11,6 +15,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -29,8 +37,11 @@ import com.icatch.mobilecam.Listener.OnFragmentInteractionListener;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.Presenter.LaunchPresenter;
 import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.AppInfo.ConfigureInfo;
+import com.icatch.mobilecam.data.GlobalApp.ExitApp;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
+import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.LaunchView;
 import com.icatch.mobilecam.ui.adapter.CameraSlotAdapter;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
@@ -103,6 +114,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         presenter.initUsbMonitor();
         if (Build.VERSION.SDK_INT < 23 || PermissionTools.checkAllSelfPermission(this)) {
             ConfigureInfo.getInstance().initCfgInfo(this.getApplicationContext());
+            checkLicenseAgreement(LaunchActivity.this);
         } else {
             PermissionTools.requestAllPermissions(LaunchActivity.this);
         }
@@ -223,6 +235,10 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
 //            finish();
             removeFragment();
             return true;
+        }
+        if (id == R.id.action_license) {
+            Intent mainIntent = new Intent(LaunchActivity.this, LicenseAgreementActivity.class);
+            startActivity(mainIntent);;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -347,6 +363,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
                 if (retValue) {
                     presenter.loadLocalThumbnails02();
                     ConfigureInfo.getInstance().initCfgInfo(this.getApplicationContext());
+                    checkLicenseAgreement(LaunchActivity.this);
                 } else {
 //                    AppDialog.showDialogQuit(this, R.string.permission_is_denied_info);
                     AppDialog.showDialogQuit(this, R.string.permission_is_denied_info);
@@ -403,5 +420,72 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void setLocalVideoThumbnail(String filePath) {
         GlideUtils.loadImageViewLodingSize(this,filePath,500,500,localVideo,R.drawable.local_default_thumbnail,R.drawable.local_default_thumbnail);
+    }
+
+
+    public void checkLicenseAgreement(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("appData", MODE_PRIVATE);
+        boolean isAgreeLicenseAgreement = preferences.getBoolean("agreeLicenseAgreement", false);
+        AppLog.d(TAG, "showLicenseAgreementDialog isAgreeLicenseAgreement=" + isAgreeLicenseAgreement);
+        String AgreeLicenseAgreementVersion = preferences.getString("agreeLicenseAgreementVersion", "");
+        AppLog.d(TAG, "showLicenseAgreementDialog Version =" + AgreeLicenseAgreementVersion);
+
+        if ((!isAgreeLicenseAgreement) || (!AppInfo.EULA_VERSION.equalsIgnoreCase(AgreeLicenseAgreementVersion))) {
+            showLicenseAgreementDialog(context, AppInfo.EULA_VERSION);
+        }
+    }
+
+    AlertDialog agreementDialog;
+    public void showLicenseAgreementDialog(final Context context, final String eulaversion) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View contentView = View.inflate(context, R.layout.dialog_privacy_policy, null);
+        TextView textView = contentView.findViewById(R.id.txv_privacy_policy);
+        SpannableString spanString = new SpannableString(context.getString(R.string.content_privacy_policy_2));
+        spanString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                //点击的响应事件
+                //AppLog.d(TAG,"spanString onclick");
+                //MyToast.show(context,"onclick");
+                Intent mainIntent = new Intent(LaunchActivity.this, LicenseAgreementActivity.class);
+                startActivity(mainIntent);
+            }
+        }, 0, spanString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textView.setText(R.string.content_privacy_policy_1);
+        textView.append(spanString);
+        textView.append(context.getString(R.string.content_privacy_policy_3));
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        builder.setTitle(R.string.title_privacy_policy);
+        builder.setView(contentView);
+
+        builder.setPositiveButton(R.string.text_agree, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor editor = context.getSharedPreferences("appData", MODE_PRIVATE).edit();
+                editor.putBoolean("agreeLicenseAgreement", true);
+                editor.putString("agreeLicenseAgreementVersion", eulaversion);
+                editor.commit();
+                dialog.dismiss();
+            }
+        });
+        builder.setCancelable(false);
+        builder.setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                ExitApp.getInstance().exit();
+            }
+        });
+        agreementDialog = builder.create();
+        agreementDialog.show();
+    }
+
+    public void closeLicenseAgreementDialog(){
+        if(agreementDialog != null){
+            agreementDialog.dismiss();
+            agreementDialog = null;
+        }
     }
 }
