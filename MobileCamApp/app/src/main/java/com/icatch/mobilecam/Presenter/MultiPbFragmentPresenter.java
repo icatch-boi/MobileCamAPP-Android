@@ -30,8 +30,6 @@ import com.icatch.mobilecam.ui.activity.PhotoPbActivity;
 import com.icatch.mobilecam.ui.activity.VideoPbActivity;
 import com.icatch.mobilecam.ui.adapter.MultiPbRecyclerViewAdapter;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
-import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
-import com.icatchtek.reliant.customer.type.ICatchFileType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -75,7 +73,8 @@ public class MultiPbFragmentPresenter extends BasePresenter {
     public void resetCurIndex() {
         curIndex = 1;
     }
-    public void resetAdpter(){
+
+    public void resetAdpter() {
         recyclerViewAdapter = null;
     }
 
@@ -293,7 +292,7 @@ public class MultiPbFragmentPresenter extends BasePresenter {
         }
     }
 
-    public void itemClick(final int position) {
+    public synchronized void itemClick(final int position) {
         AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
         if (curOperationMode == OperationMode.MODE_BROWSE) {
             AppLog.i(TAG, "listViewSelectOrCancelOnce curOperationMode=" + curOperationMode);
@@ -304,7 +303,7 @@ public class MultiPbFragmentPresenter extends BasePresenter {
                 intent.putExtra("fileType", fileType.ordinal());
                 intent.setClass(activity, PhotoPbActivity.class);
 //                activity.startActivity(intent);
-                fragment.startActivityForResult(intent,1000);
+                fragment.startActivityForResult(intent, 1000);
             } else {
                 MyProgressDialog.showProgressDialog(activity, R.string.wait);
                 stopLoad();
@@ -316,7 +315,7 @@ public class MultiPbFragmentPresenter extends BasePresenter {
                         intent.putExtra("fileType", fileType.ordinal());
                         intent.setClass(activity, VideoPbActivity.class);
 //                        activity.startActivity(intent);
-                        fragment.startActivityForResult(intent,1000);
+                        fragment.startActivityForResult(intent, 1000);
                         MyProgressDialog.closeProgressDialog();
                     }
                 }, 1500);

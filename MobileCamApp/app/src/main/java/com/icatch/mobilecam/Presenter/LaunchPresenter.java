@@ -126,7 +126,13 @@ public class LaunchPresenter extends BasePresenter {
         return ip;
     }
 
-    public void launchCamera(final int position, final int cameraType) {
+    public synchronized void launchCamera(final int position, final int cameraType) {
+        AppLog.i(TAG, "launchCamera  position:" + position + " cameraType:" + cameraType);
+        MyCamera camera = CameraManager.getInstance().getCurCamera();
+        if(camera != null && camera.isConnected()){
+            AppLog.i(TAG, "launchCamera  camera is connected.");
+            return;
+        }
         String cameraName = null;
         UsbDevice usbDevice = null;
         AppLog.d(TAG, "launchCamera position=" + position + " cameraType=" + cameraType);
@@ -176,7 +182,13 @@ public class LaunchPresenter extends BasePresenter {
         }
     }
 
-    public void launchCamera(final int position, FragmentManager fm) {
+    public synchronized void launchCamera(final int position, FragmentManager fm) {
+        AppLog.i(TAG, "launchCamera  position = " + position);
+        MyCamera camera = CameraManager.getInstance().getCurCamera();
+        if(camera != null && camera.isConnected()){
+            AppLog.i(TAG, "launchCamera  camera is connected.");
+            return;
+        }
         cameraSlotPosition = position;
         String wifiSsid = null;
         wifiSsid = MWifiManager.getSsid(activity);
@@ -440,10 +452,14 @@ public class LaunchPresenter extends BasePresenter {
         }
     }
 
-    private void beginConnectCamera(int position, String ip, String wifiSsid) {
-        AppLog.i(TAG, "isWifiConnect() == true");
-        CameraManager.getInstance().createCamera(CameraType.PANORAMA_CAMERA, wifiSsid, ip, position, CameraNetworkMode.AP);
+    private synchronized void beginConnectCamera(int position, String ip, String wifiSsid) {
+        AppLog.i(TAG, "beginConnectCamera position:" + position + " wifiSsid:" + wifiSsid);
         MyCamera currentCamera = CameraManager.getInstance().getCurCamera();
+        if(currentCamera != null && currentCamera.isConnected()){
+            AppLog.i(TAG, "beginConnectCamera camera is connected.");
+            return;
+        }
+        currentCamera = CameraManager.getInstance().createCamera(CameraType.PANORAMA_CAMERA, wifiSsid, ip, position, CameraNetworkMode.AP);
         if (currentCamera.connect(true) == false) {
             launchHandler.obtainMessage(AppMessage.MESSAGE_CAMERA_CONNECT_FAIL).sendToTarget();
             return;
@@ -489,14 +505,18 @@ public class LaunchPresenter extends BasePresenter {
 
     }
 
-    private void beginConnectUSBCamera(int position, UsbDevice usbDevice) {
-        AppLog.i(TAG, "beginConnectUSBCamera  == true");
+    private synchronized void beginConnectUSBCamera(int position, UsbDevice usbDevice) {
+        AppLog.i(TAG, "beginConnectUSBCamera position:" + position + " usbDevice:" + usbDevice.getDeviceName());
         if (!mUSBMonitor.hasPermission(usbDevice)) {
             mUSBMonitor.requestPermission(usbDevice);
             return;
         }
-        CameraManager.getInstance().createUSBCamera(CameraType.USB_CAMERA, usbDevice, position);
         MyCamera currentCamera = CameraManager.getInstance().getCurCamera();
+        if(currentCamera != null && currentCamera.isConnected()){
+            AppLog.i(TAG, "beginConnectUSBCamera camera is connected.");
+            return;
+        }
+        currentCamera = CameraManager.getInstance().createUSBCamera(CameraType.USB_CAMERA, usbDevice, position);
         if (currentCamera.connect(false) == false) {
             launchHandler.obtainMessage(AppMessage.MESSAGE_CAMERA_CONNECT_FAIL).sendToTarget();
             return;

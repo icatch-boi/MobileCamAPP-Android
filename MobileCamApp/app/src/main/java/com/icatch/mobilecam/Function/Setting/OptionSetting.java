@@ -800,8 +800,9 @@ public class OptionSetting {
         int length = videoSizeUIString.length;
 
         int curIdx = 0;
+        String curVideoSize = baseProrertys.getVideoSize().getCurrentUiStringInSetting();
         for (int i = 0; i < length; i++) {
-            if (videoSizeUIString[i].equals(baseProrertys.getVideoSize().getCurrentUiStringInSetting())) {
+            if (videoSizeUIString[i].equals(curVideoSize)) {
                 curIdx = i;
             }
         }

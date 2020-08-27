@@ -11,11 +11,17 @@ public class CameraManager {
     private MyCamera curCamera;
     private static CameraManager instance;
 
-    public static synchronized CameraManager getInstance() {
+    public static CameraManager getInstance() {
+//        if (instance == null) {
+//            instance = new CameraManager();
+//        }
         if (instance == null) {
-            instance = new CameraManager();
+            synchronized (CameraManager.class) {
+                if (instance == null) {
+                    instance = new CameraManager();
+                }
+            }
         }
-
         return instance;
     }
 
@@ -27,11 +33,13 @@ public class CameraManager {
         this.curCamera = curCamera;
     }
 
-    public void createCamera(int cameraType, String ssid, String ipAddress,int position, int mode) {
-        curCamera = new MyCamera(cameraType, ssid, ipAddress,position, mode);
+    public synchronized MyCamera createCamera(int cameraType, String ssid, String ipAddress,int position, int mode) {
+        this.curCamera = new MyCamera(cameraType, ssid, ipAddress,position, mode);
+        return this.curCamera;
     }
 
-    public void createUSBCamera(int cameraType, UsbDevice usbDevice, int  position) {
-        curCamera = new MyCamera(cameraType, usbDevice, position);
+    public synchronized MyCamera createUSBCamera(int cameraType, UsbDevice usbDevice, int  position) {
+        this.curCamera = new MyCamera(cameraType, usbDevice, position);
+        return this.curCamera;
     }
 }

@@ -45,6 +45,7 @@ import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.LaunchView;
 import com.icatch.mobilecam.ui.adapter.CameraSlotAdapter;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
+import com.icatch.mobilecam.utils.ClickUtils;
 import com.icatch.mobilecam.utils.GlideUtils;
 import com.icatch.mobilecam.utils.LruCacheTool;
 import com.icatch.mobilecam.utils.PermissionTools;
@@ -104,9 +105,10 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         camSlotListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentManager fm = getSupportFragmentManager();
-//                getSupportFragmentManager();
-                presenter.launchCamera(position, fm);
+                if (!ClickUtils.isFastDoubleClick(camSlotListView)){
+                    FragmentManager fm = getSupportFragmentManager();
+                    presenter.launchCamera(position, fm);
+                }
             }
         });
 

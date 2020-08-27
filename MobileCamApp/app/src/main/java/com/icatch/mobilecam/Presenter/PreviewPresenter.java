@@ -1,6 +1,7 @@
 package com.icatch.mobilecam.Presenter;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -172,6 +173,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     private String curCodecType = "H264";
     private CameraStreaming cameraStreaming;
     private int curPanoramaType= ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE;
+    boolean isDelEvent = false;
 
     public PreviewPresenter(Activity activity) {
         super(activity);
@@ -740,7 +742,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         }
     }
 
-    public boolean disconnectCamera() {
+    public synchronized boolean disconnectCamera() {
         if(curCamera != null){
             return curCamera.disconnect();
         }else {
@@ -755,6 +757,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     public void unregisterWifiSSReceiver() {
         if (wifiSSReceiver != null) {
             activity.unregisterReceiver(wifiSSReceiver);
+            wifiSSReceiver = null;
         }
 
     }
@@ -1320,6 +1323,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_DOWNLOAD);
 //        sdkEvent.addCustomizeEvent(0x3701);// Insert SD card event
         sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+        isDelEvent = false;
 
 //        addPanoramaEventListener();
     }
@@ -1342,7 +1346,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 
 
     public synchronized void delEvent() {
-        if(curCamera != null && curCamera.isConnected()){
+        if(curCamera != null && curCamera.isConnected() && !isDelEvent){
             sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_FULL);
             sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_BATTERY_LEVEL_CHANGED);
             sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_CAPTURE_COMPLETE);
@@ -1356,10 +1360,11 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_DOWNLOAD);
 //        sdkEvent.delCustomizeEventListener(0x3701);// Insert SD card event
             sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+            isDelEvent = true;
         }
     }
 
-    public void loadSettingMenuList() {
+    public synchronized void loadSettingMenuList() {
         AppLog.i(TAG, "setupBtn is clicked:allowClickButtoms=" + allowClickButtoms);
         if (allowClickButtoms == false) {
             return;
@@ -1513,6 +1518,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     @Override
     public void redirectToAnotherActivity(final Context context, final Class<?> cls) {
         AppLog.i(TAG, "pbBtn is clicked curMode=" + curMode);
+
         if (allowClickButtoms == false) {
             AppLog.i(TAG, "do not allow to response button clicking");
             return;

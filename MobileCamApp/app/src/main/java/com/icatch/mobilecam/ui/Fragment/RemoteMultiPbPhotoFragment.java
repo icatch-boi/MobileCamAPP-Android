@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
+import com.icatch.mobilecam.utils.ClickUtils;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallGridAdapter;
 import com.icatch.mobilecam.ui.adapter.MultiPbPhotoWallListAdapter;
@@ -103,7 +104,9 @@ public class RemoteMultiPbPhotoFragment extends BaseMultiPbFragment implements M
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("1111", "listView.setOnItemClickListener");
-                presenter.listViewSelectOrCancelOnce(position);
+                if (!ClickUtils.isFastDoubleClick(listView)) {
+                    presenter.listViewSelectOrCancelOnce(position);
+                }
             }
         });
 
@@ -112,7 +115,9 @@ public class RemoteMultiPbPhotoFragment extends BaseMultiPbFragment implements M
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("1111", "multiPbPhotoGridView.setOnItemClickListener");
 //                MyToast.show(getActivity(), "item " + position + " clicked!");
-                presenter.gridViewSelectOrCancelOnce(position);
+                    if (!ClickUtils.isFastDoubleClick(multiPbPhotoGridView)) {
+                        presenter.gridViewSelectOrCancelOnce(position);
+                    }
             }
         });
         isCreated = true;

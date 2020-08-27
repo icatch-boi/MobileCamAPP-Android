@@ -28,6 +28,7 @@ import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
 import com.icatch.mobilecam.ui.Interface.MultiPbFragmentView;
 import com.icatch.mobilecam.ui.RemoteFileHelper;
 import com.icatch.mobilecam.ui.adapter.MultiPbRecyclerViewAdapter;
+import com.icatch.mobilecam.utils.ClickUtils;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
 
 import java.util.List;
@@ -83,7 +84,9 @@ public class RemoteMultiPbFragment extends BaseMultiPbFragment implements MultiP
         recyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(recyclerView) {
             @Override
             public void onItemClick(int position, View view, RecyclerView.ViewHolder viewHolder) {
-                presenter.itemClick(position);
+                if (!ClickUtils.isFastDoubleClick(R.id.recycler_view)) {
+                    presenter.itemClick(position);
+                }
             }
 
             @Override

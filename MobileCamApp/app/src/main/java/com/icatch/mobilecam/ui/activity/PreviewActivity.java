@@ -39,6 +39,7 @@ import com.icatch.mobilecam.Presenter.PreviewPresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
 import com.icatch.mobilecam.ui.Interface.PreviewView;
+import com.icatch.mobilecam.utils.ClickUtils;
 import com.icatch.mobilecam.utils.imageloader.ICatchtekImageDownloader;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
 import com.icatchtek.control.customer.type.ICatchCamEventID;
@@ -154,7 +155,9 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         facebookLiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.startOrStopFacebookLive();
+                if (!ClickUtils.isFastDoubleClick(v)) {
+                    presenter.startOrStopFacebookLive();
+                }
             }
         });
 
@@ -162,28 +165,36 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
 //                presenter.startOrStopYouTubeLive();
-                presenter.startYouTubeLive();
+                if (!ClickUtils.isFastDoubleClick(view)) {
+                    presenter.startYouTubeLive();
+                }
             }
         });
 
         googleAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.gotoGoogleAccountManagement();
+                if (!ClickUtils.isFastDoubleClick(v)) {
+                    presenter.gotoGoogleAccountManagement();
+                }
             }
         });
         zoomView = (ZoomView) findViewById(R.id.zoom_view);
         zoomView.setZoomInOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.zoomIn();
+                if (!ClickUtils.isFastDoubleClick(v)) {
+                    presenter.zoomIn();
+                }
             }
         });
 
         zoomView.setZoomOutOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.zoomOut();
+                if (!ClickUtils.isFastDoubleClick(v)) {
+                    presenter.zoomOut();
+                }
             }
         });
 
@@ -207,34 +218,44 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         mainMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                presenter.showSettingDialog(position);
+                if (!ClickUtils.isFastDoubleClick(mainMenuList)) {
+                    presenter.showSettingDialog(position);
+                }
             }
         });
 
         pvModeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.showPvModePopupWindow();
+                if (!ClickUtils.isFastDoubleClick(v)) {
+                    presenter.showPvModePopupWindow();
+                }
             }
         });
 
         captureRadioBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.changePreviewMode(PreviewMode.APP_STATE_STILL_MODE);
+                if (!ClickUtils.isFastDoubleClick(v)) {
+                    presenter.changePreviewMode(PreviewMode.APP_STATE_STILL_MODE);
+                }
             }
         });
 
         videoRadioBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.changePreviewMode(PreviewMode.APP_STATE_VIDEO_MODE);
+                if (!ClickUtils.isFastDoubleClick(v)) {
+                    presenter.changePreviewMode(PreviewMode.APP_STATE_VIDEO_MODE);
+                }
             }
         });
         timepLapseRadioBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.changePreviewMode(PreviewMode.APP_STATE_TIMELAPSE_MODE);
+                if (!ClickUtils.isFastDoubleClick(v)) {
+                    presenter.changePreviewMode(PreviewMode.APP_STATE_TIMELAPSE_MODE);
+                }
             }
         });
 
@@ -291,7 +312,9 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         panoramaTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.setPanoramaType();
+                if (!ClickUtils.isFastDoubleClick(panoramaTypeBtn)) {
+                    presenter.setPanoramaType();
+                }
             }
         });
 
@@ -409,7 +432,9 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
             presenter.finishActivity();
         } else if (id == R.id.action_setting) {
             settingMenu = item;
-            presenter.loadSettingMenuList();
+            if (!ClickUtils.isFastDoubleClick(id)) {
+                presenter.loadSettingMenuList();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -420,11 +445,15 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.multi_pb:
                 AppLog.i(TAG, "click the multi_pb");
-                presenter.redirectToAnotherActivity(PreviewActivity.this, RemoteMultiPbActivity.class);
+                if (!ClickUtils.isFastDoubleClick(R.id.multi_pb)) {
+                    presenter.redirectToAnotherActivity(PreviewActivity.this, RemoteMultiPbActivity.class);
+                }
                 break;
             case R.id.doCapture:
                 AppLog.i(TAG, "click the doCapture");
-                presenter.startOrStopCapture();
+                if (!ClickUtils.isFastDoubleClick(R.id.doCapture)) {
+                    presenter.startOrStopCapture();
+                }
                 break;
             default:
                 break;

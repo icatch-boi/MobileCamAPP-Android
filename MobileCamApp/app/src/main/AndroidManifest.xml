@@ -79,24 +79,30 @@
             android:name=".ui.activity.RemoteMultiPbActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_multi_pb"
+            android:launchMode="singleTask"
             android:theme="@style/FullScreenTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.PhotoPbActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_photo_pb"
+            android:launchMode="singleTask"
             android:theme="@style/FullScreenTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.VideoPbActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_panorama_video_pb"
+            android:launchMode="singleTask"
             android:theme="@style/FullScreenTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.LocalPhotoPbActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_local_photo"
+            android:launchMode="singleTask"
             android:theme="@style/FullScreenTheme.NoActionBar" />
-        <activity android:name=".ui.activity.WifiApActivity"></activity>
-        <activity android:name=".ui.activity.LoginFacebookActivity" />
+        <activity android:name=".ui.activity.WifiApActivity"
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".ui.activity.LoginFacebookActivity"
+            android:launchMode="singleTask"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
