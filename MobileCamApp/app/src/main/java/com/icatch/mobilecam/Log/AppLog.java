@@ -1,5 +1,6 @@
 package com.icatch.mobilecam.Log;
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -70,8 +71,21 @@ public class AppLog {
         }
         hasConfiguration = true;
 
-        i("", sdf.format(date) + "\n");
-        i("", AppInfo.APP_VERSION + "\n");
+        i(TAG, sdf.format(date) + "\n");
+        i(TAG, "MobileCam version:" + AppInfo.APP_VERSION + "\n");
+        i(TAG, "MobileCam sdk:" + AppInfo.SDK_VERSION + "\n");
+        i(TAG,"Build.VERSION.SDK_INT:" + Build.VERSION.SDK_INT);
+        i(TAG,"Build.VERSION.CODENAME:" + Build.VERSION.CODENAME);
+        i(TAG,"Build.VERSION.INCREMENTAL:" + Build.VERSION.INCREMENTAL);
+        i(TAG,"Build.VERSION.BOARD:" + Build.BOARD);
+        i(TAG,"Build.VERSION.ID:" + Build.ID);
+        i(TAG,"Build.VERSION.MODEL:" + Build.MODEL);
+        i(TAG,"Build.VERSION.MANUFACTURER:" + Build.MANUFACTURER);
+        i(TAG,"Build.VERSION.PRODUCT:" + Build.PRODUCT);
+        i(TAG,"Build.VERSION.RELEASE:" + Build.VERSION.RELEASE);
+        i(TAG,"Build.VERSION.CODENAME:" + Build.VERSION.CODENAME);
+        i(TAG,"Build.VERSION.INCREMENTAL:" + Build.VERSION.INCREMENTAL);
+        i(TAG, "CPU type is " + android.os.Build.CPU_ABI);
     }
 
 

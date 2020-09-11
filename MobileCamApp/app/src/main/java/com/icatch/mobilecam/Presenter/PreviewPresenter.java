@@ -686,8 +686,8 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             } else if (curMode == PreviewMode.APP_STATE_STILL_PREVIEW || curMode == PreviewMode.APP_STATE_VIDEO_PREVIEW) {
                 stopPreview();
                 if (curCamera.timeLapsePreviewMode == TimeLapseMode.TIME_LAPSE_MODE_VIDEO) {
-                    changeCameraMode(APP_STATE_TIMELAPSE_VIDEO_PREVIEW, ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_VIDEO_PREVIEW_MODE);
-                } else if (curCamera.timeLapsePreviewMode == TimeLapseMode.TIME_LAPSE_MODE_STILL) {
+                    changeCameraMode(PreviewMode.APP_STATE_TIMELAPSE_VIDEO_PREVIEW, ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_VIDEO_PREVIEW_MODE);
+                } else {
                     changeCameraMode(PreviewMode.APP_STATE_TIMELAPSE_STILL_PREVIEW, ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_STILL_PREVIEW_MODE);
                 }
             }
@@ -839,17 +839,27 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                 @Override
                 public void settingTimeLapseModeComplete(int timeLapseMode) {
                     if (timeLapseMode == TimeLapseMode.TIME_LAPSE_MODE_STILL) {
+                        if(cameraAction.changePreviewMode(ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_STILL_PREVIEW_MODE)){
+                            curIcatchMode = ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_STILL_PREVIEW_MODE;
+                            curMode = PreviewMode.APP_STATE_TIMELAPSE_STILL_PREVIEW;
+                            baseProrertys.getTimeLapseStillInterval().initTimeLapseInterval();
+                        }
 //                        boolean ret = cameraProperties.changePreviewMode(ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_STILL_PREVIEW_MODE);
 //                        if (ret) {
 //                            curMode = PreviewMode.APP_STATE_TIMELAPSE_STILL_PREVIEW;
 //                        }
-                        curMode = PreviewMode.APP_STATE_TIMELAPSE_STILL_PREVIEW;
+//                        curMode = PreviewMode.APP_STATE_TIMELAPSE_STILL_PREVIEW;
                     } else if (timeLapseMode == TimeLapseMode.TIME_LAPSE_MODE_VIDEO) {
+                        if(cameraAction.changePreviewMode(ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_VIDEO_PREVIEW_MODE)) {
+                            curIcatchMode = ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_VIDEO_PREVIEW_MODE;
+                            curMode = PreviewMode.APP_STATE_TIMELAPSE_VIDEO_PREVIEW;
+                            baseProrertys.getTimeLapseVideoInterval().initTimeLapseInterval();
+                        }
 //                        boolean ret = cameraProperties.changePreviewMode(ICatchCamPreviewMode.ICH_CAM_TIMELAPSE_VIDEO_PREVIEW_MODE);
 //                        if (ret) {
 //                            curMode = PreviewMode.APP_STATE_TIMELAPSE_VIDEO_PREVIEW;
 //                        }
-                        curMode = PreviewMode.APP_STATE_TIMELAPSE_VIDEO_PREVIEW;
+//                        curMode = PreviewMode.APP_STATE_TIMELAPSE_VIDEO_PREVIEW;
                     }
                 }
             });
@@ -1224,20 +1234,21 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 
                 case SDKEvent.EVENT_TIME_LAPSE_STOP:
                     AppLog.i(TAG, "receive EVENT_TIME_LAPSE_STOP:curMode=" + curMode);
+                    //BSP-1419 收到 Event 時，就表示FW 已經自己停止了，APP 不需要再去執行 stopTimeLapse
                     if (curMode == PreviewMode.APP_STATE_TIMELAPSE_VIDEO_CAPTURE) {
-                        if (cameraAction.stopTimeLapse()) {
+//                        if (cameraAction.stopTimeLapse()) {
                             stopVideoCaptureButtomChangeTimer();
                             stopRecordingLapseTimeTimer();
                             previewView.setRemainCaptureCount(new Integer(cameraProperties.getRemainImageNum()).toString());
                             curMode = APP_STATE_TIMELAPSE_VIDEO_PREVIEW;
-                        }
+//                        }
 
                     } else if (curMode == PreviewMode.APP_STATE_TIMELAPSE_STILL_CAPTURE) {
-                        if (cameraAction.stopTimeLapse()) {
+//                        if (cameraAction.stopTimeLapse()) {
                             stopRecordingLapseTimeTimer();
                             previewView.setRemainCaptureCount(new Integer(cameraProperties.getRemainImageNum()).toString());
                             curMode = PreviewMode.APP_STATE_TIMELAPSE_STILL_PREVIEW;
-                        }
+//                        }
                     }
                     break;
                 case SDKEvent.EVENT_VIDEO_RECORDING_TIME:
@@ -1700,13 +1711,15 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         }
         ICatchStreamParam iCatchStreamParam = null;
         if (streamInfo == null) {
-            iCatchStreamParam = new ICatchH264StreamParam(1920, 960, 30);
+            iCatchStreamParam = new ICatchH264StreamParam(1280, 720, 30);
+//            iCatchStreamParam = new ICatchH264StreamParam(1920, 960, 30);
         } else if (streamInfo.mediaCodecType.equals("MJPG")) {
             iCatchStreamParam = new ICatchJPEGStreamParam(streamInfo.width, streamInfo.height, streamInfo.fps, streamInfo.bitrate);
         } else if (streamInfo.mediaCodecType.equals("H264")) {
             iCatchStreamParam = new ICatchH264StreamParam(streamInfo.width, streamInfo.height, streamInfo.fps, streamInfo.bitrate);
         } else {
-            iCatchStreamParam = new ICatchH264StreamParam(1920, 960, 30);
+            iCatchStreamParam = new ICatchH264StreamParam(1280, 720, 30);
+//            iCatchStreamParam = new ICatchH264StreamParam(1920, 960, 30);
         }
 
         return iCatchStreamParam;

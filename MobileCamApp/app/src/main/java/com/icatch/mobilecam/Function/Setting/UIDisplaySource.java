@@ -200,9 +200,14 @@ public class UIDisplaySource {
             settingMenuList.add(new SettingMenu(R.string.setting_enable_wifi_hotspot, ""));
         }
         if (cameraProperties.cameraModeSupport(ICatchCamMode.ICH_CAM_MODE_TIMELAPSE)) {
-
+            String curTimeLapseInterval;
+            if (curCamera.timeLapsePreviewMode == TimeLapseMode.TIME_LAPSE_MODE_STILL) {
+                curTimeLapseInterval = baseProrertys.getTimeLapseStillInterval().getCurrentValue();
+            } else {
+                curTimeLapseInterval = baseProrertys.getTimeLapseVideoInterval().getCurrentValue();
+            }
             settingMenuList.add(new SettingMenu(R.string.title_timeLapse_mode, baseProrertys.getTimeLapseMode().getCurrentUiStringInSetting()));
-            settingMenuList.add(new SettingMenu(R.string.setting_time_lapse_interval, baseProrertys.getTimeLapseInterval().getCurrentValue()));
+            settingMenuList.add(new SettingMenu(R.string.setting_time_lapse_interval, curTimeLapseInterval));
             settingMenuList.add(new SettingMenu(R.string.setting_time_lapse_duration, baseProrertys.gettimeLapseDuration().getCurrentValue()));
         }
 

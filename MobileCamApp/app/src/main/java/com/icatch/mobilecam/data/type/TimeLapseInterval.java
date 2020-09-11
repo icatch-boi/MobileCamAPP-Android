@@ -34,7 +34,7 @@ public class TimeLapseInterval {
 
     public TimeLapseInterval(CameraProperties cameraProperties) {
         this.cameraProperties = cameraProperties;
-        initTimeLapseInterval();
+        //initTimeLapseInterval();
     }
 
     public String getCurrentValue() {
@@ -42,6 +42,9 @@ public class TimeLapseInterval {
     }
 
     public String[] getValueStringList() {
+        //if(valueListString == null){
+            initTimeLapseInterval();
+        //}
         return valueListString;
     }
 

@@ -427,7 +427,7 @@ public class CameraAction {
     }
 
     public boolean changePreviewMode(int mode){
-        AppLog.i(TAG, "begin changePreviewMode");
+        AppLog.i(TAG, "begin changePreviewMode mode:" + mode);
         boolean ret = false;
         try {
             ret = cameraControl.changePreviewMode(mode);

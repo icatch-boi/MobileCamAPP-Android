@@ -121,12 +121,11 @@ public class FileOperation {
             AppLog.e(tag, "IchInvalidSessionException");
             e.printStackTrace();
         }
-//        if (list != null && list.size() > 0) {
-//            for (ICatchFile file : list
-//            ) {
-//                AppLog.d(tag, "getFileList info=" + file.toString());
-//            }
-//        }
+        if (list != null && list.size() > 0) {
+            for (int ii =0; ii<list.size();ii++){
+                AppLog.d(tag, "getFileList info=" + list.get(ii).toString());
+            }
+        }
         AppLog.i(tag, "end getFileList list size=" + (list != null ? list.size() : -1));
         return list;
     }

@@ -376,6 +376,14 @@ public class VideoPbActivity extends AppCompatActivity implements VideoPbView {
     }
 
     @Override
+    public void setSeekbarEnabled(boolean enabled) {
+        if(seekBar.isEnabled() != enabled){
+            AppLog.d(TAG,"setSeekbarEnabled enabled:" + enabled);
+            seekBar.setEnabled(enabled);
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         new Handler().postDelayed(new Runnable() {

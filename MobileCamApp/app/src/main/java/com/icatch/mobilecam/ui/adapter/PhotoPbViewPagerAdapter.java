@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.icatch.mobilecam.Log.AppLog;
+import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
 import com.icatch.mobilecam.ui.ExtendComponent.ProgressWheel;
-import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
 import com.icatch.mobilecam.utils.imageloader.TutkUriUtil;
 

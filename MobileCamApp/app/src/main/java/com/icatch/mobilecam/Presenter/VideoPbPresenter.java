@@ -201,7 +201,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
                     }
                 });
             }
-            boolean ret = false;
+            boolean ret;
             try {
                 ret = videoStreaming.play(curVideoFile, false, true);
             } catch (IchGLFormatNotSupportedException e) {
@@ -221,20 +221,24 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
 //                AppLog.i(TAG, "failed to resumePlayback");
 //                return;
 //            }
+            videoPbMode = VideoPbMode.MODE_VIDEO_PLAY;
             videoPbView.showLoadingCircle(true);
             cacheFlag = true;
             waitForCaching = true;
+            needUpdateSeekBar = true;
             AppLog.i(TAG, "seekBar.getProgress() =" + videoPbView.getSeekBarProgress());
             int tempDuration = panoramaVideoPlayback.getLength();
+            videoDuration = tempDuration;
             AppLog.i(TAG, "end getLength = " + tempDuration);
             videoPbView.setPlayBtnSrc(R.drawable.ic_pause_white_36dp);
+            videoPbView.setSeekbarEnabled(true);
             videoPbView.setTimeLapsedValue("00:00");
             videoPbView.setTimeDurationValue(ConvertTools.secondsToMinuteOrHours(tempDuration / 100));
             videoPbView.setSeekBarMaxValue(tempDuration);
-            videoDuration = tempDuration;// temp attemp to avoid sdk
+            // temp attemp to avoid sdk
 //            startVideoPb();
             AppLog.i(TAG, "has start the GetVideoFrameThread() to get play video");
-            videoPbMode = VideoPbMode.MODE_VIDEO_PLAY;
+
         } else if (videoPbMode == VideoPbMode.MODE_VIDEO_PAUSE) {
             resumeVideoPb();
         } else if (videoPbMode == VideoPbMode.MODE_VIDEO_PLAY) {
@@ -270,29 +274,93 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
     }
 
     public void seekBarOnStopTrackingTouch() {
-        needUpdateSeekBar = false;
-        lastSeekBarPosition = videoPbView.getSeekBarProgress();
-        //videoPbView.setTimeLapsedValue(ConvertTools.secondsToMinuteOrHours(lastSeekBarPosition / 100));
-        if (panoramaVideoPlayback.videoSeek(lastSeekBarPosition / 100.0)) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } else {
-            videoPbView.setSeekBarProgress(lastSeekBarPosition);
-            MyToast.show(activity, R.string.dialog_failed);
+        AppLog.d(TAG, "seekBarOnStopTrackingTouch lastSeekBarPosition=" + lastSeekBarPosition + " videoDuration=" + videoDuration);
+        int curProgress = videoPbView.getSeekBarProgress();
+        if(videoDuration - curProgress < 500){
+            videoPbView.setSeekbarEnabled(false);
         }
+        if(videoDuration - curProgress < 100){
+            lastSeekBarPosition = videoDuration -100;
+            videoPbView.setSeekBarProgress(lastSeekBarPosition);
+        }else {
+            lastSeekBarPosition = curProgress;
+        }
+        videoPbView.setTimeLapsedValue(ConvertTools.secondsToMinuteOrHours(lastSeekBarPosition / 100));
+        MyProgressDialog.showProgressDialog(activity, R.string.action_processing);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (panoramaVideoPlayback.videoSeek(lastSeekBarPosition / 100.0)) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+//                    if (videoPbMode == VideoPbMode.MODE_VIDEO_PLAY) {
+                    panoramaVideoPlayback.resumePlayback();
+//                    resumeVideoPb();
+//                    }
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyProgressDialog.closeProgressDialog();
+                            videoPbView.setPlayBtnSrc(R.drawable.ic_pause_white_36dp);
+//                            videoPbView.setPlayCircleImageViewVisibility(View.GONE);
+//                            videoPbView.setDeleteBtnEnabled(false);
+//                            videoPbView.setDownloadBtnEnabled(false);
+                            videoPbView.showLoadingCircle(true);
+                        }
+                    });
+                } else {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyProgressDialog.closeProgressDialog();
+                            videoPbView.setSeekBarProgress(lastSeekBarPosition);
+                            MyToast.show(activity, R.string.dialog_failed);
+                        }
+                    });
+
+                }
+                videoPbMode = VideoPbMode.MODE_VIDEO_PLAY;
+                needUpdateSeekBar = true;
+            }
+        }).start();
 
     }
+
+//    public void seekBarOnStopTrackingTouch() {
+//        needUpdateSeekBar = false;
+//        lastSeekBarPosition = videoPbView.getSeekBarProgress();
+//        //videoPbView.setTimeLapsedValue(ConvertTools.secondsToMinuteOrHours(lastSeekBarPosition / 100));
+//        if (panoramaVideoPlayback.videoSeek(lastSeekBarPosition / 100.0)) {
+//            try {
+//                Thread.sleep(500);
+//            } catch (InterruptedException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        } else {
+//            videoPbView.setSeekBarProgress(lastSeekBarPosition);
+//            MyToast.show(activity, R.string.dialog_failed);
+//        }
+//
+//    }
 
     public void seekBarOnStartTrackingTouch() {
         needUpdateSeekBar = false;
         lastSeekBarPosition = videoPbView.getSeekBarProgress();
+        panoramaVideoPlayback.pausePlayback();
+        videoPbView.showLoadingCircle(false);
+        videoPbMode = VideoPbMode.MODE_VIDEO_PAUSE;
     }
 
     public void setTimeLapsedValue(int progress) {
+        if(needUpdateSeekBar && videoDuration >0 && (videoDuration - progress) < 500) {
+            AppLog.i(TAG, "setTimeLapsedValue setSeekbarEnabled");
+            videoPbView.setSeekbarEnabled(false);
+        }
         videoPbView.setTimeLapsedValue(ConvertTools.secondsToMinuteOrHours(progress / 100));
     }
 
@@ -332,6 +400,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         videoPbView.setTopBarVisibility(View.VISIBLE);
         videoPbView.setBottomBarVisibility(View.VISIBLE);
         videoPbView.showLoadingCircle(false);
+        videoPbView.setSeekbarEnabled(false);
         videoPbMode = VideoPbMode.MODE_VIDEO_IDLE;
         AppLog.i(TAG, "End stopVideoStream");
     }

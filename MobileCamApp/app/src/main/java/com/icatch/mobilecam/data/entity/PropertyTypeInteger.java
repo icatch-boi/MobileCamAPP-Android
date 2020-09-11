@@ -152,14 +152,14 @@ public class PropertyTypeInteger {
         if(hashMap == null){
             return "Unknown";
         }
-        ItemInfo itemInfo = hashMap.get(getCurrentValue());
+        int curValue = getCurrentValue();
+        ItemInfo itemInfo = hashMap.get(curValue);
         String ret = null;
         if (itemInfo == null) {
             ret = "Unknown";
         } else {
-            ret = res.getString(hashMap.get(getCurrentValue()).uiStringInSetting);
+            ret = res.getString(itemInfo.uiStringInSetting);
         }
-
         return ret;
     }
 

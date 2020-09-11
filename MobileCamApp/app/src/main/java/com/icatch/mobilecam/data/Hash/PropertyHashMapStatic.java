@@ -103,10 +103,10 @@ public class PropertyHashMapStatic {
         burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_3, new ItemInfo(R.string.burst_3, null, R.drawable.continuous_shot_1));
         burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_5, new ItemInfo(R.string.burst_5, null, R.drawable.continuous_shot_2));
         burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_10, new ItemInfo(R.string.burst_10, null, R.drawable.continuous_shot_3));
-        burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_7, new ItemInfo(R.string.burst_7, null, 0));
-        burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_15, new ItemInfo(R.string.burst_15, null, 0));
-        burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_30, new ItemInfo(R.string.burst_30, null, 0));
-        burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_HS, new ItemInfo(R.string.burst_hs, null, 0));
+        burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_7, new ItemInfo(R.string.burst_7, null, R.drawable.continuous_shot_7));
+        burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_15, new ItemInfo(R.string.burst_15, null, R.drawable.continuous_shot_15));
+        burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_30, new ItemInfo(R.string.burst_30, null, R.drawable.continuous_shot_30));
+        burstMap.put(ICatchCamBurstNumber.ICH_CAM_BURST_NUMBER_HS, new ItemInfo(R.string.burst_hs, null, R.drawable.continuous_shot_continuous));
     }
 
     public void initElectricityFrequencyMap() {

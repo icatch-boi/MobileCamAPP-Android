@@ -27,7 +27,9 @@ public class BaseProrertys {
     private PropertyTypeInteger captureDelay;
     private PropertyTypeString videoSize;
     private PropertyTypeString imageSize;
-    private TimeLapseInterval timeLapseInterval;
+    //private TimeLapseInterval timeLapseInterval;
+    private TimeLapseInterval timeLapseVideoInterval;
+    private TimeLapseInterval timeLapseStillInterval;
     private TimeLapseDuration timeLapseDuration;
     private PropertyTypeInteger timeLapseMode;
     private PropertyTypeInteger exposureCompensation;
@@ -59,7 +61,9 @@ public class BaseProrertys {
         captureDelay = new PropertyTypeInteger(cameraProperty, PropertyId.CAPTURE_DELAY, GlobalInfo.getInstance().getAppContext());
         videoSize = new PropertyTypeString(cameraProperty, PropertyId.VIDEO_SIZE, GlobalInfo.getInstance().getAppContext());
         imageSize = new PropertyTypeString(cameraProperty, PropertyId.IMAGE_SIZE, GlobalInfo.getInstance().getAppContext());
-        timeLapseInterval = new TimeLapseInterval(cameraProperty);
+        //timeLapseInterval = new TimeLapseInterval(cameraProperty);
+        timeLapseVideoInterval = new TimeLapseInterval(cameraProperty);
+        timeLapseStillInterval = new TimeLapseInterval(cameraProperty);
         timeLapseDuration = new TimeLapseDuration(cameraProperty);
         timeLapseMode = new PropertyTypeInteger(cameraProperty, PropertyHashMapStatic.timeLapseMode, PropertyId.TIMELAPSE_MODE, GlobalInfo.getInstance()
                 .getAppContext());
@@ -112,9 +116,17 @@ public class BaseProrertys {
         return electricityFrequency;
     }
 
-    public TimeLapseInterval getTimeLapseInterval() {
-        return timeLapseInterval;
+    public TimeLapseInterval getTimeLapseVideoInterval() {
+        return timeLapseVideoInterval;
     }
+
+    public TimeLapseInterval getTimeLapseStillInterval() {
+        return timeLapseStillInterval;
+    }
+
+//    public TimeLapseInterval getTimeLapseInterval() {
+//        return timeLapseInterval;
+//    }
 
     public TimeLapseDuration gettimeLapseDuration() {
         return timeLapseDuration;

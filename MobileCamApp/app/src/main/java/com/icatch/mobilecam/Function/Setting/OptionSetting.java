@@ -29,6 +29,8 @@ import com.icatch.mobilecam.data.GlobalApp.ExitApp;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.data.Message.AppMessage;
 import com.icatch.mobilecam.data.PropertyId.PropertyId;
+import com.icatch.mobilecam.data.type.TimeLapseInterval;
+import com.icatch.mobilecam.data.type.TimeLapseMode;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
@@ -444,9 +446,9 @@ public class OptionSetting {
         }
         int length = upsideUIString.length;
         int curIdx = 0;
-
+        String curValue = baseProrertys.getUpside().getCurrentUiStringInSetting();
         for (int i = 0; i < length; i++) {
-            if (upsideUIString[i].equals(baseProrertys.getUpside().getCurrentUiStringInSetting())) {
+            if (upsideUIString[i].equals(curValue)) {
                 curIdx = i;
             }
         }
@@ -473,8 +475,9 @@ public class OptionSetting {
         }
         int length = slowmotionUIString.length;
         int curIdx = 0;
+        String curValue = baseProrertys.getSlowMotion().getCurrentUiStringInSetting();
         for (int i = 0; i < length; i++) {
-            if (slowmotionUIString[i].equals(baseProrertys.getSlowMotion().getCurrentUiStringInSetting())) {
+            if (slowmotionUIString[i].equals(curValue)) {
                 curIdx = i;
             }
         }
@@ -501,10 +504,10 @@ public class OptionSetting {
         }
         int length = timeLapseModeString.length;
         int curIdx = 0;
-
+        String curValue = baseProrertys.getTimeLapseMode().getCurrentUiStringInSetting();
         for (int i = 0; i < length; i++) {
             Log.d("tigertiger", "timeLapseModeString[i] =" + timeLapseModeString[i]);
-            if (timeLapseModeString[i] != null && timeLapseModeString[i].equals(baseProrertys.getTimeLapseMode().getCurrentUiStringInSetting())) {
+            if (timeLapseModeString[i] != null && timeLapseModeString[i].equals(curValue)) {
                 curIdx = i;
             }
         }
@@ -554,7 +557,15 @@ public class OptionSetting {
     private void showTimeLapseIntervalDialog(final Context context) {
         // TODO Auto-generated method stub
         CharSequence title = context.getResources().getString(R.string.setting_time_lapse_interval);
-        final String[] videoTimeLapseIntervalString = baseProrertys.getTimeLapseInterval().getValueStringList();
+        final TimeLapseInterval timeLapseInterval;
+        AppLog.e(TAG, "showTimeLapseIntervalDialog timeLapsePreviewMode:" + myCamera.timeLapsePreviewMode);
+        if (myCamera.timeLapsePreviewMode == TimeLapseMode.TIME_LAPSE_MODE_STILL) {
+            timeLapseInterval = baseProrertys.getTimeLapseStillInterval();
+        } else {
+            timeLapseInterval = baseProrertys.getTimeLapseVideoInterval();
+        }
+
+        final String[] videoTimeLapseIntervalString = timeLapseInterval.getValueStringList();
         if (videoTimeLapseIntervalString == null) {
             AppLog.e(TAG, "videoTimeLapseIntervalString == null");
             return;
@@ -562,7 +573,7 @@ public class OptionSetting {
         int length = videoTimeLapseIntervalString.length;
 
         int curIdx = 0;
-        String temp = baseProrertys.getTimeLapseInterval().getCurrentValue();
+        String temp = timeLapseInterval.getCurrentValue();
         for (int i = 0; i < length; i++) {
             if (videoTimeLapseIntervalString[i].equals(temp)) {
                 curIdx = i;
@@ -572,7 +583,7 @@ public class OptionSetting {
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                baseProrertys.getTimeLapseInterval().setValueByPosition(arg1);
+                timeLapseInterval.setValueByPosition(arg1);
                 arg0.dismiss();
                 onSettingCompleteListener.onOptionSettingComplete();
             }
@@ -608,64 +619,6 @@ public class OptionSetting {
         showOptionDialog(title, delayTimeUIString, curIdx, listener, true);
     }
 
-    private void showVideoSizeOptionDialog(final Context context, final OnSettingCompleteListener settingCompleteListener) {
-        // TODO Auto-generated method stub
-        CharSequence title = context.getResources().getString(R.string.stream_set_res_vid);
-        final String[] videoSizeUIString = baseProrertys.getVideoSize().getValueArrayString();
-        final List<String> videoSizeValueString = baseProrertys.getVideoSize().getValueList();
-        if (videoSizeUIString == null) {
-            AppLog.e(TAG, "videoSizeUIString == null");
-            return;
-        }
-        int length = videoSizeUIString.length;
-
-        int curIdx = 0;
-        for (int i = 0; i < length; i++) {
-            if (videoSizeUIString[i].equals(baseProrertys.getVideoSize().getCurrentUiStringInSetting())) {
-                curIdx = i;
-            }
-        }
-
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                final String value = videoSizeValueString.get(arg1);
-                baseProrertys.getVideoSize().setValue(value);
-                arg0.dismiss();
-                settingCompleteListener.onOptionSettingComplete();
-            }
-        };
-        showOptionDialog(title, videoSizeUIString, curIdx, listener, false);
-    }
-
-    private void showImageSizeOptionDialog(final Context context, final OnSettingCompleteListener settingCompleteListener) {
-        // TODO Auto-generated method stub
-        CharSequence title = context.getResources().getString(R.string.stream_set_res_photo);
-
-        final String[] imageSizeUIString = baseProrertys.getImageSize().getValueArrayString();
-        if (imageSizeUIString == null) {
-            AppLog.e(TAG, "imageSizeUIString == null");
-            return;
-        }
-        int length = imageSizeUIString.length;
-        int curIdx = 0;
-        for (int ii = 0; ii < length; ii++) {
-            if (imageSizeUIString[ii].equals(baseProrertys.getImageSize().getCurrentUiStringInSetting())) {
-                curIdx = ii;
-            }
-        }
-
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                baseProrertys.getImageSize().setValueByPosition(arg1);
-                arg0.dismiss();
-                settingCompleteListener.onOptionSettingComplete();
-            }
-        };
-        showOptionDialog(title, imageSizeUIString, curIdx, listener, true);
-    }
-
     public void showImageSizeOptionDialog(final Context context) {
         // TODO Auto-generated method stub
         CharSequence title = context.getResources().getString(R.string.stream_set_res_photo);
@@ -677,8 +630,9 @@ public class OptionSetting {
         }
         int length = imageSizeUIString.length;
         int curIdx = 0;
+        String curValue = baseProrertys.getImageSize().getCurrentUiStringInSetting();
         for (int ii = 0; ii < length; ii++) {
-            if (imageSizeUIString[ii].equals(baseProrertys.getImageSize().getCurrentUiStringInSetting())) {
+            if (imageSizeUIString[ii].equals(curValue)) {
                 curIdx = ii;
             }
         }
@@ -873,8 +827,9 @@ public class OptionSetting {
         int length = dateStampUIString.length;
 
         int curIdx = 0;
+        String curValue = baseProrertys.getDateStamp().getCurrentUiStringInSetting();
         for (int i = 0; i < length; i++) {
-            if (dateStampUIString[i].equals(baseProrertys.getDateStamp().getCurrentUiStringInSetting())) {
+            if (dateStampUIString[i].equals(curValue)) {
                 curIdx = i;
             }
         }
@@ -902,8 +857,9 @@ public class OptionSetting {
         int length = eleFreUIString.length;
 
         int curIdx = 0;
+        String curValue = baseProrertys.getElectricityFrequency().getCurrentUiStringInSetting();
         for (int i = 0; i < length; i++) {
-            if (eleFreUIString[i].equals(baseProrertys.getElectricityFrequency().getCurrentUiStringInSetting())) {
+            if (eleFreUIString[i].equals(curValue)) {
                 curIdx = i;
             }
         }
@@ -930,9 +886,10 @@ public class OptionSetting {
         }
         int length = whiteBalanceUIString.length;
 
+        String curValue = baseProrertys.getWhiteBalance().getCurrentUiStringInSetting();
         int curIdx = 0;
         for (int i = 0; i < length; i++) {
-            if (whiteBalanceUIString[i].equals(baseProrertys.getWhiteBalance().getCurrentUiStringInSetting())) {
+            if (whiteBalanceUIString[i].equals(curValue)) {
                 curIdx = i;
             }
         }
@@ -958,10 +915,10 @@ public class OptionSetting {
             return;
         }
         int length = burstUIString.length;
-
+        String curValue = baseProrertys.getBurst().getCurrentUiStringInSetting();
         int curIdx = 0;
         for (int i = 0; i < length; i++) {
-            if (burstUIString[i].equals(baseProrertys.getBurst().getCurrentUiStringInSetting())) {
+            if (burstUIString[i].equals(curValue)) {
                 curIdx = i;
             }
         }
