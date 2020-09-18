@@ -17,4 +17,12 @@ public class DownloadInfo {
         this.progress = progress;
         this.done = done;
     }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
 }

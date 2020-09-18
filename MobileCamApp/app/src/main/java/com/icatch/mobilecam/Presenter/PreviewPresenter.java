@@ -494,9 +494,23 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     public void initPreview() {
         AppLog.i(TAG, "initPreview curMode=" + curMode);
         //set min first ,then max;
+        GlobalInfo.getInstance().setOnEventListener(new GlobalInfo.OnEventListener() {
+            @Override
+            public void eventListener(int sdkEventId) {
+                switch (sdkEventId){
+                    case SDKEvent.EVENT_SDCARD_REMOVED:
+                        MyToast.show(activity,R.string.dialog_card_removed);
+                        break;
+                    case SDKEvent.EVENT_SDCARD_INSERT:
+                        MyToast.show(activity,R.string.dialog_card_inserted);
+                        break;
+                }
+            }
+        });
         previewView.setMinZoomRate(1.0f);
         previewView.setMaxZoomRate(cameraProperties.getMaxZoomRatio() * 1.0f);
         previewView.updateZoomViewProgress(cameraProperties.getCurrentZoomRatio());
+        int icatchMode = cameraAction.getCurrentCameraMode();
         if (cameraState.isMovieRecording()) {
             AppLog.i(TAG, "camera is recording...");
             curMode = PreviewMode.APP_STATE_VIDEO_CAPTURE;
@@ -1333,7 +1347,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         sdkEvent.addCustomizeEvent(0x5001);// video recording event
         sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_DOWNLOAD);
 //        sdkEvent.addCustomizeEvent(0x3701);// Insert SD card event
-        sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+//        sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
         isDelEvent = false;
 
 //        addPanoramaEventListener();
@@ -1370,7 +1384,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             sdkEvent.delCustomizeEventListener(0x5001);
             sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_DOWNLOAD);
 //        sdkEvent.delCustomizeEventListener(0x3701);// Insert SD card event
-            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+//            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
             isDelEvent = true;
         }
     }

@@ -82,7 +82,7 @@ public class UIDisplaySource {
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download, ""));
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download_size_limit, ""));
         }
-        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
+//        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
 //        settingMenuList.add( new SettingMenu( R.string.setting_live_address, AppInfo.liveAddress ) );
         settingMenuList.add(new SettingMenu(R.string.setting_format, ""));
         if (cameraProperties.hasFuction(PropertyId.STA_MODE_SSID)){
@@ -133,7 +133,7 @@ public class UIDisplaySource {
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download, ""));
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download_size_limit, ""));
         }
-        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
+//        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
 //        settingMenuList.add( new SettingMenu( R.string.setting_live_address, AppInfo.liveAddress ) );
         settingMenuList.add(new SettingMenu(R.string.setting_format, ""));
         if (cameraProperties.hasFuction(PropertyId.STA_MODE_SSID)){
@@ -193,7 +193,7 @@ public class UIDisplaySource {
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download, ""));
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download_size_limit, ""));
         }
-        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
+//        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
 //        settingMenuList.add( new SettingMenu( R.string.setting_live_address, AppInfo.liveAddress ) );
         settingMenuList.add(new SettingMenu(R.string.setting_format, ""));
         if (cameraProperties.hasFuction(PropertyId.STA_MODE_SSID)){

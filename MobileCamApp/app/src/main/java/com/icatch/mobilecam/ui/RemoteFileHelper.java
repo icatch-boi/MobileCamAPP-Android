@@ -91,9 +91,23 @@ public class RemoteFileHelper {
         } else if (fileType == FileType.FILE_EMERGENCY_VIDEO) {
             icatchFileType = ICatchFileType.ICH_FILE_TYPE_VIDEO;
         }
-        setFileListAttribute(fileOperation, fileType);
-        List<ICatchFile> fileList = fileOperation.getFileList(icatchFileType);
-        List<MultiPbItemInfo> tempItemInfos = getList(fileList, fileFilter);
+        MyCamera camera = CameraManager.getInstance().getCurCamera();
+        CameraProperties cameraProperties = null;
+        List<MultiPbItemInfo> tempItemInfos;
+        if (camera != null) {
+            cameraProperties = camera.getCameraProperties();
+        }
+        if(cameraProperties != null && cameraProperties.hasFuction(PropertyId.CAMERA_PB_LIMIT_NUMBER))
+        {
+            tempItemInfos = getFileList(fileOperation,icatchFileType,700);
+        }else {
+            setFileListAttribute(fileOperation, fileType);
+            List<ICatchFile> fileList= fileOperation.getFileList(icatchFileType);
+            tempItemInfos = getList(fileList, fileFilter);
+        }
+//        setFileListAttribute(fileOperation, fileType);
+//        List<ICatchFile> fileList= fileOperation.getFileList(icatchFileType);
+//        tempItemInfos = getList(fileList, fileFilter);
         return tempItemInfos;
     }
 
@@ -160,10 +174,84 @@ public class RemoteFileHelper {
         }
     }
 
+    public List<MultiPbItemInfo> getFileList(FileOperation fileOperation,int type, int maxNum) {
+        AppLog.i(TAG, "begin getFileList type: " + type + " maxNum：" + maxNum);
+        if(fileOperation == null){
+            AppLog.i(TAG, "cameraPlayback is null");
+            return null;
+        }
+        int startIndex = 0;
+        int endIndex;
+        int fileCount = -1;
+        List<ICatchFile> photoList = new LinkedList<>();
+        List<ICatchFile> videoList = new LinkedList<>();
+
+        fileCount = fileOperation.getFileCount();
+        if(fileCount <=0){
+            return null;
+        }
+        if(fileCount  < maxNum){
+            startIndex = 1 ;
+            endIndex = fileCount;
+        }else {
+            startIndex = 1;
+            endIndex = maxNum;
+        }
+        while (fileCount >= startIndex){
+            AppLog.i(TAG, "start getFileList startIndex=" + startIndex + " endIndex=" + endIndex);
+            try {
+                List<ICatchFile> templist = fileOperation.getFileList(ICatchFileType.ICH_FILE_TYPE_ALL,startIndex, endIndex);//timeout 20s
+                if(templist != null) {
+                    AppLog.i(TAG, "end getFileList tempList =" + templist.size());
+                }
+                if(templist != null && templist.size() > 0){
+                    for (ICatchFile file: templist
+                    ) {
+                        AppLog.i(TAG, "getFileList fileInfo[" + file.toString() + "]");
+                        if(file != null && file.getFileType() == ICatchFileType.ICH_FILE_TYPE_VIDEO){
+                            videoList.add(file);
+                        }else if(file != null && file.getFileType() == ICatchFileType.ICH_FILE_TYPE_IMAGE){
+                            photoList.add(file);
+                        }
+                    }
+//				 	list.addAll(templist);
+                }
+
+                AppLog.i(TAG, "end getFileList photoList size=" + photoList.size());
+                AppLog.i(TAG, "end getFileList videoList size=" + videoList.size());
+            } catch (Exception e) {
+                AppLog.e(TAG, "Exception e:" + e.getClass().getSimpleName());
+                e.printStackTrace();
+            }
+
+            startIndex = endIndex + 1;
+            if(endIndex + maxNum > fileCount){
+                endIndex =fileCount;
+            }else {
+                endIndex = endIndex + maxNum;
+            }
+            AppLog.i(TAG, "end getFileList startIndex=" + startIndex + " endIndex=" + endIndex);
+        }
+
+        List<MultiPbItemInfo> photoInfoList = getList(photoList,fileFilter);
+        List<MultiPbItemInfo> videoInfoList = getList(videoList,fileFilter);
+//        GlobalInfo.getInstance().photoInfoList = photoInfoList;
+//        GlobalInfo.getInstance().videoInfoList = videoInfoList;
+        setLocalFileList(photoInfoList,FileType.FILE_PHOTO);
+        setLocalFileList(videoInfoList,FileType.FILE_VIDEO);
+        if(type == ICatchFileType.ICH_FILE_TYPE_VIDEO) {
+            return videoInfoList;
+        }else if(type == ICatchFileType.ICH_FILE_TYPE_IMAGE){
+            return photoInfoList;
+        }else {
+            return null;
+        }
+    }
+
     private List<MultiPbItemInfo> getList(List<ICatchFile> fileList, FileFilter fileFilter) {
         List<MultiPbItemInfo> multiPbItemInfoList = new LinkedList<>();
         if (fileList == null) {
-            return null;
+            return multiPbItemInfoList;
         }
         String fileDate;
         String fileSize;

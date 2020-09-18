@@ -356,4 +356,8 @@ $1$"</string>
     <string name="content_privacy_policy_1">请你务必审慎阅读、充分理解各条款，包括但不限于：为了向你提供基本服务，我们需要收集你的设备信息、操作日志等个人信息。你可以阅读</string>
     <string name="content_privacy_policy_2">《隱私政策和用戶協議》</string>
     <string name="content_privacy_policy_3">了解详细信息。如你同意，请点击“同意”开始享受我们的服务。</string>
+    <string name="cancel_all">全部取消</string>
+    <string name="download_cancel_all_tips">是否取消所有文件下载？</string>
+    <string name="dialog_card_removed_and_back">SD卡已移除，将退出视频播放。</string>
+    <string name="dialog_card_removed_and_back_photo_pb">SD已移除，将退出图片预览</string>
 </resources>

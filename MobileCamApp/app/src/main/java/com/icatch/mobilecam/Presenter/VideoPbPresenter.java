@@ -42,6 +42,7 @@ import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.VideoPbView;
 import com.icatch.mobilecam.ui.RemoteFileHelper;
+import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.ui.appdialog.SingleDownloadDialog;
 import com.icatch.mobilecam.utils.ConvertTools;
 import com.icatch.mobilecam.utils.MediaRefresh;
@@ -974,6 +975,30 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         } else {
             streamStablization.disableStablization();
         }
+    }
+
+    public void setSdCardEventListener() {
+        GlobalInfo.getInstance().setOnEventListener(new GlobalInfo.OnEventListener() {
+            @Override
+            public void eventListener(int sdkEventId) {
+                switch (sdkEventId){
+                    case SDKEvent.EVENT_SDCARD_REMOVED:
+//                        stopVideoStream();
+                        videoStreaming.stopForSdRemove();
+                        RemoteFileHelper.getInstance().clearAllFileList();
+                        AppDialog.showDialogWarn(activity, R.string.dialog_card_removed_and_back, false,new AppDialog.OnDialogSureClickListener() {
+                            @Override
+                            public void onSure() {
+                                back();
+                            }
+                        });
+                        break;
+//                    case SDKEvent.EVENT_SDCARD_INSERT:
+//                        MyToast.show(activity,R.string.dialog_card_inserted);
+//                        break;
+                }
+            }
+        });
     }
 }
 

@@ -28,7 +28,7 @@ public class SingleDownloadDialog {
         this.curVideoFile = iCatchFile;
         builder = new AlertDialog.Builder(context);
         View contentView = View.inflate(context, R.layout.single_download_content_dialog, null);
-        View titleView = View.inflate(context, R.layout.download_dialog_title, null);
+        View titleView = View.inflate(context, R.layout.download_single_dialog_title, null);
         exitBtn = (ImageButton) titleView.findViewById(R.id.exit);
         fileNameTxv = (TextView) contentView.findViewById(R.id.fileName);
         fileDownloadStatus = (TextView) contentView.findViewById(R.id.downloadStatus);

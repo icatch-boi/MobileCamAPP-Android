@@ -13,7 +13,8 @@ import com.icatch.mobilecam.R;
 public class CustomDownloadDialog {
     private TextView message;
     private ListView downloadStatus;
-    private ImageButton exit;
+    //private ImageButton exit;
+    private TextView cancelAllTxv;
     AlertDialog.Builder builder;
     AlertDialog alertDialog;
 
@@ -25,7 +26,7 @@ public class CustomDownloadDialog {
         builder = new AlertDialog.Builder(context);
         View contentView = View.inflate(context, R.layout.download_content_dialog, null);
         View titleView = View.inflate(context, R.layout.download_dialog_title, null);
-        exit = (ImageButton) titleView.findViewById(R.id.exit);
+        cancelAllTxv = (TextView) titleView.findViewById(R.id.cancel_all_txv);
         downloadStatus = (ListView) contentView.findViewById(R.id.downloadStatus);
         message = (TextView) contentView.findViewById(R.id.message);
         downloadStatus.setAdapter(adapter);
@@ -53,7 +54,7 @@ public class CustomDownloadDialog {
 
     public void setBackBtnOnClickListener(View.OnClickListener onClickListener){
         if(onClickListener != null){
-            exit.setOnClickListener(onClickListener);
+            cancelAllTxv.setOnClickListener(onClickListener);
         }
     }
 

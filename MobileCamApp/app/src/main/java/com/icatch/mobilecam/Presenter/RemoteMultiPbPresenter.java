@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.icatch.mobilecam.Function.CameraAction.PbDownloadManager;
+import com.icatch.mobilecam.Function.SDKEvent;
 import com.icatch.mobilecam.Listener.OnStatusChangedListener;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.MyCamera.CameraManager;
@@ -14,6 +15,7 @@ import com.icatch.mobilecam.Presenter.Interface.BasePresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.CameraProperties;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
+import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.data.Mode.OperationMode;
 import com.icatch.mobilecam.data.PropertyId.PropertyId;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
@@ -60,6 +62,13 @@ public class RemoteMultiPbPresenter extends BasePresenter {
     public void loadViewPager() {
         RemoteFileHelper.getInstance().initSupportCapabilities();
         initViewpager();
+        initEditLayout();
+    }
+
+    public void initEditLayout(){
+        boolean isSupportSegmentedLoading = RemoteFileHelper.getInstance().isSupportSegmentedLoading();
+        multiPbView.setSelectBtnVisibility(isSupportSegmentedLoading?View.GONE:View.VISIBLE);
+        multiPbView.setSelectNumTextVisibility(isSupportSegmentedLoading?View.GONE:View.VISIBLE);
     }
 
     public void reset() {
@@ -238,8 +247,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
         }
     }
 
-    public void setFileFilter(FileFilter fileFilter) {
-        RemoteFileHelper.getInstance().setFileFilter(fileFilter);
+    private void reloadFileList(){
         RemoteFileHelper.getInstance().clearAllFileList();
         if (fragments != null && fragments.size() > 0) {
             BaseMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
@@ -247,5 +255,28 @@ public class RemoteMultiPbPresenter extends BasePresenter {
                 fragment.loadPhotoWall();
             }
         }
+    }
+
+    public void setFileFilter(FileFilter fileFilter) {
+        RemoteFileHelper.getInstance().setFileFilter(fileFilter);
+        reloadFileList();
+    }
+
+    public void setSdCardEventListener() {
+        GlobalInfo.getInstance().setOnEventListener(new GlobalInfo.OnEventListener() {
+            @Override
+            public void eventListener(int sdkEventId) {
+                switch (sdkEventId){
+                    case SDKEvent.EVENT_SDCARD_REMOVED:
+                        MyToast.show(activity,R.string.dialog_card_removed);
+                        reloadFileList();
+                        break;
+                    case SDKEvent.EVENT_SDCARD_INSERT:
+                        MyToast.show(activity,R.string.dialog_card_inserted);
+                        reloadFileList();
+                        break;
+                }
+            }
+        });
     }
 }

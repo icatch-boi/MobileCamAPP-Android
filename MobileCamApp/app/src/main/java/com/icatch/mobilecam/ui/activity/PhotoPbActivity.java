@@ -173,6 +173,7 @@ public class PhotoPbActivity extends AppCompatActivity implements PhotoPbView {
         super.onResume();
         presenter.initView();
         presenter.submitAppInfo();
+        presenter.setSdCardEventListener();
     }
 
     @Override
