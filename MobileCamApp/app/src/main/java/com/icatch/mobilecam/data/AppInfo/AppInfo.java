@@ -17,13 +17,14 @@ import java.util.List;
  */
 public class AppInfo {
     public static final String APP_PATH = "/MobileCam/";
-    public static final String APP_VERSION = "V1.2.0_beta19";
-    public static final String SDK_VERSION = "V3.6.0.28";
+    public static final String APP_VERSION = "V1.2.0_beta22";
+    public static final String SDK_VERSION = "V3.6.0.29";
     public static final String SDK_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_SDK_Log/";
     public static final String APP_LOG_DIRECTORY_PATH = APP_PATH  + "MobileCam_APP_Log/";
     public static final String PROPERTY_CFG_FILE_NAME = "netconfig.properties";
     public static final String STREAM_OUTPUT_DIRECTORY_PATH = APP_PATH + "Resoure/Raw/";
     public static final String PROPERTY_CFG_DIRECTORY_PATH = APP_PATH + "Resoure/";
+    public static final String DOWNLOAD_PATH = "/DCIM/MobileCam/";
     public static final String DOWNLOAD_PATH_PHOTO = "/DCIM/MobileCam/photo/";
     public static final String DOWNLOAD_PATH_VIDEO = "/DCIM/MobileCam/video/";
     public static final String AUTO_DOWNLOAD_PATH = "/DCIM/MobileCam/photo/";

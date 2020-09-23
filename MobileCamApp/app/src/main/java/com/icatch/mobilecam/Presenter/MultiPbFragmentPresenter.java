@@ -171,7 +171,7 @@ public class MultiPbFragmentPresenter extends BasePresenter {
                 } else {
                     pbItemInfoList.clear();
                     List<MultiPbItemInfo> temp = RemoteFileHelper.getInstance().getLocalFileList(fileType);
-                    if (temp != null && temp.size() > 0) {
+                    if (temp != null) {
                         pbItemInfoList.addAll(temp);
                     } else {
                         resetCurIndex();

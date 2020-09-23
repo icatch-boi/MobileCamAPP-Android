@@ -124,6 +124,7 @@ public class RemoteMultiPbActivity extends AppCompatActivity implements MultiPbV
     protected void onResume() {
         super.onResume();
         presenter.submitAppInfo();
+        presenter.setSdCardEventListener();
         AppLog.d(TAG, "onResume()");
     }
 

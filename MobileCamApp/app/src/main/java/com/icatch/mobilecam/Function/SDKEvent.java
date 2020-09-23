@@ -347,7 +347,8 @@ public class SDKEvent {
         @Override
         public void eventNotify(ICatchCamEvent arg0) {
             // TODO Auto-generated method stub
-            handler.obtainMessage(EVENT_BATTERY_ELETRIC_CHANGED).sendToTarget();
+            AppLog.i(TAG, "--------------receive event:BatteryStateListener intValue1:"+ arg0.getIntValue1() + " intValue2:" + arg0.getIntValue2());
+            handler.obtainMessage(EVENT_BATTERY_ELETRIC_CHANGED,arg0.getIntValue1(),0).sendToTarget();
         }
     }
 

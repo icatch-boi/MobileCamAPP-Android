@@ -232,6 +232,7 @@ public class VideoPbActivity extends AppCompatActivity implements VideoPbView {
     protected void onResume() {
         super.onResume();
         presenter.submitAppInfo();
+        presenter.setSdCardEventListener();
     }
 
     @Override

@@ -26,17 +26,22 @@ import java.util.List;
 public class DownloadManagerAdapter extends BaseAdapter {
     private String TAG = "DownloadManagerAdapter";
     private Context context;
-    private HashMap<ICatchFile, DownloadInfo> chooseListMap;
+    private HashMap<Integer, DownloadInfo> chooseListMap;
     private List<ICatchFile> actList;
     private Handler handler;
-    private boolean isDownloadComplete = false;
+    private OnCancelBtnClickListener onCancelBtnClickListener;
 
-    public DownloadManagerAdapter(Context context, HashMap<ICatchFile, DownloadInfo> downloadDataList,
-                                  List<ICatchFile> actList, Handler handler) {
+
+
+    public DownloadManagerAdapter(Context context, HashMap<Integer, DownloadInfo> downloadDataList, List<ICatchFile> actList, Handler handler) {
         this.context = context;
         this.chooseListMap = downloadDataList;
         this.actList = actList;
         this.handler = handler;
+    }
+
+    public void setOnCancelBtnClickListener(OnCancelBtnClickListener onCancelBtnClickListener) {
+        this.onCancelBtnClickListener = onCancelBtnClickListener;
     }
 
     /*
@@ -87,7 +92,6 @@ public class DownloadManagerAdapter extends BaseAdapter {
         if (position >= actList.size()) {
             return convertView;
         }
-        isDownloadComplete = false;
         final ImageButton cancelImv = (ImageButton) convertView.findViewById(R.id.doAction);
         TextView fileName = (TextView) convertView.findViewById(R.id.fileName);
         TextView downloadStatus = (TextView) convertView.findViewById(R.id.downloadStatus);
@@ -96,7 +100,7 @@ public class DownloadManagerAdapter extends BaseAdapter {
 //        ProgressBar processBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
         NumberProgressBar numberProgressBar = (NumberProgressBar) convertView.findViewById(R.id.numberbar);
         final ICatchFile downloadFile = actList.get(position);
-        final DownloadInfo downloadInfo = chooseListMap.get(downloadFile);
+        final DownloadInfo downloadInfo = chooseListMap.get(downloadFile.getFileHandle());
 //        processBar.setProgress(downloadInfo.progress);
 //        numberProgressBar.incrementProgressBy(downloadInfo.progress);
         numberProgressBar.setProgress(downloadInfo.progress);
@@ -104,31 +108,35 @@ public class DownloadManagerAdapter extends BaseAdapter {
         String curFileLength = df.format(downloadInfo.curFileLength / 1024.0 / 1024) + "M";
         String fileSize = df.format(downloadInfo.fileSize / 1024.0 / 1024) + "M";
 
-        if (downloadInfo.progress >= 100) {
-
+        if (downloadInfo.progress >= 100 || downloadInfo.isDone()) {
             downloadStatus.setText(curFileLength + "/" + fileSize);
             cancelImv.setImageResource(R.drawable.ic_done_cyan);
             cancelImv.setClickable(false);
-            isDownloadComplete = true;
         } else if (downloadInfo.progress <= 0) {
             downloadStatus.setText(curFileLength + "/" + fileSize);
             cancelImv.setImageResource(R.drawable.ic_close_black);
-            isDownloadComplete = false;
         } else {
             downloadStatus.setText(curFileLength + "/" + fileSize);
             cancelImv.setImageResource(R.drawable.ic_close_black);
-            isDownloadComplete = false;
         }
         cancelImv.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                if (downloadInfo.progress < 100) {
-                    handler.obtainMessage(AppMessage.MESSAGE_CANCEL_DOWNLOAD_SINGLE, 0, 0, downloadFile).sendToTarget();
+                if(onCancelBtnClickListener != null){
+                    if (downloadInfo.progress < 100) {
+//                    handler.obtainMessage(AppMessage.MESSAGE_CANCEL_DOWNLOAD_SINGLE, 0, 0, downloadFile).sendToTarget();
+                        onCancelBtnClickListener.onClick(downloadFile);
+                    }
                 }
+
             }
         });
         return convertView;
+    }
+
+    public interface OnCancelBtnClickListener{
+        void onClick(ICatchFile downloadFile);
     }
 }

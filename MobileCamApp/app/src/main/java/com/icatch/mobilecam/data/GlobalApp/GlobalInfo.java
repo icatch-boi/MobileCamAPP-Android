@@ -49,6 +49,8 @@ public class GlobalInfo {
     private HashMap<Integer, Integer> commonPhotoPositionMap;
     ScreenListener listener;
     private HashMap<Integer, Integer> videoPositionMap;
+    private OnEventListener onEventListener;
+
 
 
     public static GlobalInfo getInstance() {
@@ -56,6 +58,10 @@ public class GlobalInfo {
             instance = new GlobalInfo();
         }
         return instance;
+    }
+
+    public void setOnEventListener(OnEventListener onEventListener) {
+        this.onEventListener = onEventListener;
     }
 
     public Context getAppContext() {
@@ -227,7 +233,21 @@ public class GlobalInfo {
                     break;
                 case SDKEvent.EVENT_SDCARD_REMOVED:
                     AppLog.i( TAG, "receive EVENT_SDCARD_REMOVED" );
-                    AppDialog.showDialogWarn( activity, R.string.dialog_card_removed );
+                    //AppDialog.showDialogWarn( activity, R.string.dialog_card_removed );
+                    if(onEventListener!=null){
+                        onEventListener.eventListener(SDKEvent.EVENT_SDCARD_REMOVED);
+                    }
+                    break;
+                case SDKEvent.EVENT_SDCARD_INSERT:
+                    AppLog.i( TAG, "receive EVENT_SDCARD_INSERT" );
+                    //AppDialog.showDialogWarn( activity, R.string.dialog_card_removed );
+                    if(onEventListener!=null){
+                        onEventListener.eventListener(SDKEvent.EVENT_SDCARD_INSERT);
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
     };
@@ -236,7 +256,7 @@ public class GlobalInfo {
         if (sdkEvent == null) {
             sdkEvent = new SDKEvent( globalHandler );
         }
-        sdkEvent.addEventListener( ICatchCamEventID.ICH_CAM_EVENT_CONNECTION_DISCONNECTED );
+        sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_CONNECTION_DISCONNECTED );
     }
 
     public void addEventListener(int eventId){
@@ -250,5 +270,9 @@ public class GlobalInfo {
         if (sdkEvent != null) {
             sdkEvent.delEventListener(eventId);
         }
+    }
+
+    public interface OnEventListener{
+        void eventListener(int sdkEventId);
     }
 }

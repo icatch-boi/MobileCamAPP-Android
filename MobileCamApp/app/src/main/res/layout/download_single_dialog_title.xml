@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@drawable/actionbar_border"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/download_manager"
+        android:padding="8dp"
+        android:textSize="@dimen/first_title_size"
+        android:textColor="@color/primary_light"/>
+<!--    <TextView-->
+<!--        android:id="@+id/cancel_all_txv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:padding="10dp"-->
+<!--        android:text="@string/cancel_all"-->
+<!--        android:textColor="@color/accent"/>-->
+    <ImageButton
+        android:id="@+id/exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:src="@drawable/ic_close_black"
+        android:background="@drawable/selector_transparent2gray"
+        />
+
+</RelativeLayout>

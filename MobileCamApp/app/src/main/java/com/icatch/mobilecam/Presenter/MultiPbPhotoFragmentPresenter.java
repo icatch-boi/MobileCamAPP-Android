@@ -280,7 +280,7 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
                         activity.startActivity(intent);
                     MyProgressDialog.closeProgressDialog();
                 }
-            }, 500);
+            }, 1500);
         }
     }
 

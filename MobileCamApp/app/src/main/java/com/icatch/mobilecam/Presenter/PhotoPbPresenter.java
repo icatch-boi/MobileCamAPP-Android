@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 
+import com.icatch.mobilecam.Function.SDKEvent;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.MyCamera.CameraManager;
 import com.icatch.mobilecam.Presenter.Interface.BasePresenter;
@@ -27,6 +28,7 @@ import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.FileOperation;
 import com.icatch.mobilecam.SdkApi.PanoramaPhotoPlayback;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
+import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.data.Mode.TouchMode;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
@@ -36,7 +38,9 @@ import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.PhotoPbView;
 import com.icatch.mobilecam.ui.RemoteFileHelper;
 import com.icatch.mobilecam.ui.adapter.PhotoPbViewPagerAdapter;
+import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.utils.MediaRefresh;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.FileOper;
 import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
@@ -243,20 +247,19 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
         public void run() {
             AppLog.d(TAG, "begin DownloadThread");
             AppInfo.isDownloading = true;
-            String path;
-
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                path = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO;
-            } else {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        MyProgressDialog.closeProgressDialog();
-                        MyToast.show(activity, R.string.message_download_failed);
-                    }
-                });
-                return;
-            }
+            String path = StorageUtil.getRootPath(activity) + AppInfo.DOWNLOAD_PATH_PHOTO;
+//            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//                path = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO;
+//            } else {
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        MyProgressDialog.closeProgressDialog();
+//                        MyToast.show(activity, R.string.message_download_failed);
+//                    }
+//                });
+//                return;
+//            }
             String fileName = fileList.get(curIdx).getFileName();
             AppLog.d(TAG, "------------fileName =" + fileName);
             FileOper.createDirectory(path);
@@ -290,7 +293,7 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
             MediaRefresh.scanFileAsync(activity, downloadingFilename);
             AppLog.d(TAG, "end downloadFile temp =" + temp);
             AppInfo.isDownloading = false;
-            final String message = activity.getResources().getString(R.string.message_download_to).replace("$1$", AppInfo.DOWNLOAD_PATH_PHOTO);
+            final String message = activity.getResources().getString(R.string.message_download_to).replace("$1$", path);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -372,7 +375,7 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
             public void onClick(DialogInterface dialog, int whichButton) {
                 AppLog.d(TAG, "showProgressDialog");
                 downloadProcess = 0;
-                if (SystemInfo.getSDFreeSize() < fileList.get(curPhotoIdx).getFileSizeInteger()) {
+                if (SystemInfo.getSDFreeSize(activity) < fileList.get(curPhotoIdx).getFileSizeInteger()) {
                     dialog.dismiss();
                     MyToast.show(activity, R.string.text_sd_card_memory_shortage);
                 } else {
@@ -657,6 +660,28 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
         loadPanoramaImage();
+    }
+
+    public void setSdCardEventListener() {
+        GlobalInfo.getInstance().setOnEventListener(new GlobalInfo.OnEventListener() {
+            @Override
+            public void eventListener(int sdkEventId) {
+                switch (sdkEventId){
+                    case SDKEvent.EVENT_SDCARD_REMOVED:
+                        RemoteFileHelper.getInstance().clearAllFileList();
+                        AppDialog.showDialogWarn(activity, R.string.dialog_card_removed_and_back_photo_pb, false,new AppDialog.OnDialogSureClickListener() {
+                            @Override
+                            public void onSure() {
+                                back();
+                            }
+                        });
+                        break;
+//                    case SDKEvent.EVENT_SDCARD_INSERT:
+//                        MyToast.show(activity,R.string.dialog_card_inserted);
+//                        break;
+                }
+            }
+        });
     }
 }
 

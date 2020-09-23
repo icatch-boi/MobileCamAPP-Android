@@ -106,7 +106,7 @@ public class ThumbnailOperation {
         return bitmap;
     }
 
-    public static int getBatteryLevelIcon(int batteryLevel) {
+    public static int getBatteryLevelIcon02(int batteryLevel) {
         AppLog.d(TAG, "current setBatteryLevelIcon= " + batteryLevel);
         int resId = -1;
         if (batteryLevel < 20 && batteryLevel >= 0) {
@@ -121,5 +121,36 @@ public class ThumbnailOperation {
             resId = R.drawable.ic_battery_charging_full_green_24dp;
         }
         return resId;
+    }
+
+    public static int getBatteryLevelIcon(int batteryPower) {
+        AppLog.d(TAG, "current setBatteryLevelIcon= " + batteryPower);
+        int drawableId = -1;
+        if (batteryPower <= 0) {
+            drawableId = R.drawable.video_buttery_0;
+        } else if (batteryPower > 0 && batteryPower <= 10) {
+            drawableId = R.drawable.video_buttery_10;
+        } else if (batteryPower > 10 && batteryPower <= 20) {
+            drawableId = R.drawable.video_buttery_20;
+        } else if (batteryPower > 20 && batteryPower <= 30) {
+            drawableId = R.drawable.video_buttery_30;
+        } else if (batteryPower > 30 && batteryPower <= 40) {
+            drawableId = R.drawable.video_buttery_40;
+        } else if (batteryPower > 40 && batteryPower <= 50) {
+            drawableId = R.drawable.video_buttery_50;
+        } else if(batteryPower > 50 && batteryPower <= 60){
+            drawableId = R.drawable.video_buttery_60;
+        } else if(batteryPower > 60 && batteryPower <= 70){
+            drawableId = R.drawable.video_buttery_70;
+        } else if(batteryPower > 70 && batteryPower <= 80){
+            drawableId = R.drawable.video_buttery_80;
+        } else if(batteryPower > 80 && batteryPower <= 90){
+            drawableId = R.drawable.video_buttery_90;
+        } else if(batteryPower > 90 && batteryPower <= 100){
+            drawableId = R.drawable.video_buttery_100;
+        } else {
+            drawableId = R.drawable.video_buttery_100;
+        }
+        return drawableId;
     }
 }

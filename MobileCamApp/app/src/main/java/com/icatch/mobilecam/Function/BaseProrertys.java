@@ -34,6 +34,10 @@ public class BaseProrertys {
     private PropertyTypeInteger timeLapseMode;
     private PropertyTypeInteger exposureCompensation;
     private PropertyTypeInteger videoFileLength;
+    private PropertyTypeInteger cameraSwitch;
+    private PropertyTypeInteger screenSaver;
+    private PropertyTypeInteger autoPowerOff;
+    private PropertyTypeInteger fastMotionMovie;
 
     public BaseProrertys(CameraProperties cameraProperty) {
         this.cameraProperty = cameraProperty;
@@ -69,8 +73,24 @@ public class BaseProrertys {
                 .getAppContext());
         exposureCompensation = new PropertyTypeInteger(cameraProperty,PropertyId.EXPOSURE_COMPENSATION, GlobalInfo.getInstance().getAppContext());
         videoFileLength = new PropertyTypeInteger(cameraProperty,PropertyId.VIDEO_FILE_LENGTH, GlobalInfo.getInstance().getAppContext());
+        cameraSwitch = new PropertyTypeInteger(cameraProperty,PropertyHashMapStatic.cameraSwitchMap, PropertyId.CAMERA_SWITCH, GlobalInfo.getInstance().getAppContext());
+
+        screenSaver = new PropertyTypeInteger(cameraProperty,PropertyId.SCREEN_SAVER, GlobalInfo.getInstance().getAppContext());
+        autoPowerOff = new PropertyTypeInteger(cameraProperty,PropertyId.AUTO_POWER_OFF, GlobalInfo.getInstance().getAppContext());
+        fastMotionMovie = new PropertyTypeInteger(cameraProperty,PropertyId.FAST_MOTION_MOVIE, GlobalInfo.getInstance().getAppContext());
         AppLog.i(TAG, "End initProperty");
     }
+
+    public PropertyTypeInteger getScreenSaver() {
+        return screenSaver;
+    }
+
+    public PropertyTypeInteger getAutoPowerOff() {
+        return autoPowerOff;
+    }
+
+    public PropertyTypeInteger getCameraSwitch() { return cameraSwitch;  }
+
 
     public PropertyTypeInteger getExposureCompensation() {
         return exposureCompensation;
@@ -78,6 +98,10 @@ public class BaseProrertys {
 
     public PropertyTypeInteger getVideoFileLength() {
         return videoFileLength;
+    }
+
+    public PropertyTypeInteger getFastMotionMovie() {
+        return fastMotionMovie;
     }
 
     public PropertyTypeInteger getWhiteBalance() {

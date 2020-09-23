@@ -2,6 +2,7 @@ package com.icatch.mobilecam.data.Hash;
 
 import android.annotation.SuppressLint;
 
+import com.icatch.mobilecam.data.type.CameraSwitch;
 import com.icatch.mobilecam.data.type.SlowMotion;
 import com.icatch.mobilecam.data.type.TimeLapseDuration;
 import com.icatch.mobilecam.data.type.TimeLapseMode;
@@ -36,6 +37,8 @@ public class PropertyHashMapStatic {
     public static HashMap<Integer, ItemInfo> slowMotionMap = new HashMap<Integer, ItemInfo>();
     @SuppressLint("UseSparseArrays")
     public static HashMap<Integer, ItemInfo> upsideMap = new HashMap<Integer, ItemInfo>();
+    @SuppressLint("UseSparseArrays")
+    public static HashMap<Integer, ItemInfo> cameraSwitchMap = new HashMap<Integer, ItemInfo>();
     public static PropertyHashMapStatic propertyHashMap;
 
     public static PropertyHashMapStatic getInstance() {
@@ -55,7 +58,14 @@ public class PropertyHashMapStatic {
         initElectricityFrequencyMap();
         initDateStampMap();
         ininTimeLapseMode();
+        initCameraSwitch();
         AppLog.i(tag, "End initPropertyHashMap");
+    }
+
+    private void initCameraSwitch() {
+        // TODO Auto-generated method stub
+        cameraSwitchMap.put(CameraSwitch.CAMERA_FRONT, new ItemInfo(R.string.setting_camera_front, null, 0));
+        cameraSwitchMap.put(CameraSwitch.CAMERA_BACK, new ItemInfo(R.string.setting_camera_back, null, 0));
     }
 
     private void ininTimeLapseMode() {

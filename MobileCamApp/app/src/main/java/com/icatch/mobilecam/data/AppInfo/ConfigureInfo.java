@@ -1,15 +1,14 @@
 package com.icatch.mobilecam.data.AppInfo;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.Log.SdkLog;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.FileOper;
-import com.icatchtek.control.customer.ICatchCameraConfig;
 import com.icatchtek.pancam.customer.ICatchPancamConfig;
-import com.icatchtek.reliant.customer.exception.IchNoSuchPathException;
-import com.icatchtek.reliant.customer.exception.IchPermissionDeniedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,8 +51,8 @@ public class ConfigureInfo {
 
     public void initCfgInfo(Context context) {
         AppLog.d(TAG, "readCfgInfo..........");
-        FileOper.createDirectory( Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO );
-        FileOper.createDirectory( Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO );
+        FileOper.createDirectory( StorageUtil.getRootPath(context) + AppInfo.DOWNLOAD_PATH_PHOTO );
+        FileOper.createDirectory( StorageUtil.getRootPath(context) + AppInfo.DOWNLOAD_PATH_VIDEO );
         String directoryPath = context.getExternalCacheDir() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;
         AppLog.d(TAG, "readCfgInfo..........directoryPath=" + directoryPath);
         String fileName = AppInfo.PROPERTY_CFG_FILE_NAME;
@@ -179,7 +178,8 @@ public class ConfigureInfo {
         }
 
         if (enableRender != null) {
-            if (enableRender.equals("true")) {
+            //sdk 渲染，
+            if (enableRender.equals("true") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AppInfo.enableRender = true;
             } else {
                 AppInfo.enableRender = false;

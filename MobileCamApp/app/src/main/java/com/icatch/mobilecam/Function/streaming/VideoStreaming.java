@@ -204,6 +204,30 @@ public class VideoStreaming {
         return ret;
     }
 
+    public boolean stopForSdRemove() {
+        AppLog.d(TAG, "stopStreaming enableRender=" + enableRender + " isStreaming = " + isStreaming);
+        AppLog.i(TAG, "stopMPreview preview");
+        if (!enableRender) {
+            if (mjpgDecoderThread != null) {
+                mjpgDecoderThread.stop();
+                AppLog.i(TAG, "start stopMPreview mjpgDecoderThread.isAlive() =" + mjpgDecoderThread.isAlive());
+            }
+            if (h264DecoderThread != null) {
+                h264DecoderThread.stop();
+                AppLog.i(TAG, "start stopMPreview h264DecoderThread.isAlive() =" + h264DecoderThread.isAlive());
+            }
+            AppLog.i(TAG, "end preview");
+        }
+        // stopPreview pv streaming
+        if (!isStreaming) {
+            AppLog.d(TAG, "pv streaming already stoped");
+            return true;
+        }
+        boolean ret = videoPlayback.stop();
+        isStreaming = false;
+        return ret;
+    }
+
     public boolean release() {
         AppLog.d(TAG, "pancamGLRelease enableRender=" + enableRender + " needRelease = " + needRelease);
         boolean ret = false;

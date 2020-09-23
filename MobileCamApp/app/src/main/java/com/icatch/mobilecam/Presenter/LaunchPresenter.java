@@ -51,6 +51,7 @@ import com.icatch.mobilecam.ui.activity.PvParamSettingActivity;
 import com.icatch.mobilecam.ui.activity.RemoteMultiPbActivity;
 import com.icatch.mobilecam.ui.adapter.CameraSlotAdapter;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.MFileTools;
 import com.icatch.mobilecam.utils.imageloader.ICatchtekImageDownloader;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
@@ -282,26 +283,27 @@ public class LaunchPresenter extends BasePresenter {
     }
 
     public void loadLocalThumbnails02() {
-        String photoPath = MFileTools.getNewestPhotoFromDirectory(Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO);
+        String rootPath = StorageUtil.getRootPath(activity);
+        String photoPath = MFileTools.getNewestPhotoFromDirectory(rootPath + AppInfo.DOWNLOAD_PATH_PHOTO);
         if (photoPath != null) {
             launchView.setLocalPhotoThumbnail(photoPath);
         }else {
             launchView.loadDefaultLocalPhotoThumbnail();
         }
-        if (MFileTools.getPhotosSize(Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO) > 0) {
+        if (MFileTools.getPhotosSize(rootPath + AppInfo.DOWNLOAD_PATH_PHOTO) > 0) {
             launchView.setNoPhotoFilesFoundVisibility(View.GONE);
             launchView.setPhotoClickable(true);
         } else {
             launchView.setNoPhotoFilesFoundVisibility(View.VISIBLE);
             launchView.setPhotoClickable(false);
         }
-        String videoPath = MFileTools.getNewestVideoFromDirectory(Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO);
+        String videoPath = MFileTools.getNewestVideoFromDirectory(rootPath + AppInfo.DOWNLOAD_PATH_VIDEO);
         if (videoPath != null) {
             launchView.setLocalVideoThumbnail(videoPath);
         }else{
             launchView.loadDefaultLocalVideoThumbnail();
         }
-        if (MFileTools.getVideosSize(Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO) > 0) {
+        if (MFileTools.getVideosSize(rootPath + AppInfo.DOWNLOAD_PATH_VIDEO) > 0) {
             launchView.setNoVideoFilesFoundVisibility(View.GONE);
             launchView.setVideoClickable(true);
         } else {

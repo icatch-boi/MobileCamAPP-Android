@@ -67,11 +67,12 @@ import com.icatch.mobilecam.ui.activity.LoginFacebookActivity;
 import com.icatch.mobilecam.ui.activity.LoginGoogleActivity;
 import com.icatch.mobilecam.ui.adapter.SettingListAdapter;
 import com.icatch.mobilecam.utils.ConvertTools;
-import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatch.mobilecam.utils.MediaRefresh;
 import com.icatch.mobilecam.utils.PanoramaTools;
 import com.icatch.mobilecam.utils.QRCode;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.TimeTools;
+import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatchtek.pancam.customer.exception.IchGLSurfaceNotSetException;
 import com.icatchtek.pancam.customer.surface.ICatchSurfaceContext;
 import com.icatchtek.pancam.customer.type.ICatchGLCredential;
@@ -259,7 +260,7 @@ public class USBPreviewPresenter extends BasePresenter implements SensorEventLis
     }
 
     private boolean checkMemory() {
-        long size = SystemInfo.getSDFreeSize();
+        long size = SystemInfo.getSDFreeSize(activity);
         if (size >= 1024 * 1024 * 1024) {
             return true;
         } else {
@@ -404,7 +405,7 @@ public class USBPreviewPresenter extends BasePresenter implements SensorEventLis
     private boolean startMovieRecord() {
         boolean ret = false;
         if (panoramaPreviewPlayback != null) {
-            curRecordPath = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO + System.currentTimeMillis() + "_rec.mp4";
+            curRecordPath = StorageUtil.getRootPath(activity) + AppInfo.DOWNLOAD_PATH_VIDEO + System.currentTimeMillis() + "_rec.mp4";
             ret = panoramaPreviewPlayback.startMovieRecord(curRecordPath, false);
             MediaRefresh.notifySystemToScan(curRecordPath, activity);
         }
@@ -581,7 +582,7 @@ public class USBPreviewPresenter extends BasePresenter implements SensorEventLis
     }
 
     public void saveImage(ICatchFrameBuffer buffer) {
-        String path = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO;
+        String path = StorageUtil.getRootPath(activity) + AppInfo.DOWNLOAD_PATH_PHOTO;
         File directory = null;
 
         if (path != null) {

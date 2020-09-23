@@ -437,4 +437,11 @@ public class CameraAction {
         AppLog.i(TAG, "end changePreviewMode ret = " + ret);
         return ret;
     }
+
+    public int getCurrentCameraMode(){
+        AppLog.i(TAG, "begin getCurrentCameraMode");
+        int ret = cameraControl.getCurrentCameraMode();
+        AppLog.i(TAG, "end getCurrentCameraMode ret = " + ret);
+        return ret;
+    }
 }

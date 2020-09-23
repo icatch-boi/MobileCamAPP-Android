@@ -132,11 +132,11 @@ public class ImageLoaderConfig {
 
     public static void stopLoad(){
         ImageLoader.getInstance().stop();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(300);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 //        if(taskExecutor != null){
 //            taskExecutor.shutdown();
 //            while (true){

@@ -447,4 +447,21 @@
     <string name="content_privacy_policy_1">Please read carefully and fully understand the terms and conditions, including but not limited to: in order to provide you with basic services, we need to collect your device information, operation log and other personal information. You can read the </string>
     <string name="content_privacy_policy_2">Privacy Policy and User Agreement</string>
     <string name="content_privacy_policy_3"> for more information.If you agree, please click "Agree" to enjoy our services.</string>
+    <string name="cancel_all">Cancel all</string>
+    <string name="download_cancel_all_tips">Do you want to cancel all file downloads?</string>
+    <string name="dialog_card_removed_and_back">SD卡已移除，将退出视频播放。</string>
+    <string name="dialog_card_removed_and_back_photo_pb">SD已移除，将退出图片预览</string>
+    <string name="setting_title_screen_saver">Screen saver</string>
+    <string name="setting_title_auto_power_off">Auto power off</string>
+    <string name="setting_title_power_on_auto_record">Power-on auto record</string>
+    <string name="setting_title_fast_motion_movie">Fast motion movie</string>
+    <string name="setting_title_wind_noise_reduction">Wind Noise Reduction</string>
+    <string name="setting_title_camera_switch">Camera Switch</string>
+    <string name="setting_camera_front">Front Camera</string>
+    <string name="setting_camera_back">Back Camera</string>
+    <string name="setting_storage_location">Storage location</string>
+    <string name="setting_internal_storage">Internal storage</string>
+    <string name="setting_sd_card_storage">SD card</string>
+    <string name="off">OFF</string>
+
 </resources>
