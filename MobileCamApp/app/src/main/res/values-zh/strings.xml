@@ -87,7 +87,7 @@ $3$"</string>
     <string name="dialog_wifi_lost">无法连接到Wi-Fi ，请重试。</string>
     <string name="dialog_btn_reconnect">重新连接</string>
     <string name="dialog_btn_continue">继续</string>
-    <string name="dialog_btn_exit">退出...</string>
+    <string name="dialog_btn_exit">退出</string>
     <string name="dialog_not_enough_space">没有足够的存储空间，请删除一些文件，然后重新启动。</string>
     <string name="dialog_recording_card_full">警告： SD卡已满，录像停止。</string>
     <string name="dialog_card_error">SD卡错误！</string>
@@ -96,7 +96,7 @@ $3$"</string>
     <string name="dialog_card_removed">SD卡被移除</string>
     <string name="dialog_card_full">SD卡已满</string>
     <string name="dialog_timeout">相机的连接失败，请确保Wi-Fi连接工作。</string>
-    <string name="ok">OK</string>
+    <string name="ok">确定</string>
     <string name="gallery_view_video_not_supported">不支持视频观看</string>
     <string name="gallery_download_video_not_supported">不支持视频下载</string>
     <string name="gallery_no_image">没有文件下载</string>
@@ -366,4 +366,20 @@ $3$"</string>
     <string name="content_privacy_policy_1">请你务必审慎阅读、充分理解各条款，包括但不限于：为了向你提供基本服务，我们需要收集你的设备信息、操作日志等个人信息。你可以阅读</string>
     <string name="content_privacy_policy_2">《隐私政策和用户协议》</string>
     <string name="content_privacy_policy_3">了解详细信息。如你同意，请点击“同意”开始享受我们的服务。</string>
+    <string name="cancel_all">全部取消</string>
+    <string name="download_cancel_all_tips">是否取消所有文件下载？</string>
+    <string name="dialog_card_removed_and_back">SD卡已移除，将退出视频播放。</string>
+    <string name="dialog_card_removed_and_back_photo_pb">SD已移除，将退出图片预览</string>
+    <string name="setting_title_screen_saver">自动熄屏</string>
+    <string name="setting_title_auto_power_off">自动关机</string>
+    <string name="setting_title_power_on_auto_record">开机自动录影</string>
+    <string name="setting_title_fast_motion_movie">快录</string>
+    <string name="setting_title_wind_noise_reduction">降噪</string>
+    <string name="setting_title_camera_switch">摄相头切换</string>
+    <string name="setting_camera_front">前摄相头</string>
+    <string name="setting_camera_back">后摄相头</string>
+    <string name="setting_storage_location">下载文件存储位置</string>
+    <string name="setting_internal_storage">手机内置存储</string>
+    <string name="setting_sd_card_storage">SD卡</string>
+    <string name="off">关闭</string>
 </resources>

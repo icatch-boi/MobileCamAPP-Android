@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    tools:context=".MainActivity"
     android:padding="10dp"
     android:orientation="horizontal"
     android:descendantFocusability="blocksDescendants">
@@ -61,9 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/ic_close_black"
-            android:padding="20dp"
+            android:padding="15dp"
             android:focusable="false"
-            android:background="@drawable/selector_transparent2gray"
+            android:background="@drawable/selector_white"
             />
 
 

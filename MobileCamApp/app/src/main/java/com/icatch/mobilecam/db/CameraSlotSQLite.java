@@ -67,7 +67,9 @@ public class CameraSlotSQLite {
         ContentValues values = new ContentValues();
         //在values中添加内容
         values.put("isOccupied", camSlot.isOccupied);
-        values.put("imageBuffer", camSlot.cameraPhoto);
+        if(camSlot.cameraPhoto != null && camSlot.cameraPhoto.length > 0) {
+            values.put("imageBuffer", camSlot.cameraPhoto);
+        }
         values.put("cameraName", camSlot.cameraName);
         values.put("cameraType", camSlot.cameraType);
 

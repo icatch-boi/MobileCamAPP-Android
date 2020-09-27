@@ -85,7 +85,7 @@ public class PhotoCapture {
             } else {
                 CaptureAudioTask captureAudioTask = new CaptureAudioTask(needCaptureCount, TYPE_BURST_CAPTURE);
                 Timer captureAudioTimer = new Timer(true);
-                captureAudioTimer.schedule(captureAudioTask, delayTime, 280);
+                captureAudioTimer.schedule(captureAudioTask, delayTime, 420);
             }
 
             //start delay audio

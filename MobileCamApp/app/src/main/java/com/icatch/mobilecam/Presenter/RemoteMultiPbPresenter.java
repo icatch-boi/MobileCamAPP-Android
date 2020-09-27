@@ -1,11 +1,14 @@
 package com.icatch.mobilecam.Presenter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.icatch.mobilecam.Function.CameraAction.PbDownloadManager;
+import com.icatch.mobilecam.Function.SDKEvent;
 import com.icatch.mobilecam.Listener.OnStatusChangedListener;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.MyCamera.CameraManager;
@@ -14,18 +17,21 @@ import com.icatch.mobilecam.Presenter.Interface.BasePresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.CameraProperties;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
+import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.data.Mode.OperationMode;
 import com.icatch.mobilecam.data.PropertyId.PropertyId;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
 import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
 import com.icatch.mobilecam.data.type.FileType;
 import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
+import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Fragment.BaseMultiPbFragment;
 import com.icatch.mobilecam.ui.Fragment.RemoteMultiPbFragment;
 import com.icatch.mobilecam.ui.Fragment.RemoteMultiPbPhotoFragment;
 import com.icatch.mobilecam.ui.Interface.MultiPbView;
 import com.icatch.mobilecam.ui.RemoteFileHelper;
+import com.icatch.mobilecam.ui.activity.VideoPbActivity;
 import com.icatch.mobilecam.ui.adapter.ViewPagerAdapter;
 import com.icatch.mobilecam.utils.FileFilter;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
@@ -46,6 +52,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
     ViewPagerAdapter adapter;
     private boolean curSelectAll = false;
     PhotoWallLayoutType curLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
+    Handler handler = new Handler();
 
     public RemoteMultiPbPresenter(Activity activity) {
         super(activity);
@@ -60,6 +67,13 @@ public class RemoteMultiPbPresenter extends BasePresenter {
     public void loadViewPager() {
         RemoteFileHelper.getInstance().initSupportCapabilities();
         initViewpager();
+        initEditLayout();
+    }
+
+    public void initEditLayout(){
+        boolean isSupportSegmentedLoading = RemoteFileHelper.getInstance().isSupportSegmentedLoading();
+        multiPbView.setSelectBtnVisibility(isSupportSegmentedLoading?View.GONE:View.VISIBLE);
+        multiPbView.setSelectNumTextVisibility(isSupportSegmentedLoading?View.GONE:View.VISIBLE);
     }
 
     public void reset() {
@@ -156,9 +170,22 @@ public class RemoteMultiPbPresenter extends BasePresenter {
     }
 
     public void reback() {
+        AppLog.i(TAG,"reback curOperationMode:" + curOperationMode);
         if (curOperationMode == OperationMode.MODE_BROWSE) {
+            MyProgressDialog.showProgressDialog(activity, R.string.wait);
+            MyCamera camera = CameraManager.getInstance().getCurCamera();
+            if(camera != null){
+                camera.setLoadThumbnail(false);
+            }
             ImageLoaderConfig.stopLoad();
-            activity.finish();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    MyProgressDialog.closeProgressDialog();
+                    activity.finish();
+                }
+            }, 1500);
+
         } else if (curOperationMode == OperationMode.MODE_EDIT) {
             curOperationMode = OperationMode.MODE_BROWSE;
             int index = multiPbView.getViewPageIndex();
@@ -217,7 +244,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
                 linkedList.add(temp.iCatchFile);
                 fileSizeTotal += temp.getFileSizeInteger();
             }
-            if (SystemInfo.getSDFreeSize() < fileSizeTotal) {
+            if (SystemInfo.getSDFreeSize(activity) < fileSizeTotal) {
                 MyToast.show(activity, R.string.text_sd_card_memory_shortage);
             } else {
                 quitEditMode();
@@ -238,8 +265,7 @@ public class RemoteMultiPbPresenter extends BasePresenter {
         }
     }
 
-    public void setFileFilter(FileFilter fileFilter) {
-        RemoteFileHelper.getInstance().setFileFilter(fileFilter);
+    private void reloadFileList(){
         RemoteFileHelper.getInstance().clearAllFileList();
         if (fragments != null && fragments.size() > 0) {
             BaseMultiPbFragment fragment = fragments.get(multiPbView.getViewPageIndex());
@@ -247,5 +273,28 @@ public class RemoteMultiPbPresenter extends BasePresenter {
                 fragment.loadPhotoWall();
             }
         }
+    }
+
+    public void setFileFilter(FileFilter fileFilter) {
+        RemoteFileHelper.getInstance().setFileFilter(fileFilter);
+        reloadFileList();
+    }
+
+    public void setSdCardEventListener() {
+        GlobalInfo.getInstance().setOnEventListener(new GlobalInfo.OnEventListener() {
+            @Override
+            public void eventListener(int sdkEventId) {
+                switch (sdkEventId){
+                    case SDKEvent.EVENT_SDCARD_REMOVED:
+                        MyToast.show(activity,R.string.dialog_card_removed);
+                        reloadFileList();
+                        break;
+                    case SDKEvent.EVENT_SDCARD_INSERT:
+                        MyToast.show(activity,R.string.dialog_card_inserted);
+                        reloadFileList();
+                        break;
+                }
+            }
+        });
     }
 }

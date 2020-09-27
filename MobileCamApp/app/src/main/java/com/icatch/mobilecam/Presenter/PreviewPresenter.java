@@ -66,6 +66,7 @@ import com.icatch.mobilecam.data.Mode.LiveMode;
 import com.icatch.mobilecam.data.Mode.PreviewMode;
 import com.icatch.mobilecam.data.Mode.TouchMode;
 import com.icatch.mobilecam.data.PropertyId.PropertyId;
+import com.icatch.mobilecam.data.entity.CameraSlot;
 import com.icatch.mobilecam.data.entity.GoogleToken;
 import com.icatch.mobilecam.data.entity.SettingMenu;
 import com.icatch.mobilecam.data.entity.StreamInfo;
@@ -74,6 +75,7 @@ import com.icatch.mobilecam.data.type.TimeLapseInterval;
 import com.icatch.mobilecam.data.type.TimeLapseMode;
 import com.icatch.mobilecam.data.type.Tristate;
 import com.icatch.mobilecam.data.type.Upside;
+import com.icatch.mobilecam.db.CameraSlotSQLite;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.PreviewView;
@@ -84,6 +86,7 @@ import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.ui.appdialog.AppToast;
 import com.icatch.mobilecam.utils.BitmapTools;
 import com.icatch.mobilecam.utils.ConvertTools;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.FileOper;
 import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatch.mobilecam.utils.PanoramaTools;
@@ -107,6 +110,7 @@ import com.icatchtek.reliant.customer.type.ICatchH264StreamParam;
 import com.icatchtek.reliant.customer.type.ICatchJPEGStreamParam;
 import com.icatchtek.reliant.customer.type.ICatchStreamParam;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -228,10 +232,11 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         } else {
             previewView.setYouTubeLiveLayoutVisibility(View.GONE);
         }
-        int resid = ThumbnailOperation.getBatteryLevelIcon(cameraProperties.getBatteryElectric());
+        int batteryLevel = cameraProperties.getBatteryElectric();
+        int resid = ThumbnailOperation.getBatteryLevelIcon(batteryLevel);
         if (resid > 0) {
             previewView.setBatteryIcon(resid);
-            if (resid == R.drawable.ic_battery_charging_green24dp) {
+            if (batteryLevel <20) {
                 AppDialog.showLowBatteryWarning(activity);
             }
         }
@@ -278,9 +283,6 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 
 
     public void startOrStopCapture() {
-        if (TimeTools.isFastClick()) {
-            return;
-        }
         if (curMode == PreviewMode.APP_STATE_VIDEO_PREVIEW) {
             if (cameraProperties.isSDCardExist() == false) {
                 AppDialog.showDialogWarn(activity, R.string.dialog_card_not_exist);
@@ -494,9 +496,23 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     public void initPreview() {
         AppLog.i(TAG, "initPreview curMode=" + curMode);
         //set min first ,then max;
+        GlobalInfo.getInstance().setOnEventListener(new GlobalInfo.OnEventListener() {
+            @Override
+            public void eventListener(int sdkEventId) {
+                switch (sdkEventId){
+                    case SDKEvent.EVENT_SDCARD_REMOVED:
+                        MyToast.show(activity,R.string.dialog_card_removed);
+                        break;
+                    case SDKEvent.EVENT_SDCARD_INSERT:
+                        MyToast.show(activity,R.string.dialog_card_inserted);
+                        break;
+                }
+            }
+        });
         previewView.setMinZoomRate(1.0f);
         previewView.setMaxZoomRate(cameraProperties.getMaxZoomRatio() * 1.0f);
         previewView.updateZoomViewProgress(cameraProperties.getCurrentZoomRatio());
+        int icatchMode = cameraAction.getCurrentCameraMode();
         if (cameraState.isMovieRecording()) {
             AppLog.i(TAG, "camera is recording...");
             curMode = PreviewMode.APP_STATE_VIDEO_CAPTURE;
@@ -710,7 +726,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             photoCapture.setOnCaptureListener(new PhotoCapture.OnCaptureListener() {
                 @Override
                 public void onCompleted() {
-                    curMode = PreviewMode.APP_STATE_STILL_PREVIEW;
+                    //curMode = PreviewMode.APP_STATE_STILL_PREVIEW;
                     previewHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -725,20 +741,22 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             if (!cameraProperties.hasFuction(0xd704)) {
                 stopPreview();
             }
-//            stopPreview();
-            previewHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(!cameraAction.capturePhoto()){
-
-                        MyToast.show(activity,R.string.text_operation_failed);
-                    }
-                    curMode = PreviewMode.APP_STATE_STILL_PREVIEW;
-                    previewView.setCaptureBtnEnability(true);
-
-                }
-            }, 500);
-//            CameraAction.getInstance().capturePhoto();
+//            previewHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if(!cameraAction.capturePhoto()){
+//
+//                        MyToast.show(activity,R.string.text_operation_failed);
+//                    }
+//                    //curMode = PreviewMode.APP_STATE_STILL_PREVIEW;
+//                    previewView.setCaptureBtnEnability(true);
+//
+//                }
+//            }, 500);
+            if(!cameraAction.capturePhoto()){
+                MyToast.show(activity,R.string.text_operation_failed);
+            }
+            previewView.setCaptureBtnEnability(true);
         }
     }
 
@@ -1152,10 +1170,11 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                 case SDKEvent.EVENT_BATTERY_ELETRIC_CHANGED:
                     AppLog.i(TAG, "receive EVENT_BATTERY_ELETRIC_CHANGED power =" + msg.arg1);
                     //need to update battery eletric
-                    int resid = ThumbnailOperation.getBatteryLevelIcon(msg.arg1);
+                    int batteryLevel = msg.arg1;
+                    int resid = ThumbnailOperation.getBatteryLevelIcon(batteryLevel);
                     if (resid > 0) {
                         previewView.setBatteryIcon(resid);
-                        if (resid == R.drawable.ic_battery_charging_green24dp) {
+                        if (batteryLevel < 20) {
                             AppDialog.showLowBatteryWarning(activity);
                         }
                     }
@@ -1263,12 +1282,12 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 
                         return;
                     }
-                    final String path;
-                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                        path = Environment.getExternalStorageDirectory().toString() + AppInfo.AUTO_DOWNLOAD_PATH;
-                    } else {
-                        return;
-                    }
+                    final String path = StorageUtil.getRootPath(activity)+ AppInfo.AUTO_DOWNLOAD_PATH;
+//                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//                        path = Environment.getExternalStorageDirectory().toString() + AppInfo.AUTO_DOWNLOAD_PATH;
+//                    } else {
+//                        return;
+//                    }
                     File directory = new File(path);
 
                     if (FileTools.getFileSize(directory) / 1024 >= AppInfo.autoDownloadSizeLimit * 1024 * 1024) {
@@ -1333,7 +1352,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         sdkEvent.addCustomizeEvent(0x5001);// video recording event
         sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_DOWNLOAD);
 //        sdkEvent.addCustomizeEvent(0x3701);// Insert SD card event
-        sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+//        sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
         isDelEvent = false;
 
 //        addPanoramaEventListener();
@@ -1370,7 +1389,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             sdkEvent.delCustomizeEventListener(0x5001);
             sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FILE_DOWNLOAD);
 //        sdkEvent.delCustomizeEventListener(0x3701);// Insert SD card event
-            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+//            sdkEvent.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
             isDelEvent = true;
         }
     }
@@ -1521,6 +1540,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             }
 //            AppDialog.showDialogWarn( activity, R.string.text_preview_hint_info );
         } else {
+            savePvThumbnail();
             destroyPreview();
             super.finishActivity();
         }
@@ -1749,6 +1769,24 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     }
 
     //pancamGLRelease surface;
+
+    public void savePvThumbnail(){
+        if (curCamera != null && panoramaPreviewPlayback != null && curCamera.isStreamReady) {
+            Bitmap bitmap = panoramaPreviewPlayback.getPvThumbnail();
+            if(bitmap != null) {
+                ByteArrayOutputStream output = new ByteArrayOutputStream();//初始化一个流对象
+//        AppLog.d(TAG, "bitmapToByteArray bitmap size=" + thumbnailBitmap.getByteCount());
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);//把bitmap100%高质量压缩 到 output对象里
+                byte[] result = output.toByteArray();//转换成功了
+                try {
+                    output.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                CameraSlotSQLite.getInstance().update(new CameraSlot(curCamera.getPosition(), true, curCamera.getCameraName(), curCamera.getCameraType(), result, true));
+            }
+        }
+    }
     public void destroyPreview() {
 //        removePanoramaEventListener();
         if (AppInfo.enableDumpVideo) {

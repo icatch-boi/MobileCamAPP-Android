@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.icatch.mobilecam.Log.AppLog;
+import com.icatch.mobilecam.utils.StorageUtil;
 
 import java.io.File;
 
@@ -43,13 +44,13 @@ public class SystemInfo {
         return info.getMacAddress().toLowerCase();
     }
 
-    public static long getSDFreeSize() {
+    public static long getSDFreeSize(Context context) {
         // 得到文件系统的信息：存储块大小，总的存储块数量，可用存储块数量
         // 获取sd卡空间
         // 存储设备会被分为若干个区块
         // 每个区块的大小 * 区块总数 = 存储设备的总大小
         // 每个区块的大小 * 可用区块的数量 = 存储设备可用大小
-        File path = Environment.getExternalStorageDirectory();
+        File path = StorageUtil.getStorageDirectory(context);
         StatFs stat = new StatFs(path.getPath());
         long blockSize;
         long totalBlocks;

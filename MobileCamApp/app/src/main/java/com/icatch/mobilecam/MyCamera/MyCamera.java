@@ -53,6 +53,7 @@ public class MyCamera {
     private int position;
     private UsbDevice usbDevice;
     private ICatchITransport transport;
+    private boolean isLoadThumbnail = false;
 
     public MyCamera(int cameraType) {
         this.cameraType = cameraType;
@@ -61,6 +62,14 @@ public class MyCamera {
     public MyCamera(int cameraType, String cameraName) {
         this.cameraName = cameraName;
         this.cameraType = cameraType;
+    }
+
+    public synchronized void setLoadThumbnail(boolean loadThumbnail) {
+        isLoadThumbnail = loadThumbnail;
+    }
+
+    public synchronized boolean isLoadThumbnail() {
+        return isLoadThumbnail;
     }
 
     public MyCamera(int cameraType, String ssid, String ipAddress, int position, int mode) {

@@ -87,6 +87,27 @@ public class AppDialog {
         dialog.show();
     }
 
+    public static void showDialogWarn(final Context context, int messageID,boolean canelable,final OnDialogSureClickListener listener){
+        if(dialog != null){
+            dialog.dismiss();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.warning).setTitle(R.string.title_warning).setMessage(messageID);
+        builder.setCancelable(canelable);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if(listener != null){
+                    listener.onSure();
+                }
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
+    }
+
     public static void showConectFailureWarning(final Context context){
         if(needShown == false){
             return;
@@ -122,6 +143,16 @@ public class AppDialog {
             }
         });
         builder.create().show();
+    }
+
+    public interface OnDialogButtonClickListener {
+        void onCancel();
+
+        void onSure();
+    }
+
+    public interface OnDialogSureClickListener {
+        void onSure();
     }
 
 }

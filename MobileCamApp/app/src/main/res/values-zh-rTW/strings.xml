@@ -356,4 +356,20 @@ $1$"</string>
     <string name="content_privacy_policy_1">请你务必审慎阅读、充分理解各条款，包括但不限于：为了向你提供基本服务，我们需要收集你的设备信息、操作日志等个人信息。你可以阅读</string>
     <string name="content_privacy_policy_2">《隱私政策和用戶協議》</string>
     <string name="content_privacy_policy_3">了解详细信息。如你同意，请点击“同意”开始享受我们的服务。</string>
+    <string name="cancel_all">全部取消</string>
+    <string name="download_cancel_all_tips">是否取消所有文件下载？</string>
+    <string name="dialog_card_removed_and_back">SD卡已移除，将退出视频播放。</string>
+    <string name="dialog_card_removed_and_back_photo_pb">SD已移除，将退出图片预览</string>
+    <string name="setting_title_screen_saver">自动熄屏</string>
+    <string name="setting_title_auto_power_off">自动關機</string>
+    <string name="setting_title_power_on_auto_record">開機自動錄影</string>
+    <string name="setting_title_fast_motion_movie">快錄</string>
+    <string name="setting_title_wind_noise_reduction">降噪</string>
+    <string name="setting_title_camera_switch">相機切換</string>
+    <string name="setting_camera_front">前鏡頭</string>
+    <string name="setting_camera_back">後鏡頭</string>
+    <string name="setting_storage_location">下載文件存儲位置</string>
+    <string name="setting_internal_storage">手機內置存儲</string>
+    <string name="setting_sd_card_storage">SD卡</string>
+    <string name="off">關閉</string>
 </resources>

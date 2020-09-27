@@ -30,14 +30,55 @@ public class PropertyHashMapDynamic {
         switch (propertyId) {
             case PropertyId.CAPTURE_DELAY:
                 return getCaptureDelayMap(cameraProperties);
+            case PropertyId.AUTO_POWER_OFF:
+                return getAutoPowerOffMap(cameraProperties);
             case PropertyId.EXPOSURE_COMPENSATION:
                 return getExposureCompensationMap(cameraProperties);
             case PropertyId.VIDEO_FILE_LENGTH:
                 return getVideoFileLengthMap(cameraProperties);
+            case PropertyId.FAST_MOTION_MOVIE:
+                return getFastMotionMovieMap(cameraProperties);
+            case PropertyId.SCREEN_SAVER:
+                return getScreenSaverMap(cameraProperties);
 
             default:
                 return null;
         }
+    }
+
+    private HashMap<Integer, ItemInfo> getAutoPowerOffMap(CameraProperties cameraProperties) {
+        HashMap<Integer, ItemInfo> autoPowerOffMap = new HashMap<Integer, ItemInfo>();
+
+        List<Integer> autoPowerOffList = cameraProperties.getSupportedPropertyValues(PropertyId.AUTO_POWER_OFF);
+        String temp;
+        for (int ii = 0; ii < autoPowerOffList.size(); ii++) {
+            int value = autoPowerOffList.get(ii);
+            if (value == 0) {
+                temp = PanoramaApp.getContext().getString(R.string.off);
+            } else {
+                temp = value + "s";
+            }
+            AppLog.d(TAG, "autoPowerOffList ii=" + ii + " value=" + value);
+            autoPowerOffMap.put(value, new ItemInfo(temp, temp, 0));
+        }
+        return autoPowerOffMap;
+    }
+
+    private HashMap<Integer, ItemInfo> getScreenSaverMap(CameraProperties cameraProperties) {
+        HashMap<Integer, ItemInfo> screenSaverMap = new HashMap<Integer, ItemInfo>();
+        List<Integer> screenSaverList = cameraProperties.getSupportedPropertyValues(PropertyId.SCREEN_SAVER);
+        String temp;
+        for (int ii = 0; ii < screenSaverList.size(); ii++) {
+            int value = screenSaverList.get(ii);
+            if (value == 0) {
+                temp = PanoramaApp.getContext().getString(R.string.off);
+            } else {
+                temp = value + "s";
+            }
+            AppLog.d(TAG, "screenSaverList ii=" + ii + " value=" + value);
+            screenSaverMap.put(value, new ItemInfo(temp, temp, 0));
+        }
+        return screenSaverMap;
     }
 
     public HashMap<String, ItemInfo> getDynamicHashString(CameraProperties cameraProperties, int propertyId) {
@@ -51,13 +92,30 @@ public class PropertyHashMapDynamic {
         }
     }
 
+    private HashMap<Integer, ItemInfo> getFastMotionMovieMap(CameraProperties cameraProperties) {
+        HashMap<Integer, ItemInfo> fastMotionMovieMap = new HashMap<Integer, ItemInfo>();
+        List<Integer> fastMotionMovieList = cameraProperties.getSupportedPropertyValues(PropertyId.FAST_MOTION_MOVIE);
+        String temp;
+        for (int ii = 0; ii < fastMotionMovieList.size(); ii++) {
+            int value = fastMotionMovieList.get(ii);
+            if (value == 0) {
+                temp = PanoramaApp.getContext().getString(R.string.off);
+            } else {
+                temp = value + "x";
+            }
+            AppLog.d(TAG, "fastMotionMovieList ii=" + ii + " value=" + value);
+            fastMotionMovieMap.put(value, new ItemInfo(temp, temp, 0));
+        }
+        return fastMotionMovieMap;
+    }
+
     private HashMap<Integer, ItemInfo> getCaptureDelayMap(CameraProperties cameraProperties) {
         HashMap<Integer, ItemInfo> captureDelayMap = new HashMap<Integer, ItemInfo>();
         List<Integer> delyaList = cameraProperties.getSupportedPropertyValues(PropertyId.CAPTURE_DELAY);
         String temp;
         for (int ii = 0; ii < delyaList.size(); ii++) {
             if (delyaList.get(ii) == 0) {
-                temp = "OFF";
+                temp = PanoramaApp.getContext().getString(R.string.off);
             } else {
                 temp = delyaList.get(ii) / 1000 + "S";
             }

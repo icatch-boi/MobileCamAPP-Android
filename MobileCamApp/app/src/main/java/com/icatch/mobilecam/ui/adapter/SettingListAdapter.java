@@ -97,7 +97,37 @@ public class SettingListAdapter extends BaseAdapter {
                 }
             });
             return convertView;
-        }else if (menuList.get(position).name == R.string.setting_title_image_stabilization) {
+        }else if (menuList.get(position).name == R.string.setting_title_power_on_auto_record) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.setting_switch_layout, null);
+            TextView textView = (TextView) convertView.findViewById(R.id.item_name);
+            textView.setText(R.string.setting_title_power_on_auto_record);
+            int curValue = cameraProperties.getCurrentPropertyValue(PropertyId.POWER_ON_AUTO_RECORD);
+            final SwitchCompat switchCompat = (SwitchCompat) convertView.findViewById(R.id.switchCompat);
+            boolean isCheched = curValue == 0 ? false : true;
+            switchCompat.setChecked(isCheched);
+            switchCompat.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                    int value = switchCompat.isChecked() ? 1 : 0;
+                    cameraProperties.setPropertyValue(PropertyId.POWER_ON_AUTO_RECORD, value);
+                    // read one more time
+                    int retValue = cameraProperties.getCurrentPropertyValue(PropertyId.POWER_ON_AUTO_RECORD);
+                    boolean isChecked2 = retValue == 0 ? false : true;
+                    switchCompat.setChecked(isChecked2);
+                }
+            } );
+            /*            switchCompat.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    int value = switchCompat.isChecked() ? 1 : 0;
+                    CameraProperties.getInstance().setPropertyValue(PropertyId.POWER_ON_AUTO_RECORD, value);
+                    // read one more time
+                    int retValue = CameraProperties.getInstance().getCurrentPropertyValue(PropertyId.POWER_ON_AUTO_RECORD);
+                    boolean isChecked = retValue == 0 ? false : true;
+                    switchCompat.setChecked(isChecked);
+                }            });            */
+            return convertView;
+        } else if (menuList.get(position).name == R.string.setting_title_image_stabilization) {
             convertView = LayoutInflater.from(context).inflate(R.layout.setting_switch_layout, null);
             TextView textView = (TextView) convertView.findViewById(R.id.item_name);
             final SwitchCompat switchCompat = (SwitchCompat) convertView.findViewById(R.id.switchCompat);
@@ -125,13 +155,33 @@ public class SettingListAdapter extends BaseAdapter {
                 }
             } );
             return convertView;
-        }
-        if(menuList.get(position).name == R.string.setting_auto_download_size_limit){
+        }else if(menuList.get(position).name == R.string.setting_auto_download_size_limit){
             convertView = LayoutInflater.from(context).inflate(R.layout.auto_download_layout_size, null);
             final TextView autoDownloadSize = (TextView) convertView.findViewById(R.id.download_size);
             autoDownloadSize.setText(AppInfo.autoDownloadSizeLimit + "GB");
             return convertView;
+        }else if (menuList.get(position).name == R.string.setting_title_wind_noise_reduction) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.setting_switch_layout, null);
+            TextView textView = (TextView) convertView.findViewById(R.id.item_name);
+            textView.setText(R.string.setting_title_wind_noise_reduction);
+            int curValue = cameraProperties.getCurrentPropertyValue(PropertyId.WIND_NOISE_REDUCTION);
+            final SwitchCompat switchCompat = (SwitchCompat) convertView.findViewById(R.id.switchCompat);
+            boolean isCheched = curValue == 0 ? false : true;
+            switchCompat.setChecked(isCheched);
+            switchCompat.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                    int value = switchCompat.isChecked() ? 1 : 0;
+                    cameraProperties.setPropertyValue(PropertyId.WIND_NOISE_REDUCTION, value);
+                    // read one more time
+                    int retValue = cameraProperties.getCurrentPropertyValue(PropertyId.WIND_NOISE_REDUCTION);
+                    boolean isChecked2 = retValue == 0 ? false : true;
+                    switchCompat.setChecked(isChecked2);
+                }
+            } );
+            return convertView;
         }
+
 
 //        if(menuList.get(position).name == R.string.setting_live_switch){
 //            convertView = LayoutInflater.from(context).inflate(R.layout.live_switch_layout, null);

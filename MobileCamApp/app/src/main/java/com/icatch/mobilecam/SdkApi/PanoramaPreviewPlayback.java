@@ -1,7 +1,15 @@
 package com.icatch.mobilecam.SdkApi;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.icatch.mobilecam.Log.AppLog;
+import com.icatch.mobilecam.MyCamera.CameraType;
+import com.icatch.mobilecam.data.entity.CameraSlot;
 import com.icatch.mobilecam.data.type.Tristate;
+import com.icatch.mobilecam.db.CameraSlotSQLite;
+import com.icatch.mobilecam.test.test;
+import com.icatch.mobilecam.utils.BitmapTools;
 import com.icatchtek.pancam.customer.ICatchIPancamPreview;
 import com.icatchtek.pancam.customer.ICatchPancamConfig;
 import com.icatchtek.pancam.customer.ICatchPancamSession;
@@ -34,6 +42,7 @@ import com.icatchtek.reliant.customer.type.ICatchFrameBuffer;
 import com.icatchtek.reliant.customer.type.ICatchImageSize;
 import com.icatchtek.reliant.customer.type.ICatchStreamParam;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -594,4 +603,35 @@ public class PanoramaPreviewPlayback {
         streamPublish.stopLive();
         AppLog.d(TAG, "End stopLive");
     }
+
+    public Bitmap getPvThumbnail(){
+        AppLog.d(TAG, "start stop ");
+        boolean retValue = false;
+        int frameWidth = 1920;
+        int frameHeight = 1080;
+//        int frameWidth = 1280;
+//        int frameHeight = 720;
+        byte[] mPixel = new byte[frameWidth * frameHeight * 4];
+        ICatchFrameBuffer frameBuffer = new ICatchFrameBuffer(frameWidth * frameHeight * 4);
+        frameBuffer.setBuffer(mPixel);
+        try {
+            retValue = previewPlayback.getThumbnail(frameBuffer,5);
+        } catch (Exception e) {
+            AppLog.d(TAG, "savePvThumbnail Exception e:" + e.getClass().getSimpleName());
+            e.printStackTrace();
+        }
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(mPixel, 0, mPixel.length);
+        Bitmap thumbnailBitmap = BitmapTools.decodeByteArray(mPixel, 200, 200);
+//        test.saveImage11(frameBuffer,frameBuffer.getFrameSize());
+//        test.saveImage(thumbnailBitmap,System.currentTimeMillis());
+
+
+//        if(bitmap != null) {
+//            DatabaseHelper.updateCameraPhoto(GlobalInfo.curSlotId, bitmap);
+//        }
+//        AppLog.d(TAG, "End savePvThumbnail=" + ret);
+        AppLog.d(TAG, "end stop retValue=" + retValue);
+        return thumbnailBitmap;
+    }
+
 }

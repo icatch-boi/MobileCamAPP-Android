@@ -2,6 +2,7 @@ package com.icatch.mobilecam.Function.Setting;
 
 import android.content.Context;
 
+import com.icatch.mobilecam.Application.PanoramaApp;
 import com.icatch.mobilecam.Function.BaseProrertys;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.type.TimeLapseMode;
@@ -12,6 +13,7 @@ import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.CameraFixedInfo;
 import com.icatch.mobilecam.SdkApi.CameraProperties;
 import com.icatch.mobilecam.SdkApi.CameraState;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatchtek.control.customer.type.ICatchCamMode;
 import com.icatchtek.control.customer.type.ICatchCamProperty;
 
@@ -82,25 +84,30 @@ public class UIDisplaySource {
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download, ""));
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download_size_limit, ""));
         }
-        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
+//        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
 //        settingMenuList.add( new SettingMenu( R.string.setting_live_address, AppInfo.liveAddress ) );
         settingMenuList.add(new SettingMenu(R.string.setting_format, ""));
+        settingMenuList.add(new SettingMenu(R.string.setting_storage_location, StorageUtil.getCurStorageLocation(PanoramaApp.getContext())));
         if (cameraProperties.hasFuction(PropertyId.STA_MODE_SSID)){
             settingMenuList.add(new SettingMenu(R.string.setting_enable_wifi_hotspot, ""));
         }
-
-
-
         if (cameraProperties.hasFuction(PropertyId.UP_SIDE)) {
             settingMenuList.add(new SettingMenu(R.string.upside, baseProrertys.getUpside().getCurrentUiStringInSetting()));
         }
         if (cameraProperties.hasFuction(PropertyId.CAMERA_ESSID)) {//camera password and wifi
             settingMenuList.add(new SettingMenu(R.string.camera_wifi_configuration, ""));
         }
+        if (cameraProperties.hasFuction(PropertyId.POWER_ON_AUTO_RECORD)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_power_on_auto_record, ""));
+        }
+        if (cameraProperties.hasFuction(PropertyId.AUTO_POWER_OFF)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_auto_power_off, baseProrertys.getAutoPowerOff().getCurrentUiStringInPreview()));
+        }
         if (cameraProperties.hasFuction(PropertyId.EXPOSURE_COMPENSATION)) {
             settingMenuList.add(new SettingMenu(R.string.setting_title_exposure_compensation, baseProrertys.getExposureCompensation()
                     .getCurrentUiStringInPreview()));
         }
+
 
 
         settingMenuList.add(new SettingMenu(R.string.setting_app_version, AppInfo.APP_VERSION));
@@ -133,9 +140,10 @@ public class UIDisplaySource {
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download, ""));
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download_size_limit, ""));
         }
-        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
+//        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
 //        settingMenuList.add( new SettingMenu( R.string.setting_live_address, AppInfo.liveAddress ) );
         settingMenuList.add(new SettingMenu(R.string.setting_format, ""));
+        settingMenuList.add(new SettingMenu(R.string.setting_storage_location, StorageUtil.getCurStorageLocation(PanoramaApp.getContext())));
         if (cameraProperties.hasFuction(PropertyId.STA_MODE_SSID)){
             settingMenuList.add(new SettingMenu(R.string.setting_enable_wifi_hotspot, ""));
         }
@@ -148,6 +156,17 @@ public class UIDisplaySource {
         if (cameraProperties.hasFuction(PropertyId.CAMERA_ESSID)) {//camera password and wifi
             settingMenuList.add(new SettingMenu(R.string.camera_wifi_configuration, ""));
         }
+
+        if (cameraProperties.hasFuction(PropertyId.SCREEN_SAVER)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_screen_saver, baseProrertys.getScreenSaver().getCurrentUiStringInPreview()));
+        }
+        if (cameraProperties.hasFuction(PropertyId.POWER_ON_AUTO_RECORD)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_power_on_auto_record, ""));
+        }
+        if (cameraProperties.hasFuction(PropertyId.AUTO_POWER_OFF)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_auto_power_off, baseProrertys.getAutoPowerOff().getCurrentUiStringInPreview()));
+        }
+
         if (cameraProperties.hasFuction(PropertyId.EXPOSURE_COMPENSATION)) {
             settingMenuList.add(new SettingMenu(R.string.setting_title_exposure_compensation, baseProrertys.getExposureCompensation()
                     .getCurrentUiStringInPreview()));
@@ -159,6 +178,13 @@ public class UIDisplaySource {
         if (cameraProperties.hasFuction(PropertyId.VIDEO_FILE_LENGTH)) {
             settingMenuList.add(new SettingMenu(R.string.setting_title_video_file_length, baseProrertys.getVideoFileLength().getCurrentUiStringInPreview()));
         }
+        if (cameraProperties.hasFuction(PropertyId.FAST_MOTION_MOVIE)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_fast_motion_movie, baseProrertys.getFastMotionMovie().getCurrentUiStringInPreview()));
+        }
+        if (cameraProperties.hasFuction(PropertyId.WIND_NOISE_REDUCTION)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_wind_noise_reduction, ""));
+        }
+
         settingMenuList.add(new SettingMenu(R.string.setting_app_version, AppInfo.APP_VERSION));
         settingMenuList.add(new SettingMenu(R.string.setting_product_name, cameraFixedInfo.getCameraName()));
         if (cameraProperties.hasFuction(ICatchCamProperty.ICH_CAM_CAP_FW_VERSION)) {
@@ -193,9 +219,10 @@ public class UIDisplaySource {
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download, ""));
             settingMenuList.add(new SettingMenu(R.string.setting_auto_download_size_limit, ""));
         }
-        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
+//        settingMenuList.add(new SettingMenu(R.string.setting_audio_switch, ""));
 //        settingMenuList.add( new SettingMenu( R.string.setting_live_address, AppInfo.liveAddress ) );
         settingMenuList.add(new SettingMenu(R.string.setting_format, ""));
+        settingMenuList.add(new SettingMenu(R.string.setting_storage_location, StorageUtil.getCurStorageLocation(PanoramaApp.getContext())));
         if (cameraProperties.hasFuction(PropertyId.STA_MODE_SSID)){
             settingMenuList.add(new SettingMenu(R.string.setting_enable_wifi_hotspot, ""));
         }
@@ -217,6 +244,12 @@ public class UIDisplaySource {
         if (cameraProperties.hasFuction(PropertyId.CAMERA_ESSID)) {//camera password and wifi
             settingMenuList.add(new SettingMenu(R.string.camera_wifi_configuration, ""));
 
+        }
+        if (cameraProperties.hasFuction(PropertyId.POWER_ON_AUTO_RECORD)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_power_on_auto_record, ""));
+        }
+        if (cameraProperties.hasFuction(PropertyId.AUTO_POWER_OFF)) {
+            settingMenuList.add(new SettingMenu(R.string.setting_title_auto_power_off, baseProrertys.getAutoPowerOff().getCurrentUiStringInPreview()));
         }
         if (cameraProperties.hasFuction(PropertyId.EXPOSURE_COMPENSATION)) {
             settingMenuList.add(new SettingMenu(R.string.setting_title_exposure_compensation, baseProrertys.getExposureCompensation()

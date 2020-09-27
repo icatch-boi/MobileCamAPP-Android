@@ -308,6 +308,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         });
 //        presenter.initRender();
         GlobalInfo.getInstance().addEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_REMOVED);
+        GlobalInfo.getInstance().addEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
         panoramaTypeBtn = (ImageButton) findViewById(R.id.panorama_type_btn);
         panoramaTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -371,6 +372,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         presenter.delConnectFailureListener();
         presenter.unregisterWifiSSReceiver();
         GlobalInfo.getInstance().delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_REMOVED);
+        GlobalInfo.getInstance().delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
     }
 
     @Override

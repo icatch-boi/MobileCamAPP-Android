@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.MyCamera.CameraManager;
+import com.icatch.mobilecam.MyCamera.MyCamera;
 import com.icatch.mobilecam.SdkApi.FileOperation;
 import com.icatch.mobilecam.utils.BitmapTools;
 import com.icatchtek.reliant.customer.type.ICatchFile;
@@ -46,7 +47,15 @@ public class ICatchtekImageDownloader extends BaseImageDownloader {
         if (file == null) {
             return null;
         }
-        FileOperation fileOperation = CameraManager.getInstance().getCurCamera().getFileOperation();
+        MyCamera myCamera = CameraManager.getInstance().getCurCamera();
+        if(myCamera == null || !myCamera.isConnected()){
+            return null;
+        }
+        if(!myCamera.isLoadThumbnail()){
+            AppLog.d(TAG, "getStreamFromTUTK isLoadThumbnail is false");
+            return null;
+        }
+        FileOperation fileOperation = myCamera.getFileOperation();
         if (fileOperation == null) {
             return null;
         }

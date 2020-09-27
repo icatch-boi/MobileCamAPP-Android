@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.os.Handler;
@@ -34,6 +35,7 @@ import com.icatch.mobilecam.data.type.TimeLapseMode;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatch.mobilecam.utils.WifiAPUtil;
 import com.icatch.mobilecam.utils.WifiCheck;
@@ -42,6 +44,8 @@ import com.icatchtek.reliant.customer.type.ICatchImageSize;
 
 import java.lang.reflect.Field;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by zhang yanhu C001012 on 2015/12/30 16:33.
@@ -156,7 +160,151 @@ public class OptionSetting {
                 AppLog.d("1111", "showVideoFileLengthDialog");
                 showVideoFileLengthDialog(context);
                 break;
+
+            case R.string.setting_title_screen_saver:
+                AppLog.d("1111", "showScreenSaverDialog");
+                showScreenSaverDialog(context);
+                break;
+            case R.string.setting_title_auto_power_off:
+                AppLog.d("1111", "showAutoPowerOffDialog");
+                showAutoPowerOffDialog(context);
+                break;
+
+            case R.string.setting_title_fast_motion_movie:
+                AppLog.d("1111", "showFastMotionMovieDialog");
+                showFastMotionMovieDialog(context);
+                break;
+            case R.string.setting_storage_location:
+                AppLog.d("1111", "showStorageLocationDialog");
+                showStorageLocationDialog(context);
+                break;
+
         }
+    }
+
+    public  void showStorageLocationDialog(final Context context) {
+        // TODO Auto-generated method stub
+        CharSequence title = context.getResources().getString(R.string.setting_storage_location);
+        boolean sdCardExist = StorageUtil.sdCardExist(context);
+        final String[] storageLocationString;
+        int curIdx = 0;
+        if (sdCardExist) {
+            storageLocationString = new String[2];
+            storageLocationString[0] = context.getResources().getString(R.string.setting_internal_storage);
+            storageLocationString[1] = context.getResources().getString(R.string.setting_sd_card_storage);
+        } else {
+            storageLocationString = new String[1];
+            storageLocationString[0] = context.getResources().getString(R.string.setting_internal_storage);
+        }
+        SharedPreferences preferences = context.getSharedPreferences("appData", MODE_PRIVATE);
+        String storageLocation = preferences.getString("storageLocation", "InternalStorage");
+        if (storageLocation.equals("InternalStorage")) {
+            curIdx = 0;
+        } else {
+            curIdx = 1;
+        }
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                if (arg1 == 0) {
+                    SharedPreferences.Editor editor = context.getSharedPreferences("appData", MODE_PRIVATE).edit();
+                    editor.putString("storageLocation", "InternalStorage");
+                    editor.commit();
+                } else {
+                    SharedPreferences.Editor editor = context.getSharedPreferences("appData", MODE_PRIVATE).edit();
+                    editor.putString("storageLocation", "SdCard");
+                    editor.commit();
+                }
+                arg0.dismiss();
+                onSettingCompleteListener.onOptionSettingComplete();
+                AppLog.d("tigertiger", "showStorageLocationDialog  storageLocation =" + arg1);
+            }
+        };
+        showOptionDialog(title, storageLocationString, curIdx, listener, true);
+    }
+
+    public void showFastMotionMovieDialog(final Context context) {
+        // TODO Auto-generated method stub
+        CharSequence title = context.getResources().getString(R.string.setting_title_fast_motion_movie);
+        final String[] fastMotionMovieUIString = baseProrertys.getFastMotionMovie().getValueList();
+        if (fastMotionMovieUIString == null) {
+            AppLog.e(TAG, "fastMotionMovieUIString == null");
+            return;
+        }
+        int length = fastMotionMovieUIString.length;
+        int curIdx = 0;
+        String temp = baseProrertys.getFastMotionMovie().getCurrentUiStringInPreview();
+        for (int i = 0; i < length; i++) {
+            if (fastMotionMovieUIString[i].equals(temp)) {
+                curIdx = i;
+            }
+        }
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                baseProrertys.getFastMotionMovie().setValueByPosition(arg1);
+                arg0.dismiss();
+                onSettingCompleteListener.onOptionSettingComplete();
+            }
+        };
+        showOptionDialog(title, fastMotionMovieUIString, curIdx, listener, true);
+    }
+
+    public void showAutoPowerOffDialog(final Context context) {
+        // TODO Auto-generated method stub
+        CharSequence title = context.getResources().getString(R.string.setting_title_auto_power_off);
+        final String[] autoPowerOffUIString = baseProrertys.getAutoPowerOff().getValueList();
+        if (autoPowerOffUIString == null) {
+            AppLog.e(TAG, "autoPowerOffUIString == null");
+            return;
+        }
+        int length = autoPowerOffUIString.length;
+        int curIdx = 0;
+        String temp = baseProrertys.getAutoPowerOff().getCurrentUiStringInPreview();
+        for (int i = 0; i < length; i++) {
+            if (autoPowerOffUIString[i].equals(temp)) {
+                curIdx = i;
+            }
+        }
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                baseProrertys.getAutoPowerOff().setValueByPosition(arg1);
+                arg0.dismiss();
+                onSettingCompleteListener.onOptionSettingComplete();
+            }
+        };
+        showOptionDialog(title, autoPowerOffUIString, curIdx, listener, true);
+    }
+
+    public void showScreenSaverDialog(final Context context) {
+        // TODO Auto-generated method stub
+        CharSequence title = context.getResources().getString(R.string.setting_title_screen_saver);
+        final String[] screenSaverUIString = baseProrertys.getScreenSaver().getValueList();
+        if (screenSaverUIString == null) {
+            AppLog.e(TAG, "screenSaverUIString == null");
+            return;
+        }
+        int length = screenSaverUIString.length;
+        int curIdx = 0;
+        String temp = baseProrertys.getScreenSaver().getCurrentUiStringInPreview();
+        for (int i = 0; i < length; i++) {
+            if (screenSaverUIString[i].equals(temp)) {
+                curIdx = i;
+            }
+        }
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                baseProrertys.getScreenSaver().setValueByPosition(arg1);
+                arg0.dismiss();
+                onSettingCompleteListener.onOptionSettingComplete();
+            }
+        };
+        showOptionDialog(title, screenSaverUIString, curIdx, listener, true);
     }
 
     public void showEnableWifihotspotDialog() {

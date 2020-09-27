@@ -21,6 +21,7 @@ import com.icatch.mobilecam.ui.activity.LocalPhotoPbActivity;
 import com.icatch.mobilecam.ui.activity.LocalVideoPbActivity;
 import com.icatch.mobilecam.ui.adapter.LocalMultiPbWallGridAdapter;
 import com.icatch.mobilecam.ui.adapter.LocalMultiPbWallListAdapter;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.MFileTools;
 import com.icatch.mobilecam.utils.PanoramaTools;
 
@@ -64,14 +65,15 @@ public class LocalMultiPbFragmentPresenter extends BasePresenter {
 
     public List<LocalPbItemInfo> getPhotoInfoList(FileType fileType) {
         String fileDate;
+        String rootPath = StorageUtil.getRootPath(activity);
         final List<LocalPbItemInfo> photoList = new ArrayList<LocalPbItemInfo>();
         List<File> fileList;
         if (fileType == FileType.FILE_PHOTO) {
-            String filePath = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO;
+            String filePath = rootPath + AppInfo.DOWNLOAD_PATH_PHOTO;
 
             fileList = MFileTools.getPhotosOrderByDate(filePath);
         } else {
-            String filePath = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO;
+            String filePath = rootPath + AppInfo.DOWNLOAD_PATH_VIDEO;
             fileList = MFileTools.getVideosOrderByDate(filePath);
         }
         if (fileList == null || fileList.size() <= 0) {

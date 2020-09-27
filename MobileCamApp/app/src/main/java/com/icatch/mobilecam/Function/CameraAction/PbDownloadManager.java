@@ -20,6 +20,7 @@ import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.Message.AppMessage;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.FileOperation;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatch.mobilecam.utils.MediaRefresh;
 import com.icatchtek.reliant.customer.type.ICatchFile;
@@ -43,17 +44,19 @@ public class PbDownloadManager {
     public FileOperation fileOperation;
     private LinkedList<ICatchFile> downloadTaskList;
     private LinkedList<ICatchFile> downloadChooseList;
-    private LinkedList<ICatchFile> downloadProgressList;
+//    private LinkedList<ICatchFile> downloadProgressList;
+    private ICatchFile curDownloadFile;
     private DownloadManagerAdapter downloadManagerAdapter;
     private AlertDialog.Builder builder;
     private Context context;
-    private HashMap<ICatchFile, DownloadInfo> downloadInfoMap = new HashMap<ICatchFile, DownloadInfo>();
+    private HashMap<Integer, DownloadInfo> downloadInfoMap = new HashMap<Integer, DownloadInfo>();
     private ICatchFile currentDownloadFile;
     private Timer downloadProgressTimer;
     private int downloadFailed = 0;
     private int downloadSucceed = 0;
     private CustomDownloadDialog customDownloadDialog;
     private String curFilePath = "";
+    private AlertDialog cancelDownloadDialog;
 
     public PbDownloadManager(Context context, LinkedList<ICatchFile> downloadList) {
         this.context = context;
@@ -61,11 +64,11 @@ public class PbDownloadManager {
         this.fileOperation = CameraManager.getInstance().getCurCamera().getFileOperation();
 //        filePath = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH;
         downloadChooseList = new LinkedList<>();
-        downloadProgressList = new LinkedList<ICatchFile>();
+//        downloadProgressList = new LinkedList<ICatchFile>();
         downloadChooseList.addAll(downloadTaskList);
         for (int ii = 0; ii < downloadChooseList.size(); ii++) {
             DownloadInfo downloadInfo = new DownloadInfo(downloadChooseList.get(ii), downloadChooseList.get(ii).getFileSize(), 0, 0, false);
-            downloadInfoMap.put(downloadChooseList.get(ii), downloadInfo);
+            downloadInfoMap.put(downloadChooseList.get(ii).getFileHandle(), downloadInfo);
         }
     }
 
@@ -76,7 +79,7 @@ public class PbDownloadManager {
             currentDownloadFile = downloadTaskList.getFirst();
             new DownloadAsytask(currentDownloadFile).execute();
             downloadProgressTimer = new Timer();
-            downloadProgressTimer.schedule(new DownloadProgressTask(), 0, 100);
+            downloadProgressTimer.schedule(new DownloadProgressTask(), 500, 500);
 
         }
     }
@@ -92,7 +95,7 @@ public class PbDownloadManager {
             switch (msg.what) {
                 case AppMessage.UPDATE_LOADING_PROGRESS:
                     ICatchFile icatchFile = ((DownloadInfo) msg.obj).file;
-                    downloadInfoMap.put(icatchFile, (DownloadInfo) msg.obj);
+                    downloadInfoMap.put(icatchFile.getFileHandle(), (DownloadInfo) msg.obj);
                     downloadManagerAdapter.notifyDataSetChanged();
                     break;
                 case AppMessage.CANCEL_DOWNLOAD_ALL:
@@ -131,12 +134,12 @@ public class PbDownloadManager {
 
                     }
                     Toast.makeText(context, R.string.dialog_cancel_downloading_succeeded, Toast.LENGTH_SHORT).show();
-                    downloadInfoMap.remove(temp);
+                    downloadInfoMap.remove(temp.getFileHandle());
                     downloadChooseList.remove(temp);
                     downloadTaskList.remove(temp);
                     AppLog.d(TAG, "1122 receive MESSAGE_CANCEL_DOWNLOAD_SINGLE downloadChooseList size=" + downloadChooseList.size() + "downloadInfoMap size=" + downloadInfoMap.size());
-                    downloadManagerAdapter = new DownloadManagerAdapter(context, downloadInfoMap, downloadChooseList, downloadManagerHandler);
-                    customDownloadDialog.setAdapter(downloadManagerAdapter);
+                    //downloadManagerAdapter = new DownloadManagerAdapter(context, downloadInfoMap, downloadChooseList, downloadManagerHandler);
+                    //customDownloadDialog.setAdapter(downloadManagerAdapter);
                     downloadManagerAdapter.notifyDataSetChanged();
 
                     updateDownloadMessage();
@@ -162,16 +165,54 @@ public class PbDownloadManager {
 
     public void showDownloadManagerDialog() {
         downloadManagerAdapter = new DownloadManagerAdapter(context, downloadInfoMap, downloadChooseList, downloadManagerHandler);
+        downloadManagerAdapter.setOnCancelBtnClickListener(new DownloadManagerAdapter.OnCancelBtnClickListener() {
+            @Override
+            public void onClick(ICatchFile downloadFile) {
+                cancelDownload(downloadFile);
+            }
+        });
         customDownloadDialog = new CustomDownloadDialog();
         customDownloadDialog.showDownloadDialog(context, downloadManagerAdapter);
         customDownloadDialog.setBackBtnOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                downloadManagerHandler.obtainMessage(AppMessage.CANCEL_DOWNLOAD_ALL).sendToTarget();
+                alertForQuitDownload();
+                //downloadManagerHandler.obtainMessage(AppMessage.CANCEL_DOWNLOAD_ALL).sendToTarget();
             }
         });
         updateDownloadMessage();
+    }
+
+    public void cancelDownload(ICatchFile downloadFile){
+        if (currentDownloadFile == downloadFile) {
+            if (fileOperation.cancelDownload() == false) {
+                Toast.makeText(context, R.string.dialog_cancel_downloading_failed, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (curFilePath != null) {
+                File file = new File(curFilePath);
+                if (file == null || !file.exists()) {
+                    return;
+                }
+                if (file.delete()) {
+                    AppLog.d("2222", "delete file success == " + curFilePath);
+                }
+            }
+        }
+        Toast.makeText(context, R.string.dialog_cancel_downloading_succeeded, Toast.LENGTH_SHORT).show();
+        downloadInfoMap.remove(downloadFile.getFileHandle());
+        downloadChooseList.remove(downloadFile);
+        downloadTaskList.remove(downloadFile);
+        //downloadManagerAdapter = new DownloadManagerAdapter(context, downloadInfoMap, downloadChooseList, downloadManagerHandler);
+        //customDownloadDialog.setAdapter(downloadManagerAdapter);
+        downloadManagerAdapter.notifyDataSetChanged();
+        updateDownloadMessage();
+        if (downloadTaskList.size() <= 0) {
+            if (customDownloadDialog != null) {
+                customDownloadDialog.dismissDownloadDialog();
+            }
+        }
     }
 
 
@@ -180,8 +221,8 @@ public class PbDownloadManager {
             return;
         }
         builder = new AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.warning).setTitle(R.string.dialog_btn_exit).setMessage(R.string.downloading_quit);
-        builder.setPositiveButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
+        builder.setIcon(R.drawable.warning).setMessage(R.string.download_cancel_all_tips);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -219,19 +260,35 @@ public class PbDownloadManager {
                 builder = null;
             }
         });
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.show();
+        cancelDownloadDialog = builder.create();
+        cancelDownloadDialog.setCancelable(false);
+        cancelDownloadDialog.show();
+    }
+
+    /**
+     * 单个文件下载完成
+     */
+    public void singleDownloadComplete(boolean result,ICatchFile iCatchFile){
+        if(downloadInfoMap.containsKey(iCatchFile.getFileHandle())){
+            DownloadInfo downloadInfo = downloadInfoMap.get(iCatchFile.getFileHandle());
+            downloadInfo.setDone(true);
+            downloadInfo.progress = 100;
+            downloadManagerAdapter.notifyDataSetChanged();
+        }
     }
 
     public void downloadCompleted() {
+        if(cancelDownloadDialog != null){
+            cancelDownloadDialog.dismiss();
+            cancelDownloadDialog = null;
+        }
         curFilePath = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getResources().getString(R.string.download_manager));
         String message = context.getResources().getString(R.string.download_complete_result).replace("$1$", String.valueOf(downloadSucceed))
                 .replace("$2$", String.valueOf(downloadFailed));
         builder.setMessage(message);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -246,14 +303,15 @@ public class PbDownloadManager {
 
     class DownloadProgressTask extends TimerTask {
 
+        long lastTime = 0;
         @Override
         public void run() {
 
-            if (downloadProgressList.isEmpty()) {
+            if (curDownloadFile == null) {
                 return;
             }
             String TAG = "DownloadProgressTask";
-            final ICatchFile iCatchFile = downloadProgressList.getFirst();
+            final ICatchFile iCatchFile = curDownloadFile;
 //            String path = null;
 //            if(iCatchFile.getFileType() == ICatchFileType.ICH_FILE_TYPE_IMAGE) {
 //                path = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO
@@ -263,9 +321,14 @@ public class PbDownloadManager {
 //                        + iCatchFile.getFileName();
 //            }
             File file = new File(curFilePath);
-            AppLog.d(TAG, "filename = " + file);
-            if (downloadInfoMap.containsKey(iCatchFile) == false) {
-                downloadProgressList.removeFirst();
+            AppLog.d(TAG, "Filename:" + file + " iCatchFile name:" + iCatchFile.getFileName() + " fileHandle:" + iCatchFile.getFileHandle());
+            if (downloadInfoMap.containsKey(iCatchFile.getFileHandle()) == false) {
+                //downloadProgressList.removeFirst();
+                return;
+            }
+            final DownloadInfo downloadInfo = downloadInfoMap.get(iCatchFile.getFileHandle());
+            AppLog.d(TAG, "downloadInfo isDone:" + downloadInfo.isDone());
+            if(downloadInfo.isDone()){
                 return;
             }
 
@@ -273,24 +336,21 @@ public class PbDownloadManager {
             if (file != null) {
                 if (fileLength == iCatchFile.getFileSize()) {
                     downloadProgress = 100;
-                    downloadProgressList.removeFirst();
+                    downloadInfo.setDone(true);
+                    //downloadProgressList.removeFirst();
                 } else {
                     downloadProgress = file.length() * 100 / iCatchFile.getFileSize();
                 }
             } else {
                 downloadProgress = 0;
             }
-            if (downloadInfoMap.containsKey(iCatchFile) == false) {
-                return;
-            }
-            final DownloadInfo downloadInfo = downloadInfoMap.get(iCatchFile);
             downloadInfo.curFileLength = fileLength;
             downloadInfo.progress = (int) downloadProgress;
             AppLog.d(TAG, "downloadProgress = " + downloadProgress);
             downloadManagerHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    downloadInfoMap.put(iCatchFile, downloadInfo);
+                    downloadInfoMap.put(iCatchFile.getFileHandle(), downloadInfo);
                     downloadManagerAdapter.notifyDataSetChanged();
                 }
             });
@@ -308,11 +368,12 @@ public class PbDownloadManager {
         public DownloadAsytask(ICatchFile iCatchFile) {
             super();
             downloadFile = iCatchFile;
-            downloadProgressList.addLast(downloadFile);
+            curDownloadFile = iCatchFile;
+            //downloadProgressList.addLast(downloadFile);
             if (downloadFile.getFileType() == ICatchFileType.ICH_FILE_TYPE_IMAGE) {
-                filePath = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_PHOTO;
+                filePath = StorageUtil.getRootPath(context) + AppInfo.DOWNLOAD_PATH_PHOTO;
             } else if (downloadFile.getFileType() == ICatchFileType.ICH_FILE_TYPE_VIDEO) {
-                filePath = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO;
+                filePath = StorageUtil.getRootPath(context) + AppInfo.DOWNLOAD_PATH_VIDEO;
             }
         }
 
@@ -361,7 +422,7 @@ public class PbDownloadManager {
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -376,13 +437,14 @@ public class PbDownloadManager {
             //后台任务执行完之后被调用，在ui线程执行
             if (!result) {
                 AppLog.d(TAG, "receive DOWNLOAD_FAILURE downloadFailed=" + downloadFailed);
-                downloadProgressList.remove(downloadFile);
+                //downloadProgressList.remove(downloadFile);
                 downloadFailed++;
                 updateDownloadMessage();
             } else {
                 downloadSucceed++;
                 updateDownloadMessage();
             }
+            singleDownloadComplete(result,downloadFile);
             downloadTaskList.remove(downloadFile);
             if (downloadTaskList.size() > 0) {
                 currentDownloadFile = downloadTaskList.getFirst();

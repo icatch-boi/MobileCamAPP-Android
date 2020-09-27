@@ -30,7 +30,7 @@ public class test {
 
     public static void saveImage(Bitmap bitmap, long time) {
         videoBitmap = bitmap;
-        path = Environment.getExternalStorageDirectory().toString() + "/360Cam/Photo/";
+        path = Environment.getExternalStorageDirectory().toString() + "/MobileCam/Photo/";
         lastTime = System.currentTimeMillis();
         if (path != null) {
             directory = new File(path);
@@ -40,7 +40,7 @@ public class test {
         }
 
         // fileName = System.currentTimeMillis() + "_count.jpg";
-        fileName = time + "_count.jpg";
+        fileName = time + "_saveImage.jpg";
         File file = new File(directory, fileName);
         if (!file.exists()) {
             try {
@@ -80,6 +80,7 @@ public class test {
         // Bitmap videoBitmap = Bitmap.createBitmap(640, 360, Config.ARGB_8888);
         // }
         // videoBitmap.copyPixelsFromBuffer(buffer);
+        path = Environment.getExternalStorageDirectory().toString() + "/MobileCam/Photo/";
         lastTime11 = System.currentTimeMillis();
         if (path != null) {
             directory = new File(path);
@@ -87,8 +88,8 @@ public class test {
                 directory.mkdirs();
             }
         }
-        path = Environment.getExternalStorageDirectory().toString() + "/bitmapSave11/";
-        fileName = System.currentTimeMillis() + "_" + count + ".jpg";
+
+        fileName = System.currentTimeMillis() + "_saveImage11_" + count + ".jpg";
         File file = new File(directory, fileName);
         if (!file.exists()) {
             try {

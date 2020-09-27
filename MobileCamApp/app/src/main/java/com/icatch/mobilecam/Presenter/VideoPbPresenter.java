@@ -42,10 +42,12 @@ import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.VideoPbView;
 import com.icatch.mobilecam.ui.RemoteFileHelper;
+import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.ui.appdialog.SingleDownloadDialog;
 import com.icatch.mobilecam.utils.ConvertTools;
 import com.icatch.mobilecam.utils.MediaRefresh;
 import com.icatch.mobilecam.utils.PanoramaTools;
+import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.FileOper;
 import com.icatch.mobilecam.utils.fileutils.FileTools;
 import com.icatchtek.pancam.customer.exception.IchGLFormatNotSupportedException;
@@ -519,7 +521,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    String filePath = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO +
+                    String filePath = StorageUtil.getRootPath(activity) + AppInfo.DOWNLOAD_PATH_VIDEO +
                             curVideoFile.getFileName();
                     File file = new File(filePath);
                     if (file.exists()) {
@@ -560,25 +562,24 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         public void run() {
             AppLog.d(TAG, "begin DownloadThread");
             AppInfo.isDownloading = true;
-            String path;
-
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                path = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO;
-            } else {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (singleDownloadDialog != null) {
-                            singleDownloadDialog.dismissDownloadDialog();
-                        }
-                        if (downloadProgressTimer != null) {
-                            downloadProgressTimer.cancel();
-                        }
-                        MyToast.show(activity, R.string.message_download_failed);
-                    }
-                });
-                return;
-            }
+            final String path = StorageUtil.getRootPath(activity)  + AppInfo.DOWNLOAD_PATH_VIDEO;
+//            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//                path = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO;
+//            } else {
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (singleDownloadDialog != null) {
+//                            singleDownloadDialog.dismissDownloadDialog();
+//                        }
+//                        if (downloadProgressTimer != null) {
+//                            downloadProgressTimer.cancel();
+//                        }
+//                        MyToast.show(activity, R.string.message_download_failed);
+//                    }
+//                });
+//                return;
+//            }
             String fileName = curVideoFile.getFileName();
             AppLog.d(TAG, "------------fileName =" + fileName);
             FileOper.createDirectory(path);
@@ -611,7 +612,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
             MediaRefresh.addMediaToDB(activity, downloadingFilename, fileType);
             AppLog.d(TAG, "end downloadFile temp =" + temp);
             AppInfo.isDownloading = false;
-            final String message = activity.getResources().getString(R.string.message_download_to).replace("$1$", AppInfo.DOWNLOAD_PATH_VIDEO);
+            final String message = activity.getResources().getString(R.string.message_download_to).replace("$1$", path);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -681,7 +682,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
                 if (videoPbMode == VideoPbMode.MODE_VIDEO_PAUSE) {
                     stopVideoStream();
                 }
-                if (SystemInfo.getSDFreeSize() < curVideoFile.getFileSize()) {
+                if (SystemInfo.getSDFreeSize(activity) < curVideoFile.getFileSize()) {
                     dialog.dismiss();
                     MyToast.show(activity, R.string.text_sd_card_memory_shortage);
                 } else {
@@ -974,6 +975,30 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         } else {
             streamStablization.disableStablization();
         }
+    }
+
+    public void setSdCardEventListener() {
+        GlobalInfo.getInstance().setOnEventListener(new GlobalInfo.OnEventListener() {
+            @Override
+            public void eventListener(int sdkEventId) {
+                switch (sdkEventId){
+                    case SDKEvent.EVENT_SDCARD_REMOVED:
+//                        stopVideoStream();
+                        videoStreaming.stopForSdRemove();
+                        RemoteFileHelper.getInstance().clearAllFileList();
+                        AppDialog.showDialogWarn(activity, R.string.dialog_card_removed_and_back, false,new AppDialog.OnDialogSureClickListener() {
+                            @Override
+                            public void onSure() {
+                                back();
+                            }
+                        });
+                        break;
+//                    case SDKEvent.EVENT_SDCARD_INSERT:
+//                        MyToast.show(activity,R.string.dialog_card_inserted);
+//                        break;
+                }
+            }
+        });
     }
 }
 

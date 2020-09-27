@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.MyCamera.CameraManager;
+import com.icatch.mobilecam.MyCamera.MyCamera;
 import com.icatch.mobilecam.Presenter.Interface.BasePresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.FileOperation;
@@ -171,7 +172,7 @@ public class MultiPbFragmentPresenter extends BasePresenter {
                 } else {
                     pbItemInfoList.clear();
                     List<MultiPbItemInfo> temp = RemoteFileHelper.getInstance().getLocalFileList(fileType);
-                    if (temp != null && temp.size() > 0) {
+                    if (temp != null) {
                         pbItemInfoList.addAll(temp);
                     } else {
                         resetCurIndex();
@@ -306,6 +307,10 @@ public class MultiPbFragmentPresenter extends BasePresenter {
                 fragment.startActivityForResult(intent, 1000);
             } else {
                 MyProgressDialog.showProgressDialog(activity, R.string.wait);
+                MyCamera myCamera = CameraManager.getInstance().getCurCamera();
+                if(myCamera != null){
+                    myCamera.setLoadThumbnail(false);
+                }
                 stopLoad();
                 handler.postDelayed(new Runnable() {
                     @Override

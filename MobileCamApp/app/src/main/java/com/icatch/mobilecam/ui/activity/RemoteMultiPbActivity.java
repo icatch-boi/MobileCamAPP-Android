@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.icatch.mobilecam.Log.AppLog;
+import com.icatch.mobilecam.MyCamera.CameraManager;
+import com.icatch.mobilecam.MyCamera.MyCamera;
 import com.icatch.mobilecam.Presenter.RemoteMultiPbPresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.data.type.PhotoWallLayoutType;
@@ -118,24 +120,38 @@ public class RemoteMultiPbActivity extends AppCompatActivity implements MultiPbV
         }
 //        tabLayout.setTabsFromPagerAdapter();
 //        deleteBtn.setClickable(false);
+        MyCamera camera = CameraManager.getInstance().getCurCamera();
+        if(camera != null){
+            camera.setLoadThumbnail(true);
+        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.submitAppInfo();
-        AppLog.d(TAG, "onResume()");
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        AppLog.d(TAG, "onStop()");
         presenter.isAppBackground();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.submitAppInfo();
+        presenter.setSdCardEventListener();
+        AppLog.d(TAG, "onResume()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MyCamera camera = CameraManager.getInstance().getCurCamera();
+        if(camera != null){
+            camera.setLoadThumbnail(false);
+        }
         presenter.reset();
         presenter.removeActivity();
     }

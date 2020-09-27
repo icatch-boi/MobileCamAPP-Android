@@ -13,15 +13,24 @@
         android:padding="8dp"
         android:textSize="@dimen/first_title_size"
         android:textColor="@color/primary_light"/>
-    <ImageButton
-        android:id="@+id/exit"
+    <TextView
+        android:id="@+id/cancel_all_txv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:padding="10dp"
-        android:src="@drawable/ic_close_black"
-        android:background="@drawable/selector_transparent2gray"
-        />
+        android:text="@string/cancel_all"
+        android:textColor="@color/accent"/>
+<!--    <ImageButton-->
+<!--        android:id="@+id/exit"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:padding="10dp"-->
+<!--        android:src="@drawable/ic_close_black"-->
+<!--        android:background="@drawable/selector_transparent2gray"-->
+<!--        />-->
 
 </RelativeLayout>
