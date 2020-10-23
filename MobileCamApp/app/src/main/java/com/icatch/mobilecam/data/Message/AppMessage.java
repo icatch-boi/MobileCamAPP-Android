@@ -44,6 +44,7 @@ public class AppMessage {
     public static final int MESSAGE_UPDATE_VIDEOPB_BAR = LOCAL_VIDEO_PBACTIVITY + 0X04;
     public static final int MESSAGE_CANCEL_VIDEO_DOWNLOAD = LOCAL_VIDEO_PBACTIVITY + 0X05;
     public static final int MESSAGE_VIDEO_STREAM_NO_EIS_INFORMATION = LOCAL_VIDEO_PBACTIVITY + 0X06;
+    public static final int MESSAGE_VIDEO_STREAM_CODEC_INFO = LOCAL_VIDEO_PBACTIVITY + 0X07;
 
     //For other 0x1000~0x1FFF
     public final static int FUNCTION_MESSAGE = 0x1000;
@@ -54,6 +55,7 @@ public class AppMessage {
     public static final int MESSAGE_CONNECTED = FUNCTION_MESSAGE + 0X04;
 	
 	public final static int FACEBOOK_LOGIN_SUCCEED = FUNCTION_MESSAGE + 0x05;
+    public final static int OPEN_WIFI_HOTSPOT_FAILED = FUNCTION_MESSAGE + 0x06;
     public final static int GOOGLE_LOGIN_SUCCEED = 0x06;
 
 

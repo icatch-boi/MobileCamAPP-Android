@@ -56,8 +56,6 @@ public class RemoteFileHelper {
         if (cameraProperties != null
                 && cameraProperties.hasFuction(PropertyId.CAMERA_PB_LIMIT_NUMBER)
                 && cameraProperties.checkCameraCapabilities(ICatchCamFeatureID.ICH_CAM_NEW_PAGINATION_GET_FILE)) {
-//        if (cameraProperties != null
-//                && cameraProperties.hasFuction(PropertyId.CAMERA_PB_LIMIT_NUMBER)) {
             supportSegmentedLoading = true;
             supportSetFileListAttribute = true;
         } else {

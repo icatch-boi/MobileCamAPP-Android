@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY ismartdvuser_url "https://business.facebook.com/ismartdvuser/">
+    <!ENTITY demovideo_url "https://youtu.be/V_gPlCbHaNI">
+    <!ENTITY turnonexportlog_url "https://youtu.be/GSnqVBMUWkk">
+]>
+<resources>
+    <string name="launch_help_qa" translatable="false">"  QUESTION AND ANSWER \n"
+"\n"
+"There are some reasons let you can't connect to Camera WIFI smoothly."\n"
+"\n"
+    </string>
+    <string name="launch_help_qa_1" translatable="false">
+"1. How to connect to my camera via WiFi? \n"
+"\n"
+"Please follow these steps to connect to your camera via WiFi.\n"
+"a. Turn ON the camera and its WiFi.. \n"
+"b. Search for the camera SSID on your smartphone and connect using the default password. (The default password may be 1234567890. Please check the user manual)\n"
+"c. After the WiFi connection is established, please launch the iSmart DV app.\n"
+"d. If the camera does not support [BlueTooth], do not turn on the Bluetooth on your smartphone.\n"
+"e. Click [Add New Camera] -> [wifi connection] -> into the preview screen. \n"
+"f. For some android version, please turn off [Mobile data] before click [add new camera] \n"
+"\n"
+   </string>
+    <string name="launch_help_qa_2" translatable="false">
+"2. Could you show me how to connect to my camera?\n"
+"\n"
+"Please disconnect the WiFi connection to your camera first. Click the demo video : &demovideo_url; (The copyright belongs to the writer.)\n"
+    </string>
+    <string name="launch_help_qa_3" translatable="false">
+"\n"
+"3. Why is my smartphone disconnecting the connection to my camera automatically?\n"
+        "\n"
+"Turn off the WIFI smart netwrok switching function! \n"
+"Some Android models will automatically disconnect WIFI APs that cannot access the Internet. Since the camera is a WIFI AP that cannot access the Internet, it is necessary to turn off the WIFI smart switching function of the mobile phone. Generally speaking, this function is in the advanced setting of WIFI, but the name of this function will have its own name according to each mobile phone label. Please refer to your mobile phone manual.\n"
+"\n"
+    </string>
+    <string name="launch_help_qa_4" translatable="false">
+"4. Why can't I use my abnormal SD card? \n"
+"\n"
+"If the SD card has an abnormal file, it iwll interrupt the camera starting flow and the camera will not function properly.\m"
+"The simplest way to judge is: Exit the SD card -> turn on the camera and its WiFi, then open the APP and connect to the camera via WiFi.\n"
+"if you can [Add New Camera] and enter the Preview screen, it is functioning properly. If you can't connect, please use the PC to format the SD Card and then try again.\n"
+"\n"
+    </string>
+    <string name="launch_help_qa_5" translatable="false">
+"5. How to choose SD Card? \n"
+"\n"
+"The Micro SD card should be class 10 and FAT 32. Please format the SD card on the camera before use.\n"
+"\n"
+    </string>
+    <string name="launch_help_qa_6" translatable="false">
+"6. Why is the camera prompting [Please insert SD card] when the SD card is already inserted into the camera? \n"
+"\n"
+Please check whether the SD card has been formatted on the camera. If the problem persists, the file system on the SD card may be corrupted. Please try changing to a new class 10 SD card with capacity ranging from 8GB-64GB (reference to the user manual).
+"\n"
+
+    </string>
+    <string name="launch_help_qa_7" translatable="false">
+"7. How to feedback camera problem? \n"
+"\n"
+"This APP belongs to iCatch Technology Inc. This app is free to use for all iCatch's customers and end customers. However, the camera vendor is responsible for the camera hardware support.\n"
+"Camera parts/confifuration/sales hehavior and repairs are all supported by the camera seller. You can contact the seller for further consultation.\n"
+"The seller should be your first contact window if you have any questions to your camera. We suggest you to communicate by using a phone call. If your camera is still under warranty, you should contact the seller for your rights.\n"
+"\n"
+    </string>
+    <string name="launch_help_qa_8" translatable="false">
+
+"8. iSmart DV APP question feedback:\n"
+"\n"
+"If you want to respond to the APP developer, please post your question to: \n"
+    </string>
+    <string name="launch_help_qa_8_2" translatable="false">"\n"
+        " Reaction content: [Smart phone factory and model][camera manufacturer and camera model] [app version] [problem description]\n"
+"Example :[Google Pixel 3][iCatch/SBC 1.2.7] [iSmart DV 1.4.9] [Connectin fail when I click Add New Camera and I have follow the connection flow..... Please see the screenshot  ]\n"
+        "\n"
+    </string>
+    <string name="launch_help_qa_9" translatable="false">
+"9. How to export APP/SDK log to developer ? \n"
+"\n"
+"The following method will export the transaction log between App and camera. The log does not contain any private information. Please follow these steps to export log.\n"
+"a. Install iSmart DV APP \n"
+"b. Editing APP setting file :\\Android\\data\\com.icatch.ismartdv2016\\cache\\SportCamResoure\\netconfig.properties \n"
+"c. edit parameters : SaveAppLog=false and SaveSDKLog=false to SaveAppLog=true and SaveSDKLog=true , then Save. \n"
+"d. Go back and reproduce problem again. \n"
+"e. Exit app and clean cache. \n"
+"f. Find out the external storage folder: iCatchSportCamera_APP_Log and iCatchSportCamera_SDK_Log folder and get the latest log file (Each APP and SDK files are a pair.)\n"
+"Note: Some model smart phones cannot see the log files quickly, its need to restart smart phone one more time)\n"
+"g. Send to us (icatchtek.android\@gmail.com)\n"
+"h. Remember: please turn off the export function after you have reproducted the problem. (step by step video as below:) \n"
+    </string>
+    <string name="launch_help_qa_10" translatable="false">
+"\n"
+"10. Where can I find old version APP ? \n"
+"\n"
+"Installing old version of Android apps involves downloading the APK file of an app\'s older version from an external source and then sideloading it to the device for installation.\n"
+"a. the get started, you need to allow installation of apps from external sources on your sources.\n"
+"To do it, navigate the Settingss > Security, and enable the \'Allow installation of unknown apps\' option under Device administration sub-setting.\n"
+"\n"
+"b. the next step is to get the APK file of the old app verision you want ot install.\n"
+"Search for the app and version number you are looking for and download it.\n"
+"\n"
+"c. Almost down. Now copy the downloaded APK file to your Android smartphone. \n"
+"Nevigate to it via the file explorer, and smartphone will automatically recognize and install the app.\n"
+"\n"
+"d. Even when you successfully install the older version of an app, it is possible that the automatic update option in the Google Play Store will bump it to the latest version.\n"
+"To prevent this from happening, go to Google Play Store > Settings > Auto-update apps, and select the 'Do not auto-update apps' option.  \n"
+"\n"
+"Here are some of the older versions you can try.\n"
+"\n"
+    </string>
+    <string name="launch_help_qa_end" translatable="false">
+"\n"
+"Thank you for your feedback.\n"
+"\n"
+"We will try our best to track down the problem as soon as possible.\n"
+"\n"
+"\n"
+</string>
+</resources>

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -233,48 +233,42 @@ public class LoginGoogleActivity extends AppCompatActivity implements GoogleApiC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                getAuthCode();
-                break;
-            case R.id.sign_out_button:
-                signOut();
-                break;
-            case R.id.disconnect_button:
-                revokeAccess();
-                break;
-            case R.id.refresh_token_button:
-//                getToken(authCode);
-                if (refreshToken != null) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Log.d(TAG, "Start refreshAccessToken");
-                                String clientId = GoogleAuthTool.CLIENT_ID;
-                                String clientSecret = GoogleAuthTool.CLIENT_SECRET;
-                                final String accessToken = refreshAccessToken(refreshToken, clientId, clientSecret);
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String message = "RefreshToken:" + refreshToken + "\n" + "AccessToken:" + accessToken;
-                                        mAuthCodeTextView.setText(message);
-                                    }
-                                });
-                                GoogleToken googleToken = new GoogleToken(accessToken, refreshToken);
-                                String directoryPath = activity.getExternalCacheDir() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;
-                                String fileName = AppInfo.FILE_GOOGLE_TOKEN;
-                                FileTools.saveSerializable(directoryPath + fileName, googleToken);
-                                Log.d(TAG, "End refreshAccessToken accessToken=" + accessToken);
-                            } catch (IOException e) {
-                                Log.d(TAG, "refreshAccessToken IOException=");
-                                e.printStackTrace();
-                            }
+        int id = v.getId();
+        if (id == R.id.sign_in_button) {
+            getAuthCode();
+        } else if (id == R.id.sign_out_button) {
+            signOut();
+        } else if (id == R.id.disconnect_button) {
+            revokeAccess();
+        } else if (id == R.id.refresh_token_button) {//                getToken(authCode);
+            if (refreshToken != null) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Log.d(TAG, "Start refreshAccessToken");
+                            String clientId = GoogleAuthTool.CLIENT_ID;
+                            String clientSecret = GoogleAuthTool.CLIENT_SECRET;
+                            final String accessToken = refreshAccessToken(refreshToken, clientId, clientSecret);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String message = "RefreshToken:" + refreshToken + "\n" + "AccessToken:" + accessToken;
+                                    mAuthCodeTextView.setText(message);
+                                }
+                            });
+                            GoogleToken googleToken = new GoogleToken(accessToken, refreshToken);
+                            String directoryPath = activity.getExternalCacheDir() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;
+                            String fileName = AppInfo.FILE_GOOGLE_TOKEN;
+                            FileTools.saveSerializable(directoryPath + fileName, googleToken);
+                            Log.d(TAG, "End refreshAccessToken accessToken=" + accessToken);
+                        } catch (IOException e) {
+                            Log.d(TAG, "refreshAccessToken IOException=");
+                            e.printStackTrace();
                         }
-                    }).start();
-                }
-                break;
-
+                    }
+                }).start();
+            }
         }
     }
 

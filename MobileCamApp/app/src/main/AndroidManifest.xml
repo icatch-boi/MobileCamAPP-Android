@@ -42,10 +42,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/FullScreenTheme">
-        <activity android:name=".ui.activity.LicenseAgreementActivity"
+        <activity android:name=".ui.activity.LaunchHelpActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/help"></activity>
+        <activity
+            android:name=".ui.activity.LicenseAgreementActivity"
             android:label="@string/title_privacy_policy"
             android:launchMode="singleTask"
-            android:theme="@style/FullScreenTheme.NoActionBar"></activity>
+            android:theme="@style/FullScreenTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.LaunchActivity"
             android:launchMode="singleTask"
@@ -53,9 +59,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
 
@@ -99,36 +103,44 @@
             android:label="@string/title_activity_local_photo"
             android:launchMode="singleTask"
             android:theme="@style/FullScreenTheme.NoActionBar" />
-        <activity android:name=".ui.activity.WifiApActivity"
-            android:launchMode="singleTask"></activity>
-        <activity android:name=".ui.activity.LoginFacebookActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".ui.activity.WifiApActivity"
+            android:launchMode="singleTask" >
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".ui.activity.LoginFacebookActivity"
+            android:launchMode="singleTask" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".ui.activity.LoginGoogleActivity"></activity>
+        <activity android:name=".ui.activity.LoginGoogleActivity" />
         <activity
             android:name=".ui.activity.PvParamSettingActivity"
             android:label="@string/title_activity_pv_param_setting"
             android:launchMode="singleTask"
-            android:screenOrientation="sensorPortrait"></activity>
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ui.activity.USBPreviewActivity"
             android:label="@string/title_activity_usbpreview"
             android:launchMode="singleTask"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/FullScreenTheme.NoActionBar"></activity>
+            android:theme="@style/FullScreenTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.LocalMultiPbActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_local_pb"
             android:launchMode="singleTask"
-            android:theme="@style/FullScreenTheme.NoActionBar"></activity>
+            android:theme="@style/FullScreenTheme.NoActionBar" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.icatch.mobilecam.provider"
             android:exported="false"
             android:grantUriPermissions="true">

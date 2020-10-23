@@ -47,4 +47,6 @@ public interface LocalVideoPbView {
     void setMoreSettingLayoutVisibility(int visibility);
 
     void setEisSwitchChecked(boolean checked);
+
+    void setCodecInfoTxv(String info);
 }

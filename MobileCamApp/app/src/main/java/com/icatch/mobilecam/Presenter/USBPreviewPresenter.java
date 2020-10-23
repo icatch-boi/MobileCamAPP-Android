@@ -551,10 +551,10 @@ public class USBPreviewPresenter extends BasePresenter implements SensorEventLis
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ICatchImageSize curImageSize = curCamera.getPanoramaPreviewPlayback().getCurImageSize();
+                ICatchImageSize curImageSize = panoramaPreviewPlayback.getCurImageSize();
                 if (curImageSize == null) {
                     initImageSize();
-                    curImageSize = curCamera.getPanoramaPreviewPlayback().getCurImageSize();
+                    curImageSize = panoramaPreviewPlayback.getCurImageSize();
                 }
                 ICatchFrameBuffer frameBuffer = new ICatchFrameBuffer(1024 * 1024 * 9);
                 final boolean retValue = panoramaPreviewPlayback.snapImage(frameBuffer, 5000);
@@ -1033,7 +1033,7 @@ public class USBPreviewPresenter extends BasePresenter implements SensorEventLis
 
     public void showSharedUrlDialog(final Context context, final String shareUrl) {
 
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.live_shared_url, null);
         final EditText resetTxv = (EditText) view.findViewById(R.id.shared_url);
         final ImageView qrcodeImage = (ImageView) view.findViewById(R.id.shared_url_qrcode);

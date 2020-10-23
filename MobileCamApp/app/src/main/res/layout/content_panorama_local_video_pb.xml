@@ -9,17 +9,25 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:context="com.icatch.mobilecam.ui.activity.LocalVideoPbActivity"
     >
-
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         >
+        <TextView
+            android:id="@+id/codec_info_txv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="20dp"
+            android:background="@color/half_transparent_grey"
+            android:textColor="@color/primary_light"
+            android:visibility="gone"/>
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             >
             <SurfaceView
                 android:id="@+id/m_surfaceView"
@@ -30,7 +38,7 @@
 
         <RelativeLayout
             android:id="@+id/local_pb_top_layout"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="top"
             android:background="@color/half_transparent_grey"

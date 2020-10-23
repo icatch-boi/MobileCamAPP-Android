@@ -1,6 +1,6 @@
 package com.icatch.mobilecam.ui.Interface;
 
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 public interface MultiPbView {
     void setViewPageAdapter(FragmentPagerAdapter adapter);

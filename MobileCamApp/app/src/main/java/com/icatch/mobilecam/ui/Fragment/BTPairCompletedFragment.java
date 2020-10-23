@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.icatch.mobilecam.MyCamera.CameraType;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
@@ -19,6 +20,7 @@ import com.icatch.mobilecam.Listener.OnFragmentInteractionListener;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.Message.AppMessage;
 import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.utils.SharedPreferencesUtil;
 import com.icatch.mobilecam.utils.WifiCheck;
 import com.icatchtek.bluetooth.customer.exception.IchBluetoothDeviceBusyException;
 import com.icatchtek.bluetooth.customer.exception.IchBluetoothTimeoutException;
@@ -264,7 +266,8 @@ public class BTPairCompletedFragment extends Fragment {
                         MyProgressDialog.closeProgressDialog();
                     }
                 });
-                appStartHandler.obtainMessage(AppMessage.MESSAGE_CAMERA_CONNECTING_START).sendToTarget();
+                int position = (int) SharedPreferencesUtil.get(getContext(),SharedPreferencesUtil.CONFIG_FILE,"camera_position",0);
+                appStartHandler.obtainMessage(AppMessage.MESSAGE_CAMERA_CONNECTING_START, CameraType.WIFI_CAMERA,position).sendToTarget();
                 executor.shutdown();
                 return;
             } else {

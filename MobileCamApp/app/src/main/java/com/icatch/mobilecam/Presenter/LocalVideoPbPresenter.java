@@ -136,6 +136,7 @@ public class LocalVideoPbPresenter extends BasePresenter implements SensorEventL
         sdkEvent.addPanoramaEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_PLAYBACK_CACHING_CHANGED);
         sdkEvent.addPanoramaEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_PLAYBACK_CACHING_PROGRESS);
         sdkEvent.addPanoramaEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_STREAM_NO_EIS_INFORMATION);
+        sdkEvent.addPanoramaEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_CODEC_INSUFFICIENT_PERFORMANCE);
     }
 
     public void removeEventListener() {
@@ -148,6 +149,7 @@ public class LocalVideoPbPresenter extends BasePresenter implements SensorEventL
         sdkEvent.removePanoramaEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_PLAYBACK_CACHING_CHANGED);
         sdkEvent.removePanoramaEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_PLAYBACK_CACHING_PROGRESS);
         sdkEvent.removePanoramaEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_STREAM_NO_EIS_INFORMATION);
+        sdkEvent.removePanoramaEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_CODEC_INSUFFICIENT_PERFORMANCE);
     }
 
     public void play() {
@@ -355,6 +357,13 @@ public class LocalVideoPbPresenter extends BasePresenter implements SensorEventL
     private class VideoPbHandler extends Handler {
         public void handleMessage(Message msg) {
             switch (msg.what) {
+
+                case AppMessage.MESSAGE_VIDEO_STREAM_CODEC_INFO:
+                    if(msg.obj instanceof String){
+//                        MyToast.show(activity,(String)msg.obj);
+                        localVideoPbView.setCodecInfoTxv((String)msg.obj);
+                    }
+                    break;
                 case AppMessage.MESSAGE_UPDATE_VIDEOPB_BAR:
                     if (videoPbMode != VideoPbMode.MODE_VIDEO_PLAY || needUpdateSeekBar == false) {
                         return;

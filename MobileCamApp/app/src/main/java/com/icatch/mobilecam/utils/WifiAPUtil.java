@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.icatch.mobilecam.Listener.WifiListener;
+import com.icatch.mobilecam.Log.AppLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -125,15 +126,10 @@ public class WifiAPUtil {
             Method method = mWifiManager.getClass().getMethod("setWifiApConfiguration",
                     wcfg.getClass());
             Boolean rt = (Boolean) method.invoke(mWifiManager, wcfg);
-            if (DEBUG) Log.d(TAG, " rt = " + rt);
-        } catch (NoSuchMethodException e) {
-            Log.e(TAG, e.getMessage());
-        } catch (IllegalArgumentException e) {
-            Log.e(TAG, e.getMessage());
-        } catch (IllegalAccessException e) {
-            Log.e(TAG, e.getMessage());
-        } catch (InvocationTargetException e) {
-            Log.e(TAG, e.getMessage());
+            if (DEBUG) AppLog.d(TAG, " rt = " + rt);
+        } catch (Exception e){
+            AppLog.e(TAG, e.getClass().getSimpleName());
+            return false;
         }
         return setWifiApEnabled();
     }
@@ -328,5 +324,9 @@ public class WifiAPUtil {
         }
         return WifiSecurityType.WIFICIPHER_INVALID.ordinal();
     }
+
+
+
+
 
 }

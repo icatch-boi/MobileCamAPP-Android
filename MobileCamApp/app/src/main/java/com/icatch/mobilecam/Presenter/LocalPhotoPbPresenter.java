@@ -12,50 +12,41 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.FileProvider;
-import android.support.v4.view.ViewPager;
+import androidx.core.content.FileProvider;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 
 import com.icatch.mobilecam.MyCamera.LocalSession;
-import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.adapter.LocalPhotoPbViewPagerAdapter;
 import com.icatch.mobilecam.data.entity.LocalPbItemInfo;
 import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
-import com.icatch.mobilecam.ui.ExtendComponent.ProgressWheel;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.data.Mode.TouchMode;
 import com.icatch.mobilecam.Presenter.Interface.BasePresenter;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.PanoramaPhotoPlayback;
-import com.icatch.mobilecam.utils.BitmapTools;
 import com.icatch.mobilecam.ui.Interface.LocalPhotoPbView;
 import com.icatch.mobilecam.utils.MediaRefresh;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
-import com.icatch.mobilecam.utils.imageloader.TutkUriUtil;
 import com.icatchtek.pancam.customer.exception.IchGLSurfaceNotSetException;
 import com.icatchtek.pancam.customer.surface.ICatchSurfaceContext;
 import com.icatchtek.pancam.customer.type.ICatchGLImage;
 import com.icatchtek.pancam.customer.type.ICatchGLPanoramaType;
 import com.icatchtek.pancam.customer.type.ICatchGLPoint;
 import com.icatchtek.reliant.customer.type.ICatchCodec;
-import com.icatchtek.reliant.customer.type.ICatchFile;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import uk.co.senab.photoview.PhotoView;
 
 
 public class LocalPhotoPbPresenter extends BasePresenter implements SensorEventListener {
@@ -287,16 +278,18 @@ public class LocalPhotoPbPresenter extends BasePresenter implements SensorEventL
         showDeleteEnsureDialog();
     }
 
-    public void share() {
+    public void share(Context context) {
         int curPosition = photoPbView.getViewPagerCurrentItem();
         String photoPath = fileList.get(curPosition).file.getPath();
-        AppLog.d(TAG, "share curPosition=" + curPosition + " photoPath=" + photoPath);
+        String packagename = context.getPackageName();
+        AppLog.d(TAG, "share curPosition=" + curPosition + " photoPath=" + photoPath + " packagename:" + packagename) ;
+
         //com.icatch.mobilecam.provider
         Uri fileUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             fileUri = FileProvider.getUriForFile(
                     activity,
-                    "com.icatch.mobilecam.provider",
+                    packagename + ".provider",
                     new File(photoPath));
         } else {
             fileUri = Uri.fromFile(new File(photoPath));

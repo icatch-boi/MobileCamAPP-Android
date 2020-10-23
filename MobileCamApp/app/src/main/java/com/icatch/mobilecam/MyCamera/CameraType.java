@@ -7,6 +7,5 @@ package com.icatch.mobilecam.MyCamera;
 public class CameraType {
     public static int UNDEFIND_CAMERA = 0;
     public static int USB_CAMERA = 1;
-    public static int PANORAMA_CAMERA = 2;
-    public static int WIFI_CAMERA = 3;
+    public static int WIFI_CAMERA = 2;
 }

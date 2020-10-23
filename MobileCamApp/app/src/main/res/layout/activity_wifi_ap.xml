@@ -24,11 +24,11 @@
             android:id="@+id/et_ssid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text"
             android:layout_weight="1"
-            android:hint="请输入ssid"
+            android:ems="10"
             android:imeOptions="actionDone"
-            android:ems="10" >
+            android:inputType="text"
+            android:text="test01">
 
             <requestFocus />
         </EditText>
@@ -57,6 +57,7 @@
             android:layout_weight="1"
             android:inputType="text"
             android:imeOptions="actionDone"
+            android:text="1234567890"
             android:ems="10" >
         </EditText>
     </LinearLayout>

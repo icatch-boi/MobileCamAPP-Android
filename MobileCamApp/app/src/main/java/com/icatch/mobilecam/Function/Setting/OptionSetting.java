@@ -2,8 +2,10 @@ package com.icatch.mobilecam.Function.Setting;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
@@ -78,107 +80,80 @@ public class OptionSetting {
     public void showSettingDialog(int nameId, Activity activity) {
         this.context = activity;
         this.activity = activity;
-        switch (nameId) {
-            case R.string.setting_image_size:
-                Log.d("1111", "setting_image_size");
-                showImageSizeOptionDialog(context);
-                break;
-            case R.string.setting_video_size:
-                Log.d("1111", "setting_video_size");
-                showVideoSizeOptionDialog(context);
-                break;
-            case R.string.setting_capture_delay:
-                Log.d("1111", "setting_capture_delay");
-                showDelayTimeOptionDialog(context);
-                break;
-            case R.string.title_burst:
-                showBurstOptionDialog(context);
-                break;
-            case R.string.title_awb:
-                Log.d("1111", "showWhiteBalanceOptionDialog =");
-                showWhiteBalanceOptionDialog(context);
-                break;
-            case R.string.setting_power_supply:
-                showElectricityFrequencyOptionDialog(context);
-                break;
-            case R.string.setting_datestamp:
-                showDateStampOptionDialog(context);
-                break;
-            case R.string.setting_format:
-                if (cameraProperties.isSDCardExist() == false) {
-                    sdCardIsNotReadyAlert(context);
-                    break;
-                }
-                showFormatConfirmDialog(context);
-                break;
-            case R.string.setting_time_lapse_interval:
-                showTimeLapseIntervalDialog(context);
-                break;
-            case R.string.setting_time_lapse_duration:
-                showTimeLapseDurationDialog(context);
-                break;
-            case R.string.title_timeLapse_mode:
-                showTimeLapseModeDialog(context);
-                break;
-            case R.string.slowmotion:
-                showSlowMotionDialog(context);
-                break;
-            case R.string.upside:
-                showUpsideDialog(context);
-                break;
-            case R.string.camera_wifi_configuration:
-                showCameraConfigurationDialog(context);
-                break;
-            case R.string.setting_update_fw:
-                if (cameraProperties.isSDCardExist() == false) {
-                    sdCardIsNotReadyAlert(context);
-                    break;
-                }
-                String fwPth = Environment.getExternalStorageDirectory().toString() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;;
-                String fwUpgradeName = AppInfo.FW_UPGRADE_FILENAME;
-                if (!FileTools.checkFwUpgradeFile(fwPth,fwUpgradeName)) {
-                    String msg = context.getString(R.string.setting_updatefw_upgrade_file_not_exist)
-                            .replace("$1$",fwUpgradeName)
-                            .replace("$2$",AppInfo.PROPERTY_CFG_DIRECTORY_PATH);
-                    AppDialog.showDialogWarn(context,msg);
-                    return;
-                }
-                showUpdateFWDialog(context);
-                break;
-            case R.string.setting_auto_download_size_limit:
-                showSetDownloadSizeLimitDialog(context);
-                break;
-
-            case R.string.setting_enable_wifi_hotspot:
-                showEnableWifihotspotDialog();
-                break;
-            case R.string.setting_title_exposure_compensation:
-                AppLog.d("1111", "showExposureCompensationDialog");
-                showExposureCompensationDialog(context);
-                break;
-            case R.string.setting_title_video_file_length:
-                AppLog.d("1111", "showVideoFileLengthDialog");
-                showVideoFileLengthDialog(context);
-                break;
-
-            case R.string.setting_title_screen_saver:
-                AppLog.d("1111", "showScreenSaverDialog");
-                showScreenSaverDialog(context);
-                break;
-            case R.string.setting_title_auto_power_off:
-                AppLog.d("1111", "showAutoPowerOffDialog");
-                showAutoPowerOffDialog(context);
-                break;
-
-            case R.string.setting_title_fast_motion_movie:
-                AppLog.d("1111", "showFastMotionMovieDialog");
-                showFastMotionMovieDialog(context);
-                break;
-            case R.string.setting_storage_location:
-                AppLog.d("1111", "showStorageLocationDialog");
-                showStorageLocationDialog(context);
-                break;
-
+        if (nameId == R.string.setting_image_size) {
+            Log.d("1111", "setting_image_size");
+            showImageSizeOptionDialog(context);
+        } else if (nameId == R.string.setting_video_size) {
+            Log.d("1111", "setting_video_size");
+            showVideoSizeOptionDialog(context);
+        } else if (nameId == R.string.setting_capture_delay) {
+            Log.d("1111", "setting_capture_delay");
+            showDelayTimeOptionDialog(context);
+        } else if (nameId == R.string.title_burst) {
+            showBurstOptionDialog(context);
+        } else if (nameId == R.string.title_awb) {
+            Log.d("1111", "showWhiteBalanceOptionDialog =");
+            showWhiteBalanceOptionDialog(context);
+        } else if (nameId == R.string.setting_power_supply) {
+            showElectricityFrequencyOptionDialog(context);
+        } else if (nameId == R.string.setting_datestamp) {
+            showDateStampOptionDialog(context);
+        } else if (nameId == R.string.setting_format) {
+            if (cameraProperties.isSDCardExist() == false) {
+                sdCardIsNotReadyAlert(context);
+                return;
+            }
+            showFormatConfirmDialog(context);
+        } else if (nameId == R.string.setting_time_lapse_interval) {
+            showTimeLapseIntervalDialog(context);
+        } else if (nameId == R.string.setting_time_lapse_duration) {
+            showTimeLapseDurationDialog(context);
+        } else if (nameId == R.string.title_timeLapse_mode) {
+            showTimeLapseModeDialog(context);
+        } else if (nameId == R.string.slowmotion) {
+            showSlowMotionDialog(context);
+        } else if (nameId == R.string.upside) {
+            showUpsideDialog(context);
+        } else if (nameId == R.string.camera_wifi_configuration) {
+            showCameraConfigurationDialog(context);
+        } else if (nameId == R.string.setting_update_fw) {
+            if (cameraProperties.isSDCardExist() == false) {
+                sdCardIsNotReadyAlert(context);
+                return;
+            }
+            String fwPth = Environment.getExternalStorageDirectory().toString() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;
+            ;
+            String fwUpgradeName = AppInfo.FW_UPGRADE_FILENAME;
+            if (!FileTools.checkFwUpgradeFile(fwPth, fwUpgradeName)) {
+                String msg = context.getString(R.string.setting_updatefw_upgrade_file_not_exist)
+                        .replace("$1$", fwUpgradeName)
+                        .replace("$2$", AppInfo.PROPERTY_CFG_DIRECTORY_PATH);
+                AppDialog.showDialogWarn(context, msg);
+                return;
+            }
+            showUpdateFWDialog(context);
+        } else if (nameId == R.string.setting_auto_download_size_limit) {
+            showSetDownloadSizeLimitDialog(context);
+        } else if (nameId == R.string.setting_enable_wifi_hotspot) {
+            showEnableWifihotspotDialog();
+        } else if (nameId == R.string.setting_title_exposure_compensation) {
+            AppLog.d("1111", "showExposureCompensationDialog");
+            showExposureCompensationDialog(context);
+        } else if (nameId == R.string.setting_title_video_file_length) {
+            AppLog.d("1111", "showVideoFileLengthDialog");
+            showVideoFileLengthDialog(context);
+        } else if (nameId == R.string.setting_title_screen_saver) {
+            AppLog.d("1111", "showScreenSaverDialog");
+            showScreenSaverDialog(context);
+        } else if (nameId == R.string.setting_title_auto_power_off) {
+            AppLog.d("1111", "showAutoPowerOffDialog");
+            showAutoPowerOffDialog(context);
+        } else if (nameId == R.string.setting_title_fast_motion_movie) {
+            AppLog.d("1111", "showFastMotionMovieDialog");
+            showFastMotionMovieDialog(context);
+        } else if (nameId == R.string.setting_storage_location) {
+            AppLog.d("1111", "showStorageLocationDialog");
+            showStorageLocationDialog(context);
         }
     }
 
@@ -346,8 +321,9 @@ public class OptionSetting {
             public void onClick(DialogInterface dialog, int arg1) {
 
                 wifiSsid = wifiName.getText().toString();
+                password = cameraPassword.getText().toString();
                 if(wifiSsid.isEmpty() || password.isEmpty()){
-                    Toast.makeText(context, "Wifi name or password cannot be empty.", Toast.LENGTH_LONG).show();
+                    MyToast.show(context,R.string.wifi_or_password_cannot_be_empty);
                     try {
                         Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
                         field.setAccessible(true);
@@ -357,10 +333,9 @@ public class OptionSetting {
                         e.printStackTrace();
                     }
                     return;
-
                 }
                 if (wifiSsid.length() > 20) {
-                    Toast.makeText(context, R.string.camera_name_limit, Toast.LENGTH_LONG).show();
+                    MyToast.show(context, R.string.camera_name_limit);
                     // do not allow dialog close
                     try {
                         Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
@@ -372,9 +347,9 @@ public class OptionSetting {
                     }
                     return;
                 }
-                password = cameraPassword.getText().toString();
+
                 if (password.length() > 20) {
-                    Toast.makeText(context, R.string.password_limit, Toast.LENGTH_LONG).show();
+                    MyToast.show(context, R.string.password_limit);
                     // do not allow dialog close
                     try {
                         Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
@@ -386,7 +361,6 @@ public class OptionSetting {
                     }
                     return;
                 }
-
                 // allow dialog close
                 try {
                     Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
@@ -394,7 +368,6 @@ public class OptionSetting {
                     field.set(dialog, true);
                 } catch (Exception e) {
                     e.printStackTrace();
-
                 }
                 MyProgressDialog.showProgressDialog(context, R.string.action_processing);
                 WifiAPUtil.getInstance(context.getApplicationContext()).regitsterHandler(handler);
@@ -410,6 +383,7 @@ public class OptionSetting {
                         }
                         if (!ret) {
                             handler.obtainMessage(AppMessage.AP_MODE_TO_STA_MODE_FAILURE).sendToTarget();
+                            return;
                         }
                         ret = cameraProperties.setStringPropertyValue(PropertyId.STA_MODE_PASSWORD, password);
                         try {
@@ -419,6 +393,7 @@ public class OptionSetting {
                         }
                         if (!ret) {
                             handler.obtainMessage(AppMessage.AP_MODE_TO_STA_MODE_FAILURE).sendToTarget();
+                            return;
                         }
                         ret = cameraProperties.setPropertyValue(PropertyId.AP_MODE_TO_STA_MODE, 1);
                         if (!ret) {
@@ -427,9 +402,35 @@ public class OptionSetting {
                         }
                         ret = WifiAPUtil.getInstance(context).turnOnWifiAp(wifiSsid, password, WifiAPUtil.WifiSecurityType.WIFICIPHER_WPA2);
                         if (!ret) {
-                            handler.obtainMessage(AppMessage.AP_MODE_TO_STA_MODE_FAILURE).sendToTarget();
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MyProgressDialog.closeProgressDialog();
+                                    AlertDialog.Builder builder4 = new AlertDialog.Builder(activity);
+                                    context.getResources().getString(R.string.download_progress).replace("$1$", wifiSsid).replace("$2$",password);
+                                    String info = "Wifi热点开启失败，可能系统不支持，需要手动开启,并设置Wifi热点名称为：" + wifiSsid + " 密码为：" + password + " 设置完成后，请重新启动并连接。";
+                                    builder4.setMessage(info);
+                                    builder4.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent();
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            //打开网络共享与热点设置页面
+                                            ComponentName comp = new ComponentName("com.android.settings", "com.android.settings.Settings$TetherSettingsActivity");
+                                            intent.setComponent(comp);
+                                            activity.startActivity(intent);
+                                        }
+                                    });
+                                    alertDialog = builder4.create();
+                                    alertDialog.setCancelable(false);
+                                    alertDialog.show();
+                                }
+                            });
+
+//                            handler.obtainMessage(AppMessage.OPEN_WIFI_HOTSPOT_FAILED).sendToTarget();
                         } else {
-//                            handler.obtainMessage( AppMessage.AP_MODE_TO_STA_MODE_SUSSED).sendToTarget();
+                            handler.obtainMessage(AppMessage.AP_MODE_TO_STA_MODE_SUSSED).sendToTarget();
                         }
                     }
                 }).start();
@@ -1112,7 +1113,27 @@ public class OptionSetting {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case AppMessage.OPEN_WIFI_HOTSPOT_FAILED:
+                    AppLog.d(TAG, "receive OPEN_WIFI_HOTSPOT_FAILED");
+                    MyProgressDialog.closeProgressDialog();
+                    AlertDialog.Builder builder4 = new AlertDialog.Builder(context);
+                    builder4.setMessage("Wifi热点开启失败，可能系统版本不支持，需要手动开启");
+                    builder4.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
 
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent();
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            //打开网络共享与热点设置页面
+                            ComponentName comp = new ComponentName("com.android.settings", "com.android.settings.Settings$TetherSettingsActivity");
+                            intent.setComponent(comp);
+                            context.startActivity(intent);
+                        }
+                    });
+                    alertDialog = builder4.create();
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                    break;
                 case SDKEvent.EVENT_FW_UPDATE_COMPLETED:
                     AppLog.d(TAG, "receive EVENT_FW_UPDATE_COMPLETED");
                     MyProgressDialog.closeProgressDialog();
@@ -1233,7 +1254,7 @@ public class OptionSetting {
 
     public void showSetDownloadSizeLimitDialog(final Context context) {
 
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context);
         View contentView = View.inflate(context, R.layout.content_download_size_dialog, null);
         final EditText resetTxv = (EditText) contentView.findViewById(R.id.download_size);
         String value = AppInfo.autoDownloadSizeLimit + "";

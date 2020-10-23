@@ -6,9 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,8 +40,6 @@ import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.data.SystemInfo.SystemInfo;
 import com.icatch.mobilecam.ui.Interface.PreviewView;
 import com.icatch.mobilecam.utils.ClickUtils;
-import com.icatch.mobilecam.utils.imageloader.ICatchtekImageDownloader;
-import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
 import com.icatchtek.control.customer.type.ICatchCamEventID;
 
 import static com.icatch.mobilecam.data.Message.AppMessage.FACEBOOK_LOGIN_SUCCEED;
@@ -444,21 +442,17 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         AppLog.i(TAG, "click the v.getId() =" + v.getId());
-        switch (v.getId()) {
-            case R.id.multi_pb:
-                AppLog.i(TAG, "click the multi_pb");
-                if (!ClickUtils.isFastDoubleClick(R.id.multi_pb)) {
-                    presenter.redirectToAnotherActivity(PreviewActivity.this, RemoteMultiPbActivity.class);
-                }
-                break;
-            case R.id.doCapture:
-                AppLog.i(TAG, "click the doCapture");
-                if (!ClickUtils.isFastDoubleClick(R.id.doCapture)) {
-                    presenter.startOrStopCapture();
-                }
-                break;
-            default:
-                break;
+        int id = v.getId();
+        if (id == R.id.multi_pb) {
+            AppLog.i(TAG, "click the multi_pb");
+            if (!ClickUtils.isFastDoubleClick(R.id.multi_pb)) {
+                presenter.redirectToAnotherActivity(PreviewActivity.this, RemoteMultiPbActivity.class);
+            }
+        } else if (id == R.id.doCapture) {
+            AppLog.i(TAG, "click the doCapture");
+            if (!ClickUtils.isFastDoubleClick(R.id.doCapture)) {
+                presenter.startOrStopCapture();
+            }
         }
     }
 
@@ -599,6 +593,10 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void showZoomView() {
         zoomView.startDisplay();
+    }
+    @Override
+    public void  hideZoomView(){
+        zoomView.setHide();
     }
 
     @Override

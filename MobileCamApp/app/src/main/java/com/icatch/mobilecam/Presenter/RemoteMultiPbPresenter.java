@@ -1,10 +1,9 @@
 package com.icatch.mobilecam.Presenter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import android.view.View;
 
 import com.icatch.mobilecam.Function.CameraAction.PbDownloadManager;
@@ -28,10 +27,8 @@ import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Fragment.BaseMultiPbFragment;
 import com.icatch.mobilecam.ui.Fragment.RemoteMultiPbFragment;
-import com.icatch.mobilecam.ui.Fragment.RemoteMultiPbPhotoFragment;
 import com.icatch.mobilecam.ui.Interface.MultiPbView;
 import com.icatch.mobilecam.ui.RemoteFileHelper;
-import com.icatch.mobilecam.ui.activity.VideoPbActivity;
 import com.icatch.mobilecam.ui.adapter.ViewPagerAdapter;
 import com.icatch.mobilecam.utils.FileFilter;
 import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;

@@ -357,7 +357,8 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
                 public void onClick(DialogInterface dialog, int which) {
                     MyProgressDialog.showProgressDialog(activity, R.string.dialog_deleting);
                     quitEditMode();
-                    new DeleteFileThread(finalList, finalFileType).run();
+//                    new DeleteFileThread(finalList, finalFileType).run();
+                    new Thread(new DeleteFileThread(finalList, finalFileType)).start();
                 }
             });
             builder.create().show();
@@ -392,12 +393,13 @@ public class MultiPbPhotoFragmentPresenter extends BasePresenter {
                     deleteSucceedList.add(tempFile);
                 }
             }
-            pbItemInfoList.removeAll(deleteSucceedList);
-            RemoteFileHelper.getInstance().setLocalFileList(pbItemInfoList, fileType);
+
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     MyProgressDialog.closeProgressDialog();
+                    pbItemInfoList.removeAll(deleteSucceedList);
+                    RemoteFileHelper.getInstance().setLocalFileList(pbItemInfoList, fileType);
                     quitEditMode();
                     refreshPhotoWall();
                 }

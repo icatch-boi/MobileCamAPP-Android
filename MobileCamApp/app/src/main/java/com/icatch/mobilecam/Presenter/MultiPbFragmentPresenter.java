@@ -5,9 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 
@@ -239,6 +239,9 @@ public class MultiPbFragmentPresenter extends BasePresenter {
             setLayoutType(curLayoutType);
             multiPbPhotoView.setRecyclerViewAdapter(recyclerViewAdapter);
         }
+//        recyclerViewAdapter = new MultiPbRecyclerViewAdapter(activity, pbItemInfoList, fileType);
+//        setLayoutType(curLayoutType);
+//        multiPbPhotoView.setRecyclerViewAdapter(recyclerViewAdapter);
     }
 
     public void refreshPhotoWall() {
@@ -383,7 +386,8 @@ public class MultiPbFragmentPresenter extends BasePresenter {
                 public void onClick(DialogInterface dialog, int which) {
                     MyProgressDialog.showProgressDialog(activity, R.string.dialog_deleting);
                     quitEditMode();
-                    new DeleteFileThread(finalList, finalFileType).run();
+                    //new DeleteFileThread(finalList, finalFileType).run();
+                    new Thread(new DeleteFileThread(finalList, finalFileType)).start();
                 }
             });
             builder.create().show();
@@ -396,7 +400,7 @@ public class MultiPbFragmentPresenter extends BasePresenter {
 
     private class DeleteFileThread implements Runnable {
         private List<MultiPbItemInfo> fileList;
-        private List<MultiPbItemInfo> deleteFailedList;
+//        private List<MultiPbItemInfo> deleteFailedList;
         private List<MultiPbItemInfo> deleteSucceedList;
         private Handler handler;
         private FileOperation fileOperation;
@@ -412,23 +416,23 @@ public class MultiPbFragmentPresenter extends BasePresenter {
         @Override
         public void run() {
             AppLog.d(TAG, "DeleteThread");
-            deleteFailedList = new LinkedList<MultiPbItemInfo>();
+//            deleteFailedList = new LinkedList<MultiPbItemInfo>();
             deleteSucceedList = new LinkedList<MultiPbItemInfo>();
             for (MultiPbItemInfo tempFile : fileList) {
                 AppLog.d(TAG, "deleteFile f.getFileHandle =" + tempFile.getFileHandle());
-                if (fileOperation.deleteFile(tempFile.iCatchFile) == false) {
-                    deleteFailedList.add(tempFile);
-                } else {
+                if (fileOperation.deleteFile(tempFile.iCatchFile)) {
                     deleteSucceedList.add(tempFile);
                 }
             }
-            pbItemInfoList.removeAll(deleteSucceedList);
-            RemoteFileHelper.getInstance().setLocalFileList(pbItemInfoList, fileType);
+
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     MyProgressDialog.closeProgressDialog();
-                    quitEditMode();
+                    if(deleteSucceedList.size() > 0) {
+                        pbItemInfoList.removeAll(deleteSucceedList);
+                        RemoteFileHelper.getInstance().setLocalFileList(pbItemInfoList, fileType);
+                    }
                     if (supportSegmentedLoading) {
                         //删除后fileHandle变化，需重新获取列表
                         resetCurIndex();
@@ -437,6 +441,8 @@ public class MultiPbFragmentPresenter extends BasePresenter {
                     } else {
                         refreshPhotoWall();
                     }
+                    curOperationMode = OperationMode.MODE_BROWSE;
+                    multiPbPhotoView.notifyChangeMultiPbMode(curOperationMode);
                 }
             });
         }

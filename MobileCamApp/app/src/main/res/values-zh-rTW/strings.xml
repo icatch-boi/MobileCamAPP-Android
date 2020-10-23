@@ -13,7 +13,7 @@
     <string name="stream_title">相機預覽</string>
     <string name="stream_set_complete">完成設定</string>
     <string name="stream_set_timer">設定倒數</string>
-    <string name="stream_set_timer_off">Off</string>
+    <string name="stream_set_timer_off">關閉</string>
     <string name="stream_set_res_vid">設定影片解析度</string>
     <string name="stream_set_res_photo">設定照片解析度</string>
     <string name="stream_set_error">開流失敗</string>
@@ -58,7 +58,7 @@
     <string name="dialog_refreshing">更新Wi-Fi列表...</string>
     <string name="dialog_connect_failed">連線失敗, 請重新嘗試!</string>
     <string name="dialog_failed">執行失敗, 請重新嘗試!</string>
-    <string name="dialog_capturing">拍照中...</string>
+    <string name="dialog_capturing">拍照中</string>
     <string name="dialog_preview">讀取中...</string>
     <string name="dialog_connecting">連線中...</string>
     <string name="dialog_connecting_to_cam">和相機連線中...</string>
@@ -302,7 +302,7 @@ $1$"</string>
     <string name="title_slow_motion">慢動作</string>
     <string name="text_disconnect">未連接</string>
     <string name="text_connected">已連接</string>
-    <string name="text_add_new_camera">新增相繼</string>
+    <string name="text_add_new_camera">新增相機</string>
     <string name="text_btpair_setup_camwifi">配對相機成功後，您可以設置相機Wi-Fi或只需單擊“設置”以保留默認設置。</string>
     <string name="title_local_media">本地媒體庫</string>
     <string name="title_photo">照片</string>
@@ -372,4 +372,14 @@ $1$"</string>
     <string name="setting_internal_storage">手機內置存儲</string>
     <string name="setting_sd_card_storage">SD卡</string>
     <string name="off">關閉</string>
+    <string name="help">幫助</string>
+    <string name="dialog_timeout_2">無法成功連接相機！</string>
+    <string name="setting_capture_delay">延時拍照</string>
+    <string name="setting_image_size">照片尺寸</string>
+    <string name="setting_video_size">視頻尺寸</string>
+    <string name="setting_audio_switch">聲音</string>
+    <string name="title_timeLapse_mode">縮時模式</string>
+    <string name="wifi_or_password_cannot_be_empty">Wifi name or password cannot be empty.</string>
+    <string name="text_btpair_support_bt">新增相機，並且該相機支持藍牙配對</string>
+    <string name="wifi_hotspot_open_failed_info">Wifi熱點開啟失敗，需要手動開啟，並設置Wifi熱點名稱:$1$,密碼:$2$。設置完成後，請重啟應用並連接。</string>
 </resources>

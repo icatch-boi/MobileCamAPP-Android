@@ -64,6 +64,8 @@ public interface PreviewView {
 
     void showZoomView();
 
+    void  hideZoomView();
+
     void setMaxZoomRate(float maxZoomRate);
 
     float getZoomViewProgress();

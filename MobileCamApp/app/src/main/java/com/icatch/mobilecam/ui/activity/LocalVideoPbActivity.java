@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -46,11 +46,13 @@ public class LocalVideoPbActivity extends AppCompatActivity implements LocalVide
     private ImageButton moreBtn;
     private ImageButton cancelBtn;
     private Switch eisSwitch;
+    private TextView codecInfoTxv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_panorama_local_video_pb);
+        codecInfoTxv = findViewById(R.id.codec_info_txv);
         timeLapsed = (TextView) findViewById(R.id.local_pb_time_lapsed);
         timeDuration = (TextView) findViewById(R.id.local_pb_time_duration);
         seekBar = (SeekBar) findViewById(R.id.local_pb_seekBar);
@@ -402,6 +404,14 @@ public class LocalVideoPbActivity extends AppCompatActivity implements LocalVide
     @Override
     public void setEisSwitchChecked(boolean checked) {
         eisSwitch.setChecked(checked);
+    }
+
+    @Override
+    public void setCodecInfoTxv(String info) {
+        if(codecInfoTxv.getVisibility() != View.VISIBLE){
+            codecInfoTxv.setVisibility(View.VISIBLE);
+        }
+        codecInfoTxv.setText(info);
     }
 
     @Override

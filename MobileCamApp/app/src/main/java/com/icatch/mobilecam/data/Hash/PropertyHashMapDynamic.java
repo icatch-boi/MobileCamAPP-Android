@@ -373,10 +373,13 @@ public class PropertyHashMapDynamic {
         } else if (size.equals("848x480")) {
             abbreviationSize = "WVGA";
             return abbreviationSize;
+        }else if (size.equals("2560x1440")) {
+            abbreviationSize = "QHD";
+            return abbreviationSize;
         }
         if (abbreviationSize == null) {
             AppLog.d(TAG, "getAbbreviation videoSize 不支持!");
-            return null;
+            abbreviationSize = size + " ";
         } else {
             abbreviationSize = abbreviationSize + pts;
         }

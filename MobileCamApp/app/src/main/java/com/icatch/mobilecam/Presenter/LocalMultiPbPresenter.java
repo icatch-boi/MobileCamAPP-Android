@@ -5,8 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import android.view.View;
 
 import com.icatch.mobilecam.Listener.OnStatusChangedListener;
@@ -219,7 +219,8 @@ public class LocalMultiPbPresenter extends BasePresenter {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     MyProgressDialog.showProgressDialog(activity, R.string.dialog_deleting);
-                    new DeleteFileThread(finalList, finalFileType).run();
+//                    new DeleteFileThread(finalList, finalFileType).run();
+                    new Thread(new DeleteFileThread(finalList, finalFileType)).start();
                 }
             });
             builder.create().show();

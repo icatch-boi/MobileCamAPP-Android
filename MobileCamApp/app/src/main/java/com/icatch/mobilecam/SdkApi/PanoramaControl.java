@@ -1,5 +1,6 @@
 package com.icatch.mobilecam.SdkApi;
 
+import com.icatch.mobilecam.Log.AppLog;
 import com.icatchtek.pancam.customer.ICatchIPancamControl;
 import com.icatchtek.pancam.customer.ICatchIPancamListener;
 import com.icatchtek.pancam.customer.ICatchPancamSession;
@@ -13,7 +14,7 @@ import com.icatchtek.reliant.customer.exception.IchListenerNotExistsException;
 
 public class PanoramaControl {
     private ICatchIPancamControl iCatchIPancamControl;
-
+    private String TAG = PanoramaControl.class.getSimpleName();
     public PanoramaControl(ICatchPancamSession iCatchPancamSession) {
         this.iCatchIPancamControl = iCatchPancamSession.getControl();
 
@@ -23,13 +24,14 @@ public class PanoramaControl {
         if (iCatchIPancamControl == null) {
             return;
         }
+       AppLog.d(TAG,"addEventListener var1:" + var1);
         try {
             iCatchIPancamControl.addEventListener(var1, var2);
-        } catch (IchListenerExistsException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IchInvalidSessionException e) {
-            e.printStackTrace();
+            AppLog.e(TAG,"addEventListener e:" + e.getClass().getSimpleName());
         }
+       AppLog.d(TAG,"addEventListener ret:" + var1);
     }
 
     public void removeEventListener(int var1, ICatchIPancamListener var2) {

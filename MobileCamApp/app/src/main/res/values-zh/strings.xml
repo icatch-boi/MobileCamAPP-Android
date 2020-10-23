@@ -12,13 +12,13 @@
     <string name="stream_title">相机预览</string>
     <string name="stream_set_complete">设置成功</string>
     <string name="stream_set_timer">设置计时</string>
-    <string name="stream_set_timer_off">Off</string>
+    <string name="stream_set_timer_off">关闭</string>
     <string name="stream_set_res_vid">设定录制分辨率</string>
     <string name="stream_set_res_photo">设定拍摄分辨率</string>
     <string name="stream_set_error">开流失败</string>
     <string name="ptp_connected">PTP连接</string>
     <string name="stream_error_cannot_open_gallery">拍摄或录制时禁用</string>
-    <string name="stream_error_capturing">捕获不能切换</string>
+    <string name="stream_error_capturing">拍照中不能切换</string>
     <string name="stream_error_not_enough_space">没有足够的空间！</string>
     <string name="stream_error_recording">摄影中无法切换</string>
     <string name="stream_error_capturing_capture">正在处理...</string>
@@ -56,13 +56,13 @@
     <string name="setting_firmware_version">固件版本</string>
     <string name="title_awb">白平衡</string>
     <string name="dialog_no_sd">没有SD卡，请插入一个，然后重试</string>
-    <string name="setting_no_sd">No SD card to format</string>
+    <string name="setting_no_sd">未插入SD卡，无法格式化</string>
     <string name="dialog_refreshing">刷新Wi-Fi ...</string>
     <string name="dialog_connect_failed">连接失败，请重试.</string>
     <string name="dialog_failed">操作失败，请重试.</string>
-    <string name="dialog_capturing">捕获</string>
+    <string name="dialog_capturing">拍照中</string>
     <string name="dialog_preview">预览数据加载中...</string>
-    <string name="dialog_connecting">连接...</string>
+    <string name="dialog_connecting">连接中...</string>
     <string name="dialog_connecting_to_cam">连接相机...</string>
     <string name="dialog_reconnect">重新连接</string>
     <string name="dialog_configuring">配置...</string>
@@ -382,4 +382,10 @@ $3$"</string>
     <string name="setting_internal_storage">手机内置存储</string>
     <string name="setting_sd_card_storage">SD卡</string>
     <string name="off">关闭</string>
+    <string name="help">帮助</string>
+    <string name="dialog_timeout_2">无法成功连接相机！</string>
+    <string name="title_video_size">视频尺寸</string>
+    <string name="wifi_or_password_cannot_be_empty">Wifi name or password cannot be empty.</string>
+    <string name="text_btpair_support_bt">新增相机，并且该相机支持蓝牙配对</string>
+    <string name="wifi_hotspot_open_failed_info">Wifi热点开启失败，需要手动开启,并设置Wifi热点名称:$1$,密码:$2$。设置完成后，请重新启动并连接。</string>
 </resources>

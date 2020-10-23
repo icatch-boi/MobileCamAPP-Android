@@ -6,10 +6,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -404,17 +404,13 @@ public class USBPreviewActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         AppLog.i(TAG, "click the v.getId() =" + v.getId());
-        switch (v.getId()) {
-            case R.id.multi_pb:
-                AppLog.i(TAG, "click the multi_pb");
-                presenter.redirectToPbActivity();
-                break;
-            case R.id.doCapture:
-                AppLog.i(TAG, "click the doCapture");
-                presenter.startOrStopCapture();
-                break;
-            default:
-                break;
+        int id = v.getId();
+        if (id == R.id.multi_pb) {
+            AppLog.i(TAG, "click the multi_pb");
+            presenter.redirectToPbActivity();
+        } else if (id == R.id.doCapture) {
+            AppLog.i(TAG, "click the doCapture");
+            presenter.startOrStopCapture();
         }
     }
 

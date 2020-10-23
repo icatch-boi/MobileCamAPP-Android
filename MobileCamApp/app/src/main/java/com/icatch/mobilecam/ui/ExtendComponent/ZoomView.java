@@ -153,6 +153,16 @@ public class ZoomView extends RelativeLayout {
         setVisibility(View.VISIBLE);
     }
 
+    public void setHide() {
+        if(getVisibility() == VISIBLE){
+            if (timer != null) {
+                timer.cancel();
+                timer = null;
+                setVisibility(View.GONE);
+            }
+        }
+    }
+
     public interface OnSeekBarChangeListener {
         void onProgressChanged(ZoomView zoomView, float progress, boolean fromUser);
 

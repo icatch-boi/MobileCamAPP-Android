@@ -16,6 +16,8 @@ import com.icatchtek.pancam.customer.ICatchIPancamListener;
 import com.icatchtek.pancam.customer.type.ICatchGLEvent;
 import com.icatchtek.pancam.customer.type.ICatchGLEventID;
 
+import java.util.Locale;
+
 /**
  * Created by zhang yanhu C001012 on 2015/11/23 18:00.
  */
@@ -74,6 +76,7 @@ public class SDKEvent {
     private UpdateFWCheckListener updateFWCheckListener;
     private UpdateFWCHKSumErrListener updateFWCHKSumErrListener;
     private UpdateFWNGListener updateFWNGListener;
+    private VideoCodecInformationListener videoCodecInformationListener;
 
     public SDKEvent(Handler handler) {
         this.handler = handler;
@@ -179,6 +182,10 @@ public class SDKEvent {
                 noEISInformationListener = new NoEISInformationListener();
                 panoramaControl.addEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_STREAM_NO_EIS_INFORMATION, noEISInformationListener);
                 break;
+            case ICatchGLEventID.ICH_GL_EVENT_VIDEO_CODEC_INSUFFICIENT_PERFORMANCE:
+                videoCodecInformationListener = new VideoCodecInformationListener();
+                panoramaControl.addEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_CODEC_INSUFFICIENT_PERFORMANCE, videoCodecInformationListener);
+                break;
 
 
         }
@@ -223,7 +230,12 @@ public class SDKEvent {
                     panoramaControl.removeEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_STREAM_NO_EIS_INFORMATION, noEISInformationListener);
                     noEISInformationListener = null;
                 }
-
+                break;
+            case ICatchGLEventID.ICH_GL_EVENT_VIDEO_CODEC_INSUFFICIENT_PERFORMANCE:
+                if (videoCodecInformationListener != null) {
+                    panoramaControl.removeEventListener(ICatchGLEventID.ICH_GL_EVENT_VIDEO_CODEC_INSUFFICIENT_PERFORMANCE, videoCodecInformationListener);
+                    videoCodecInformationListener = null;
+                }
                 break;
         }
     }
@@ -327,6 +339,16 @@ public class SDKEvent {
             cameraAction.delEventListener(ICatchCamEventID.ICH_CAM_EVENT_FW_UPDATE_NG, updateFWNGListener);
         }
 
+    }
+
+    public class ICatchCodecEventListener  implements ICatchCameraListener {
+
+        @Override
+        public void eventNotify(ICatchCamEvent arg0) {
+            // TODO Auto-generated method stub
+            handler.obtainMessage(EVENT_SD_CARD_FULL).sendToTarget();
+            AppLog.i(TAG, "event: EVENT_SD_CARD_FULL");
+        }
     }
 
     public class SdcardStateListener implements ICatchCameraListener {
@@ -540,12 +562,28 @@ public class SDKEvent {
         }
     }
 
+
+
     private class NetworkDisconnectListener implements ICatchIPancamListener {
 
         @Override
         public void eventNotify(ICatchGLEvent iCatchGLEvent) {
             AppLog.i(TAG, "--------------receive VideoStreamCloseListener");
             handler.obtainMessage(AppMessage.MESSAGE_LIVE_NETWORK_DISCONNECT).sendToTarget();
+        }
+    }
+
+    private class VideoCodecInformationListener implements ICatchIPancamListener {
+
+        @Override
+        public void eventNotify(ICatchGLEvent event) {
+            AppLog.i(TAG, "--------------receive VideoCodecInformationListener");
+            String videoCodecInfo = String.format(Locale.getDefault(),
+                    "Warning, Insufficient performance.\ncodec: %d,Video width:%d,height: %d,Frame interval: %.4f,decode time: %.4f\nThe playback will stutter.",
+                    event.getLongValue1(), event.getLongValue2(), event.getLongValue3(),
+                    event.getDoubleValue1(), event.getDoubleValue2());
+            Log.i("__codec_performance__", videoCodecInfo);
+            handler.obtainMessage(AppMessage.MESSAGE_VIDEO_STREAM_CODEC_INFO,videoCodecInfo).sendToTarget();
         }
     }
 

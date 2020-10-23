@@ -463,5 +463,9 @@
     <string name="setting_internal_storage">Internal storage</string>
     <string name="setting_sd_card_storage">SD card</string>
     <string name="off">OFF</string>
+    <string name="help">Help</string>
+    <string name="dialog_timeout_2">Unable to connect the camera successfully! </string>
+    <string name="wifi_or_password_cannot_be_empty">Wifi name or password cannot be empty.</string>
+    <string name="wifi_hotspot_open_failed_info">The Wifi hotspot fails to be turned on.You need to manually turn it on and set the Wifi hotspot name: $1$ and password: $2$. After the setting is completed, please restart and connect.</string>
 
 </resources>

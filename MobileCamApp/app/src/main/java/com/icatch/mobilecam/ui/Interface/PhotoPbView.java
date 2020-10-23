@@ -1,7 +1,7 @@
 package com.icatch.mobilecam.ui.Interface;
 
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public interface PhotoPbView {
     void setViewPagerAdapter(PagerAdapter adapter);

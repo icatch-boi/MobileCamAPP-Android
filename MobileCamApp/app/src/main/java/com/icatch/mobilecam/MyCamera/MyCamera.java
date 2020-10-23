@@ -93,7 +93,7 @@ public class MyCamera {
         commandSession = new CommandSession();
         panoramaSession = new PanoramaSession();
 //        ICatchITransport transport = null;
-        if (cameraType == CameraType.PANORAMA_CAMERA) {
+        if (cameraType == CameraType.WIFI_CAMERA) {
             transport = new ICatchINETTransport(ipAddress);
         } else if (cameraType == CameraType.USB_CAMERA) {
             USBHost_Feature feature = new USBHost_Feature(PanoramaApp.getContext());

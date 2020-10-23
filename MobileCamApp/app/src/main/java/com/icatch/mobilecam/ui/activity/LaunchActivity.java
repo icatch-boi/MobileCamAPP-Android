@@ -10,11 +10,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -30,8 +25,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.appbar.AppBarLayout;
 import com.icatch.mobilecam.Listener.MyOrientoinListener;
 import com.icatch.mobilecam.Listener.OnFragmentInteractionListener;
 import com.icatch.mobilecam.Log.AppLog;
@@ -41,7 +41,6 @@ import com.icatch.mobilecam.data.AppInfo.AppInfo;
 import com.icatch.mobilecam.data.AppInfo.ConfigureInfo;
 import com.icatch.mobilecam.data.GlobalApp.ExitApp;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
-import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Interface.LaunchView;
 import com.icatch.mobilecam.ui.adapter.CameraSlotAdapter;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
@@ -49,8 +48,6 @@ import com.icatch.mobilecam.utils.ClickUtils;
 import com.icatch.mobilecam.utils.GlideUtils;
 import com.icatch.mobilecam.utils.LruCacheTool;
 import com.icatch.mobilecam.utils.PermissionTools;
-import com.icatch.mobilecam.utils.imageloader.ImageLoaderConfig;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class LaunchActivity extends AppCompatActivity implements View.OnClickListener, LaunchView, OnFragmentInteractionListener {
     private final static String TAG = "LaunchActivity";
@@ -229,18 +226,20 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         if (id == R.id.action_search) {
             //return true;
             presenter.startSearchCamera();
-        }
-        if (id == R.id.action_input_ip) {
+        }else if (id == R.id.action_input_ip) {
             presenter.inputIp();
-        }
-        if (id == android.R.id.home) {
+        }else if (id == R.id.action_about) {
+            AppDialog.showAPPVersionDialog(LaunchActivity.this);
+        }else if (id == android.R.id.home) {
 //            finish();
             removeFragment();
             return true;
-        }
-        if (id == R.id.action_license) {
+        }else if (id == R.id.action_license) {
             Intent mainIntent = new Intent(LaunchActivity.this, LicenseAgreementActivity.class);
             startActivity(mainIntent);;
+        } else if (id == R.id.action_help) {
+            Intent mainIntent = new Intent(LaunchActivity.this, LaunchHelpActivity.class);
+            LaunchActivity.this.startActivity(mainIntent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -251,24 +250,20 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         AppLog.i(TAG, "click info:::R.id.local_photo =" + R.id.local_photo);
         AppLog.i(TAG, "click info:::R.id.local_video =" + R.id.local_video);
         Intent intent = new Intent();
-        switch (v.getId()) {
-            case R.id.local_photo:
-                AppLog.i(TAG, "click the local photo");
-                intent.putExtra("CUR_POSITION", 0);
-                intent.setClass(LaunchActivity.this, LocalMultiPbActivity.class);
-                startActivity(intent);
+        int id = v.getId();
+        if (id == R.id.local_photo) {
+            AppLog.i(TAG, "click the local photo");
+            intent.putExtra("CUR_POSITION", 0);
+            intent.setClass(LaunchActivity.this, LocalMultiPbActivity.class);
+            startActivity(intent);
 //                presenter.requesetUsbPermission();
 //                UsbDeviceManager usbDeviceManager  = new UsbDeviceManager();
 //                usbDeviceManager.getUsbPermission(LaunchActivity.this);
-                break;
-            case R.id.local_video:
-                AppLog.i(TAG, "click the local video");
-                intent.putExtra("CUR_POSITION", 1);
-                intent.setClass(LaunchActivity.this, LocalMultiPbActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
+        } else if (id == R.id.local_video) {
+            AppLog.i(TAG, "click the local video");
+            intent.putExtra("CUR_POSITION", 1);
+            intent.setClass(LaunchActivity.this, LocalMultiPbActivity.class);
+            startActivity(intent);
         }
     }
 

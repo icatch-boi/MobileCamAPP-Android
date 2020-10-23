@@ -3,6 +3,8 @@ package com.icatch.mobilecam.ui.appdialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.icatch.mobilecam.data.GlobalApp.ExitApp;
 import com.icatch.mobilecam.Log.AppLog;
@@ -135,6 +137,30 @@ public class AppDialog {
     public static void showLowBatteryWarning(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(R.drawable.warning).setTitle(R.string.title_warning).setMessage(R.string.low_battery);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    public static void showAPPVersionDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String appVersion = "";
+        if (packageInfo != null) {
+            appVersion = packageInfo.versionName;
+        }
+        builder.setTitle(R.string.app_name).setMessage("App version : " + appVersion);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
             @Override

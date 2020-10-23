@@ -3,12 +3,8 @@ package com.icatch.mobilecam.ui.Fragment;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,11 +25,8 @@ import com.icatch.mobilecam.ui.Interface.MultiPbFragmentView;
 import com.icatch.mobilecam.ui.RemoteFileHelper;
 import com.icatch.mobilecam.ui.adapter.MultiPbRecyclerViewAdapter;
 import com.icatch.mobilecam.utils.ClickUtils;
-import com.icatch.mobilecam.utils.imageloader.ImageLoaderUtil;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RemoteMultiPbFragment extends BaseMultiPbFragment implements MultiPbFragmentView {
     private static final String TAG = "RemoteMultiPbFragment";

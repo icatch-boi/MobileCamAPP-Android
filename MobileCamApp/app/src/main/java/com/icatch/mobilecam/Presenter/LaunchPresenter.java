@@ -6,11 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -46,6 +45,7 @@ import com.icatch.mobilecam.ui.ExtendComponent.MyProgressDialog;
 import com.icatch.mobilecam.ui.ExtendComponent.MyToast;
 import com.icatch.mobilecam.ui.Fragment.AddNewCamFragment;
 import com.icatch.mobilecam.ui.Interface.LaunchView;
+import com.icatch.mobilecam.ui.activity.LaunchHelpActivity;
 import com.icatch.mobilecam.ui.activity.PreviewActivity;
 import com.icatch.mobilecam.ui.activity.PvParamSettingActivity;
 import com.icatch.mobilecam.ui.activity.RemoteMultiPbActivity;
@@ -137,7 +137,7 @@ public class LaunchPresenter extends BasePresenter {
         String cameraName = null;
         UsbDevice usbDevice = null;
         AppLog.d(TAG, "launchCamera position=" + position + " cameraType=" + cameraType);
-        if (cameraType == CameraType.PANORAMA_CAMERA) {
+        if (cameraType == CameraType.WIFI_CAMERA) {
             cameraName = MWifiManager.getSsid(activity);
         } else if (cameraType == CameraType.USB_CAMERA) {
             usbDevice = getUsbDevice();
@@ -154,7 +154,7 @@ public class LaunchPresenter extends BasePresenter {
             final UsbDevice finalUsbDevice = usbDevice;
             new Thread(new Runnable() {
                 public void run() {
-                    if (cameraType == CameraType.PANORAMA_CAMERA) {
+                    if (cameraType == CameraType.WIFI_CAMERA) {
                         beginConnectCamera(position, getCameraIp(), finalWifiSsid1);
                     } else if (cameraType == CameraType.USB_CAMERA) {
                         beginConnectUSBCamera(position, finalUsbDevice);
@@ -170,7 +170,7 @@ public class LaunchPresenter extends BasePresenter {
                 final UsbDevice finalUsbDevice1 = usbDevice;
                 new Thread(new Runnable() {
                     public void run() {
-                        if (cameraType == CameraType.PANORAMA_CAMERA) {
+                        if (cameraType == CameraType.WIFI_CAMERA) {
                             beginConnectCamera(position, getCameraIp(), finalWifiSsid);
                         } else if (cameraType == CameraType.USB_CAMERA) {
                             beginConnectUSBCamera(position, finalUsbDevice1);
@@ -199,7 +199,7 @@ public class LaunchPresenter extends BasePresenter {
             final String finalWifiSsid = wifiSsid;
             new Thread(new Runnable() {
                 public void run() {
-                    if (cameraType == CameraType.PANORAMA_CAMERA) {
+                    if (cameraType == CameraType.WIFI_CAMERA) {
                         beginConnectCamera(position, getCameraIp(), finalWifiSsid);
                     } else if (cameraType == CameraType.USB_CAMERA) {
                         UsbDevice usbDevice = getUsbDevice();
@@ -372,7 +372,7 @@ public class LaunchPresenter extends BasePresenter {
     }
 
     public void showInputIpDialog(final Context context) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context);
         View contentView = View.inflate(context, R.layout.input_ip, null);
         final EditText resetTxv = (EditText) contentView.findViewById(R.id.ip_address);
         resetTxv.setText(AppInfo.inputIp);
@@ -405,7 +405,8 @@ public class LaunchPresenter extends BasePresenter {
             switch (msg.what) {
                 case AppMessage.MESSAGE_CAMERA_CONNECT_FAIL:
                     MyProgressDialog.closeProgressDialog();
-                    AppDialog.showDialogWarn(activity, R.string.dialog_timeout);
+                    //AppDialog.showDialogWarn(activity, R.string.dialog_timeout);
+                    showHelpDialogWarn(activity, R.string.dialog_timeout_2);
                     break;
                 case AppMessage.MESSAGE_CAMERA_CONNECT_SUCCESS:
                     MyProgressDialog.closeProgressDialog();
@@ -453,6 +454,32 @@ public class LaunchPresenter extends BasePresenter {
             }
         }
     }
+    void showHelpDialogWarn(final Context context,int messageID) {
+        AppLog.i(TAG, "showHelpDialogWarn");
+        AlertDialog dialog = null;
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.warning).setTitle("Warning").setMessage(messageID);
+        builder.setCancelable(false);
+        builder.setNegativeButton(R.string.help, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MyProgressDialog.closeProgressDialog();
+                redirectToAnotherActivity(context, LaunchHelpActivity.class);
+            }
+        });
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
+    }
 
     private synchronized void beginConnectCamera(int position, String ip, String wifiSsid) {
         AppLog.i(TAG, "beginConnectCamera position:" + position + " wifiSsid:" + wifiSsid);
@@ -461,7 +488,7 @@ public class LaunchPresenter extends BasePresenter {
             AppLog.i(TAG, "beginConnectCamera camera is connected.");
             return;
         }
-        currentCamera = CameraManager.getInstance().createCamera(CameraType.PANORAMA_CAMERA, wifiSsid, ip, position, CameraNetworkMode.AP);
+        currentCamera = CameraManager.getInstance().createCamera(CameraType.WIFI_CAMERA, wifiSsid, ip, position, CameraNetworkMode.AP);
         if (currentCamera.connect(true) == false) {
             launchHandler.obtainMessage(AppMessage.MESSAGE_CAMERA_CONNECT_FAIL).sendToTarget();
             return;
@@ -469,7 +496,7 @@ public class LaunchPresenter extends BasePresenter {
         if (currentCamera.getCameraProperties().hasFuction(PropertyId.CAMERA_DATE)) {
             currentCamera.getCameraProperties().setCameraDate();
         }
-        CameraSlotSQLite.getInstance().update(new CameraSlot(position, true, wifiSsid, CameraType.PANORAMA_CAMERA, null, true));
+        CameraSlotSQLite.getInstance().update(new CameraSlot(position, true, wifiSsid, CameraType.WIFI_CAMERA, null, true));
         launchHandler.post(new Runnable() {
             @Override
             public void run() {

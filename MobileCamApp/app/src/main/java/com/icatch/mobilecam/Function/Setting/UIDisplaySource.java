@@ -147,6 +147,7 @@ public class UIDisplaySource {
         if (cameraProperties.hasFuction(PropertyId.STA_MODE_SSID)){
             settingMenuList.add(new SettingMenu(R.string.setting_enable_wifi_hotspot, ""));
         }
+        //settingMenuList.add(new SettingMenu(R.string.setting_enable_wifi_hotspot, ""));
         if (cameraProperties.hasFuction(PropertyId.SLOW_MOTION)) {
             settingMenuList.add(new SettingMenu(R.string.slowmotion, baseProrertys.getSlowMotion().getCurrentUiStringInSetting()));
         }

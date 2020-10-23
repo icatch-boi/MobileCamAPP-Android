@@ -1,7 +1,12 @@
 package com.icatch.mobilecam.ui.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.utils.WifiAPUtil;
 import com.icatch.mobilecam.utils.WifiAPUtil.WifiSecurityType;
@@ -30,7 +35,7 @@ public class WifiApActivity extends AppCompatActivity {
 
     private Handler mHandler = new Handler(){
         public void handleMessage(Message msg) {
-            if(DEBUG) Log.i(TAG, "WifiApActivity message.what="+msg.what);
+            if(DEBUG) AppLog.i(TAG, "WifiApActivity message.what="+msg.what);
             switch (msg.what) {
                 case WifiAPUtil.MESSAGE_AP_STATE_ENABLED:
                     String ssid = WifiAPUtil.getInstance(WifiApActivity.this).getValidApSsid();
@@ -64,6 +69,7 @@ public class WifiApActivity extends AppCompatActivity {
         mRdWpa2 = (RadioButton) findViewById(R.id.rd_wpa2);
         mWifiApState = (TextView)findViewById(R.id.tv_state);
         mBtStopWifiAp = (Button) findViewById(R.id.bt_stop_wifiap);
+        AppLog.enableAppLog();
     }
 
     @Override
@@ -81,23 +87,25 @@ public class WifiApActivity extends AppCompatActivity {
                 }else if (arg1 == mRdWpa2.getId()){
                     mWifiType = WifiSecurityType.WIFICIPHER_WPA2;
                 }
-                if(DEBUG)Log.i(TAG, "radio check mWifiType = "+mWifiType);
+                if(DEBUG)AppLog.i(TAG, "radio check mWifiType = "+mWifiType);
             }
         });
         mBtStartWifiAp.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-                String ssid = mWifiSsid.getText().toString();
-                String password = mWifiPassword.getText().toString();
-                if(DEBUG)Log.d(TAG, "ssid = "+ssid +"password = "+password);
-                if(null == ssid || "".equals(ssid)){
-                    Toast.makeText(WifiApActivity.this, "请输入ssid", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                mWifiApState.setText("正在开启");
-                WifiAPUtil.getInstance(WifiApActivity.this)
-                        .turnOnWifiAp(ssid, password, mWifiType);
+//                String ssid = mWifiSsid.getText().toString();
+//                String password = mWifiPassword.getText().toString();
+//                if(DEBUG)AppLog.d(TAG, "ssid = "+ssid +"password = "+password);
+//                if(null == ssid || "".equals(ssid)){
+//                    Toast.makeText(WifiApActivity.this, "请输入ssid", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                mWifiApState.setText("正在开启");
+//                WifiAPUtil.getInstance(WifiApActivity.this)
+//                        .turnOnWifiAp(ssid, password, mWifiType);
+
+                openAPUI();
 
             }
         });
@@ -112,19 +120,28 @@ public class WifiApActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(DEBUG) Log.i(TAG, "WifiApActivity onBackPressed");
+        if(DEBUG) AppLog.i(TAG, "WifiApActivity onBackPressed");
         finish();
     }
     @Override
     protected void onStop() {
         super.onStop();
-        if(DEBUG) Log.i(TAG, "WifiApActivity onStop");
+        if(DEBUG) AppLog.i(TAG, "WifiApActivity onStop");
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(DEBUG) Log.i(TAG, "WifiApActivity onDestroy");
+        if(DEBUG) AppLog.i(TAG, "WifiApActivity onDestroy");
         WifiAPUtil.getInstance(this).unregitsterHandler();
+    }
+
+    private void openAPUI() {
+        Intent intent = new Intent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //打开网络共享与热点设置页面
+        ComponentName comp = new ComponentName("com.android.settings", "com.android.settings.Settings$TetherSettingsActivity");
+        intent.setComponent(comp);
+        startActivity(intent);
     }
 }
 

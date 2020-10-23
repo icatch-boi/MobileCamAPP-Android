@@ -3,9 +3,9 @@ package com.icatch.mobilecam.ui.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.MyCamera.CameraType;
 import com.icatch.mobilecam.data.Message.AppMessage;
 import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.utils.SharedPreferencesUtil;
 
 public class AddNewCamFragment extends Fragment {
 
@@ -53,7 +54,7 @@ public class AddNewCamFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                appStartHandler.obtainMessage(AppMessage.MESSAGE_CAMERA_CONNECTING_START, CameraType.PANORAMA_CAMERA,position).sendToTarget();
+                appStartHandler.obtainMessage(AppMessage.MESSAGE_CAMERA_CONNECTING_START, CameraType.WIFI_CAMERA,position).sendToTarget();
             }
         });
         usbConnectCamBtn.setOnClickListener(new View.OnClickListener(){
@@ -71,6 +72,9 @@ public class AddNewCamFragment extends Fragment {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 BTPairBeginFragment btPairBegin = new BTPairBeginFragment(appContext, appStartHandler);
+                SharedPreferencesUtil.put(getContext(),SharedPreferencesUtil.CONFIG_FILE,"camera_position",position);
+//                int position = (int) SharedPreferencesUtil.get(getContext(),SharedPreferencesUtil.CONFIG_FILE,"camera_position",0);
+//                AppLog.d(TAG,"BTPairBeginFragment position:" + position);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.launch_setting_frame, btPairBegin);

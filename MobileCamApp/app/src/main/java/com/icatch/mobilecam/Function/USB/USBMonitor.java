@@ -28,8 +28,9 @@ public final class USBMonitor {
     private static final String TAG = "USBMonitor";
 
     private static final String ACTION_USB_PERMISSION_BASE = "com.serenegiant.USB_PERMISSION.";
-    private final String ACTION_USB_PERMISSION = ACTION_USB_PERMISSION_BASE + hashCode();
+//    private final String ACTION_USB_PERMISSION = ACTION_USB_PERMISSION_BASE + hashCode();
 
+    private final String ACTION_USB_PERMISSION = "com.android.usb.USB_PERMISSION";
 //    public static final String ACTION_USB_DEVICE_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
 
     private final ConcurrentHashMap<UsbDevice, UsbControlBlock> mCtrlBlocks = new ConcurrentHashMap<UsbDevice, UsbControlBlock>();
