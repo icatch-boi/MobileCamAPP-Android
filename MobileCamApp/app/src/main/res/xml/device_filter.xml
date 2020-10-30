@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<usb>
+<resources>
     <!--<usb-device vendorId="1276"/>	&lt;!&ndash; all device of sunmedia &ndash;&gt;-->
-    <usb-device vendorId="10925"/>	<!-- all device of sunmedia -->
-</usb>
+<!--    <usb-device vendorId="10925"/>	&lt;!&ndash; all device of sunmedia &ndash;&gt;-->
+    <usb-device vendor-id="10925" product-id="25859"/>
+</resources>

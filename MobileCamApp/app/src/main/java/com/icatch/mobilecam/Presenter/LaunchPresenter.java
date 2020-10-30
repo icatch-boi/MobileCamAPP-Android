@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import androidx.fragment.app.FragmentManager;
@@ -51,6 +52,8 @@ import com.icatch.mobilecam.ui.activity.PvParamSettingActivity;
 import com.icatch.mobilecam.ui.activity.RemoteMultiPbActivity;
 import com.icatch.mobilecam.ui.adapter.CameraSlotAdapter;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
+import com.icatch.mobilecam.utils.PermissionTools;
+import com.icatch.mobilecam.utils.SharedPreferencesUtil;
 import com.icatch.mobilecam.utils.StorageUtil;
 import com.icatch.mobilecam.utils.fileutils.MFileTools;
 import com.icatch.mobilecam.utils.imageloader.ICatchtekImageDownloader;
@@ -534,10 +537,32 @@ public class LaunchPresenter extends BasePresenter {
 
     }
 
-    private synchronized void beginConnectUSBCamera(int position, UsbDevice usbDevice) {
-        AppLog.i(TAG, "beginConnectUSBCamera position:" + position + " usbDevice:" + usbDevice.getDeviceName());
+    public synchronized void reconnectUSBCamera(){
+        int position = (int) SharedPreferencesUtil.get(activity,SharedPreferencesUtil.CONFIG_FILE,"camera_position",0);
+        UsbDevice usbDevice = getUsbDevice();
+        beginConnectUSBCamera(position,usbDevice);
+    }
+
+    private synchronized void beginConnectUSBCamera(final int position, final UsbDevice usbDevice) {
+        AppLog.i(TAG, "beginConnectUSBCamera position:" + position + " usbDevice:" + usbDevice.getDeviceName() + " ProductId:" + usbDevice.getProductId() + " VendorId:" + usbDevice.getVendorId());
         if (!mUSBMonitor.hasPermission(usbDevice)) {
-            mUSBMonitor.requestPermission(usbDevice);
+            launchHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    MyProgressDialog.closeProgressDialog();
+                    if(Build.VERSION.SDK_INT >= 28 && !PermissionTools.checkCameraSelfPermission(activity)){
+                        SharedPreferencesUtil.put(activity,SharedPreferencesUtil.CONFIG_FILE,"camera_position",position);
+                        AppDialog.showDialogWarn(activity, R.string.request_camera_permission_warn_info, false, new AppDialog.OnDialogSureClickListener() {
+                            @Override
+                            public void onSure() {
+                                PermissionTools.requestCameraPermissions(activity);
+                            }
+                        });
+                    }else {
+                        mUSBMonitor.requestPermission(usbDevice);
+                    }
+                }
+            });
             return;
         }
         MyCamera currentCamera = CameraManager.getInstance().getCurCamera();

@@ -3,20 +3,22 @@ package com.icatch.mobilecam.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.annotation.IdRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
+
+import androidx.annotation.IdRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.icatch.mobilecam.Listener.MyOrientoinListener;
 import com.icatch.mobilecam.Log.AppLog;
 import com.icatch.mobilecam.MyCamera.CameraManager;
 import com.icatch.mobilecam.R;
 import com.icatch.mobilecam.SdkApi.CameraProperties;
+import com.icatch.mobilecam.data.AppInfo.AppInfo;
+import com.icatch.mobilecam.data.GlobalApp.ExitApp;
 import com.icatchtek.reliant.customer.type.ICatchCodec;
 import com.icatchtek.reliant.customer.type.ICatchVideoFormat;
 
@@ -124,7 +126,7 @@ public class PvParamSettingActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         curVideoFormat = temp;
-                        Toast.makeText(PvParamSettingActivity.this, "this is radioButton  id:" + radioButton.getId(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(PvParamSettingActivity.this, "this is radioButton  id:" + radioButton.getId(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 videoSizeRadioGroup.addView(radioButton);
@@ -184,6 +186,21 @@ public class PvParamSettingActivity extends AppCompatActivity {
         if (myOrientoinListener != null) {
             myOrientoinListener.disable();
             myOrientoinListener = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        CameraManager.getInstance().getCurCamera().disconnect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (AppInfo.isAppSentToBackground(this)) {
+            CameraManager.getInstance().getCurCamera().disconnect();
+            ExitApp.getInstance().exit();
         }
     }
 }

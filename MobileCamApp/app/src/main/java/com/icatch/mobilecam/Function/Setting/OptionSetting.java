@@ -471,25 +471,31 @@ public class OptionSetting {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final int messageId;
                         String filePath = Environment.getExternalStorageDirectory().toString() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;
                         //FileTools.copyFile(R.raw.sphost,filePath);
                         String fileName = filePath + AppInfo.FW_UPGRADE_FILENAME;
                         if (!cameraAction.updateFW(fileName)) {
-                            messageId = R.string.text_operation_success;
-                            AlertDialog.Builder updateFWFailedBuilder = new AlertDialog.Builder(context);
-                            updateFWFailedBuilder.setMessage(R.string.setting_updatefw_failedInfo);
-                            updateFWFailedBuilder.setNegativeButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
-
+                            handler.post(new Runnable() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.d("1111", "update FW has failed,App quit");
-                                    ExitApp.getInstance().exit();
+                                public void run() {
+                                    MyProgressDialog.closeProgressDialog();
+//                                    AlertDialog.Builder updateFWFailedBuilder = new AlertDialog.Builder(context);
+//                                    updateFWFailedBuilder.setMessage(R.string.setting_updatefw_failedInfo);
+//                                    updateFWFailedBuilder.setNegativeButton(R.string.dialog_btn_exit, new DialogInterface.OnClickListener() {
+//
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            Log.d("1111", "update FW has failed,App quit");
+//                                            ExitApp.getInstance().exit();
+//                                        }
+//                                    });
+//                                    alertDialog = updateFWFailedBuilder.create();
+//                                    alertDialog.setCancelable(false);
+//                                    alertDialog.show();
+                                    AppDialog.showDialogWarn(activity,R.string.setting_updatefw_failedInfo);
                                 }
                             });
-                            alertDialog = updateFWFailedBuilder.create();
-                            alertDialog.setCancelable(false);
-                            alertDialog.show();
+
                         }
                     }
                 }).start();

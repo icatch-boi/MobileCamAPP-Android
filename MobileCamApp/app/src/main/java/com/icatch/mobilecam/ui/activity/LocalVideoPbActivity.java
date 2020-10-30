@@ -322,8 +322,10 @@ public class LocalVideoPbActivity extends AppCompatActivity implements LocalVide
 
     @Override
     public void setLoadPercent(int value) {
-        String temp = value + "%";
-        progressWheel.setText(temp);
+        if(value >= 0) {
+            String temp = value + "%";
+            progressWheel.setText(temp);
+        }
     }
 
     @Override

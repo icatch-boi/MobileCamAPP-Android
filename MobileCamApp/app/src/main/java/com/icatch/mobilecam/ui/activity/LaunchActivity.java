@@ -46,6 +46,7 @@ import com.icatch.mobilecam.ui.adapter.CameraSlotAdapter;
 import com.icatch.mobilecam.ui.appdialog.AppDialog;
 import com.icatch.mobilecam.utils.ClickUtils;
 import com.icatch.mobilecam.utils.GlideUtils;
+import com.icatch.mobilecam.utils.GpsUtil;
 import com.icatch.mobilecam.utils.LruCacheTool;
 import com.icatch.mobilecam.utils.PermissionTools;
 
@@ -102,6 +103,15 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         camSlotListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && !GpsUtil.checkGPSIsOpen(LaunchActivity.this)){
+                    AppDialog.showDialogWarn(LaunchActivity.this, R.string.turn_on_location_information_tips, false, new AppDialog.OnDialogSureClickListener() {
+                        @Override
+                        public void onSure() {
+                            GpsUtil.openGpsSettings(LaunchActivity.this);
+                        }
+                    });
+                    return;
+                }
                 if (!ClickUtils.isFastDoubleClick(camSlotListView)){
                     FragmentManager fm = getSupportFragmentManager();
                     presenter.launchCamera(position, fm);
@@ -346,12 +356,13 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        boolean retValue = true;
         switch (requestCode) {
             case PermissionTools.ALL_REQUEST_CODE:
-                AppLog.i(TAG, "permissions.length = " + permissions.length);
+                AppLog.i(TAG, "ALL_REQUEST_CODE permissions.length = " + permissions.length);
                 AppLog.i(TAG, "grantResults.length = " + grantResults.length);
-                boolean retValue = true;
                 for (int i = 0; i < permissions.length; i++) {
+                    AppLog.i(TAG, "permissions:" +permissions[i] +" grantResults:" + grantResults[i]);
                     if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                         retValue = false;
                         break;
@@ -367,6 +378,21 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
 //                    Toast.makeText(this, "Request write storage failed!", Toast.LENGTH_SHORT).show();
                 }
 
+                break;
+
+            case PermissionTools.CAMERA_REQUEST_CODE:
+                for (int i = 0; i < permissions.length; i++) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        retValue = false;
+                        break;
+                    }
+                }
+
+                if (retValue) {
+                    presenter.reconnectUSBCamera();
+                } else {
+                    AppDialog.showDialogWarn(this, R.string.camera_permission_is_denied_info);
+                }
                 break;
             default:
         }

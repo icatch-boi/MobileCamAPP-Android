@@ -58,7 +58,7 @@ public class MWifiManager {
         }
         //android 8.0及以下
         String ssid = WIFI_SSID_UNKNOWN;
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.O){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
             WifiManager mWifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = mWifi.getConnectionInfo();
             if (wifiInfo != null) {
@@ -69,9 +69,7 @@ public class MWifiManager {
             }else {
                 AppLog.i(TAG, "getSsid wifiInfo is null");
             }
-        }
-        //android 8.0以后
-        else {
+        }else if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo wifiInfo2 = mConnectivityManager.getActiveNetworkInfo();
             AppLog.i(TAG, "getSsid wifiInfo2:" + wifiInfo2);
@@ -84,7 +82,20 @@ public class MWifiManager {
                 String wifiName = wifiInfo2.getExtraInfo();
                 ssid =  wifiName.replaceAll("\"", "");
             }
+        }else {
+            WifiManager mWifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wifiInfo = mWifi.getConnectionInfo();
+            if (wifiInfo != null) {
+                ssid = wifiInfo.getSSID();
+                if(ssid.contains("\"")){
+                    ssid =ssid.replace("\"","");
+                }
+            }else {
+                AppLog.i(TAG, "getSsid wifiInfo is null");
+            }
         }
+        //android 8.0以后
+
         AppLog.i(TAG, "getSsid ssid:" + ssid);
         return ssid;
     }

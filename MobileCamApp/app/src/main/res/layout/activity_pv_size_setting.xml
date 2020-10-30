@@ -38,14 +38,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_20"
-                android:text="Please set the correct resolution and fps"
+                android:text="@string/please_set_the_correct_resolution_and_fps"
                 android:textSize="@dimen/text_size_18"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_20"
-                android:text="Video resolution"
+                android:text="@string/video_resolution"
                 android:textSize="@dimen/text_size_14"/>
 
             <RadioGroup
@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_10"
-                android:text="Video frame rate"
+                android:text="@string/video_frame_rate"
                 android:textSize="@dimen/text_size_14"/>
 
             <RadioGroup

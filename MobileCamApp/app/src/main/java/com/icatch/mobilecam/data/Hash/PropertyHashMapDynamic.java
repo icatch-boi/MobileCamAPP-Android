@@ -368,7 +368,7 @@ public class PropertyHashMapDynamic {
             abbreviationSize = "6K";
         } else if (size.equals("3840x2160") || size.equals("3840x1920")) {
             abbreviationSize = "4K";
-        } else if (size.equals("2704x1524") || size.equals("2800x1400") || size.equals("2880x1440")) {
+        } else if (size.equals("2704x1524") || size.equals("2800x1400") || size.equals("2880x1440") || size.equals("2720x1520") ) {
             abbreviationSize = "2.7K";
         } else if (size.equals("848x480")) {
             abbreviationSize = "WVGA";

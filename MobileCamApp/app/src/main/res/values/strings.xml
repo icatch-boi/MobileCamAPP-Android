@@ -210,7 +210,7 @@
     <string name="setting_updatefw_failed">Updated failed</string>
     <string name="setting_updatefw_closeAppInfo">FW update has completed, please restart your application</string>
     <string name="setting_updatefw_completedInfo">FW update has completed</string>
-    <string name="setting_updatefw_failedInfo">FW update has failed,please restart your application</string>
+    <string name="setting_updatefw_failedInfo">Update FW failure, check to see if this feature is supported or if positive firmware is used.</string>
     <string name="setting_auto_download">Auto download</string>
     <string name="setting_audio_switch">Audio switch</string>
     <string name="setting_auto_download_size_limit">Limit of Auto download Size </string>
@@ -467,5 +467,11 @@
     <string name="dialog_timeout_2">Unable to connect the camera successfully! </string>
     <string name="wifi_or_password_cannot_be_empty">Wifi name or password cannot be empty.</string>
     <string name="wifi_hotspot_open_failed_info">The Wifi hotspot fails to be turned on.You need to manually turn it on and set the Wifi hotspot name: $1$ and password: $2$. After the setting is completed, please restart and connect.</string>
+    <string name="request_camera_permission_warn_info">Versions of Android 9.0 and above require camera permissions to invoke external UVC cameras. Don`t worry, we won`t call the phone`s camera.</string>
+    <string name="camera_permission_is_denied_info">Camera permissions were denied, so the UVC camera could not be called!</string>
+    <string name="please_set_the_correct_resolution_and_fps">Please set the correct resolution and fps</string>
+    <string name="video_frame_rate">Frame rate</string>
+    <string name="video_resolution">Video resolution</string>
+    <string name="turn_on_location_information_tips">Android 9.0 and above requires location information to get the current WiFi name.</string>
 
 </resources>

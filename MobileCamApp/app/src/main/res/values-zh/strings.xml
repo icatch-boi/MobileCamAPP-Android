@@ -211,7 +211,7 @@ $3$"</string>
     <string name="setting_updatefw_failed">更新FW失败</string>
     <string name="setting_updatefw_closeAppInfo">已完成FW更新，请重新启动应用</string>
     <string name="setting_updatefw_completedInfo">已完成FW更新</string>
-    <string name="setting_updatefw_failedInfo">更新FW出错，请重新启动应用</string>
+    <string name="setting_updatefw_failedInfo">更新FW失败，请确认相机是否支持此功能或是否使用正确的固件。</string>
     <string name="setting_auto_download">自动下载</string>
     <string name="setting_auto_download_size_limit">自动下载空间限制</string>
     <string name="setting_card_removed">SD卡未插入，不能进行FW更新</string>
@@ -388,4 +388,10 @@ $3$"</string>
     <string name="wifi_or_password_cannot_be_empty">Wifi name or password cannot be empty.</string>
     <string name="text_btpair_support_bt">新增相机，并且该相机支持蓝牙配对</string>
     <string name="wifi_hotspot_open_failed_info">Wifi热点开启失败，需要手动开启,并设置Wifi热点名称:$1$,密码:$2$。设置完成后，请重新启动并连接。</string>
+    <string name="request_camera_permission_warn_info">Android 9.0及以上版本需要摄像头权限才能调用外部UVC相机。请不用担心，我们不会调用手机的摄像头。</string>
+    <string name="camera_permission_is_denied_info">相机权限被拒绝，无法调用UVC相机!</string>
+    <string name="please_set_the_correct_resolution_and_fps">请配置正确的参数</string>
+    <string name="video_frame_rate">帧率</string>
+    <string name="video_resolution">分辨率</string>
+    <string name="turn_on_location_information_tips">Android 9.0及以上版本需要开启位置信息才能获取当前WiFi名。</string>
 </resources>

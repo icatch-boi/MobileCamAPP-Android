@@ -1974,122 +1974,122 @@ public class CameraProperties {
         return tempList;
     }
 
-    public String getBestResolution() {
-        AppLog.i(tag, "start getBestResolution");
-        String bestResolution = null;
-
-        List<ICatchVideoFormat> tempList = getResolutionList();
-        if (tempList == null || tempList.size() == 0) {
-            return null;
-        }
-        Log.d("1111", "getResolutionList() tempList.size() = " + tempList.size());
-        int tempWidth = 0;
-        int tempHeigth = 0;
-
-        ICatchVideoFormat temp;
-
-        for (int ii = 0; ii < tempList.size(); ii++) {
-            temp = tempList.get(ii);
-            if (temp.getCodec() == ICatchCodec.ICH_CODEC_H264) {
-                if (bestResolution == null) {
-                    bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                }
-
-                if (temp.getVideoW() == 640 && temp.getVideoH() == 360) {
-                    bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                    return bestResolution;
-                } else if (temp.getVideoW() == 640 && temp.getVideoH() == 480) {
-                    if (tempWidth != 640) {
-                        bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                        tempWidth = 640;
-                        tempHeigth = 480;
-                    }
-                } else if (temp.getVideoW() == 720) {
-                    if (tempWidth != 640) {
-                        if (temp.getVideoW() * 9 == temp.getVideoH() * 16)// 16:9优先
-                        {
-                            bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                            tempWidth = 720;
-                            tempHeigth = temp.getVideoH();
-                        } else if (temp.getVideoW() * 3 == temp.getVideoH() * 4)// 4:3
-                        {
-                            if (tempWidth != 720)
-                                bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                            tempWidth = 720;
-                            tempHeigth = temp.getVideoH();
-                        }
-                    }
-                } else if (temp.getVideoW() < tempWidth) {
-                    if (temp.getVideoW() * 9 == temp.getVideoH() * 16)// 16:9优先
-                    {
-                        bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                        tempWidth = temp.getVideoW();
-                        tempHeigth = temp.getVideoH();
-                    } else if (temp.getVideoW() * 3 == temp.getVideoH() * 4)// 4:3
-                    {
-                        if (tempWidth != temp.getVideoW())
-                            bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                        tempWidth = temp.getVideoW();
-                        tempHeigth = temp.getVideoH();
-                    }
-                }
-            }
-        }
-        if (bestResolution != null) {
-            return bestResolution;
-        }
-        for (int ii = 0; ii < tempList.size(); ii++) {
-            temp = tempList.get(ii);
-            if (temp.getCodec() == ICatchCodec.ICH_CODEC_JPEG) {
-                if (bestResolution == null) {
-                    bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                }
-
-                if (temp.getVideoW() == 640 && temp.getVideoH() == 360) {
-                    bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                    return bestResolution;
-                } else if (temp.getVideoW() == 640 && temp.getVideoH() == 480) {
-                    if (tempWidth != 640) {
-                        bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                        tempWidth = 640;
-                        tempHeigth = 480;
-                    }
-                } else if (temp.getVideoW() == 720) {
-                    if (tempWidth != 640) {
-                        if (temp.getVideoW() * 9 == temp.getVideoH() * 16)// 16:9优先
-                        {
-                            bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                            tempWidth = 720;
-                            tempHeigth = temp.getVideoH();
-                        } else if (temp.getVideoW() * 3 == temp.getVideoH() * 4)// 4:3
-                        {
-                            if (tempWidth != 720)
-                                bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                            tempWidth = 720;
-                            tempHeigth = temp.getVideoH();
-                        }
-                    }
-                } else if (temp.getVideoW() < tempWidth) {
-                    if (temp.getVideoW() * 9 == temp.getVideoH() * 16)// 16:9优先
-                    {
-                        bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                        tempWidth = temp.getVideoW();
-                        tempHeigth = temp.getVideoH();
-                    } else if (temp.getVideoW() * 3 == temp.getVideoH() * 4)// 4:3
-                    {
-                        if (tempWidth != temp.getVideoW())
-                            bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
-                        tempWidth = temp.getVideoW();
-                        tempHeigth = temp.getVideoH();
-                    }
-                }
-            }
-        }
-
-        AppLog.i(tag, "end getBestResolution");
-        return bestResolution;
-
-    }
+//    public String getBestResolution() {
+//        AppLog.i(tag, "start getBestResolution");
+//        String bestResolution = null;
+//
+//        List<ICatchVideoFormat> tempList = getResolutionList();
+//        if (tempList == null || tempList.size() == 0) {
+//            return null;
+//        }
+//        Log.d("1111", "getResolutionList() tempList.size() = " + tempList.size());
+//        int tempWidth = 0;
+//        int tempHeigth = 0;
+//
+//        ICatchVideoFormat temp;
+//
+//        for (int ii = 0; ii < tempList.size(); ii++) {
+//            temp = tempList.get(ii);
+//            if (temp.getCodec() == ICatchCodec.ICH_CODEC_H264) {
+//                if (bestResolution == null) {
+//                    bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                }
+//
+//                if (temp.getVideoW() == 640 && temp.getVideoH() == 360) {
+//                    bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                    return bestResolution;
+//                } else if (temp.getVideoW() == 640 && temp.getVideoH() == 480) {
+//                    if (tempWidth != 640) {
+//                        bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                        tempWidth = 640;
+//                        tempHeigth = 480;
+//                    }
+//                } else if (temp.getVideoW() == 720) {
+//                    if (tempWidth != 640) {
+//                        if (temp.getVideoW() * 9 == temp.getVideoH() * 16)// 16:9优先
+//                        {
+//                            bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                            tempWidth = 720;
+//                            tempHeigth = temp.getVideoH();
+//                        } else if (temp.getVideoW() * 3 == temp.getVideoH() * 4)// 4:3
+//                        {
+//                            if (tempWidth != 720)
+//                                bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                            tempWidth = 720;
+//                            tempHeigth = temp.getVideoH();
+//                        }
+//                    }
+//                } else if (temp.getVideoW() < tempWidth) {
+//                    if (temp.getVideoW() * 9 == temp.getVideoH() * 16)// 16:9优先
+//                    {
+//                        bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                        tempWidth = temp.getVideoW();
+//                        tempHeigth = temp.getVideoH();
+//                    } else if (temp.getVideoW() * 3 == temp.getVideoH() * 4)// 4:3
+//                    {
+//                        if (tempWidth != temp.getVideoW())
+//                            bestResolution = "H264?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                        tempWidth = temp.getVideoW();
+//                        tempHeigth = temp.getVideoH();
+//                    }
+//                }
+//            }
+//        }
+//        if (bestResolution != null) {
+//            return bestResolution;
+//        }
+//        for (int ii = 0; ii < tempList.size(); ii++) {
+//            temp = tempList.get(ii);
+//            if (temp.getCodec() == ICatchCodec.ICH_CODEC_JPEG) {
+//                if (bestResolution == null) {
+//                    bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                }
+//
+//                if (temp.getVideoW() == 640 && temp.getVideoH() == 360) {
+//                    bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                    return bestResolution;
+//                } else if (temp.getVideoW() == 640 && temp.getVideoH() == 480) {
+//                    if (tempWidth != 640) {
+//                        bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                        tempWidth = 640;
+//                        tempHeigth = 480;
+//                    }
+//                } else if (temp.getVideoW() == 720) {
+//                    if (tempWidth != 640) {
+//                        if (temp.getVideoW() * 9 == temp.getVideoH() * 16)// 16:9优先
+//                        {
+//                            bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                            tempWidth = 720;
+//                            tempHeigth = temp.getVideoH();
+//                        } else if (temp.getVideoW() * 3 == temp.getVideoH() * 4)// 4:3
+//                        {
+//                            if (tempWidth != 720)
+//                                bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                            tempWidth = 720;
+//                            tempHeigth = temp.getVideoH();
+//                        }
+//                    }
+//                } else if (temp.getVideoW() < tempWidth) {
+//                    if (temp.getVideoW() * 9 == temp.getVideoH() * 16)// 16:9优先
+//                    {
+//                        bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                        tempWidth = temp.getVideoW();
+//                        tempHeigth = temp.getVideoH();
+//                    } else if (temp.getVideoW() * 3 == temp.getVideoH() * 4)// 4:3
+//                    {
+//                        if (tempWidth != temp.getVideoW())
+//                            bestResolution = "MJPG?" + "W=" + temp.getVideoW() + "&H=" + temp.getVideoH() + "&BR=" + temp.getBitrate() + "&";
+//                        tempWidth = temp.getVideoW();
+//                        tempHeigth = temp.getVideoH();
+//                    }
+//                }
+//            }
+//        }
+//
+//        AppLog.i(tag, "end getBestResolution");
+//        return bestResolution;
+//
+//    }
 
     public String getFWDefaultResolution() {
         AppLog.i(tag, "start getFWDefaultResolution");

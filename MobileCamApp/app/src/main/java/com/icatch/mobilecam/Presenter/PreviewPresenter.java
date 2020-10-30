@@ -281,6 +281,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 
 
     public void startOrStopCapture() {
+        int duration = videoCaptureStartBeep.getDuration();
         if (curAppStateMode == PreviewMode.APP_STATE_VIDEO_PREVIEW) {
             if (cameraProperties.isSDCardExist() == false) {
                 AppDialog.showDialogWarn(activity, R.string.dialog_card_not_exist);
@@ -291,6 +292,12 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                 return;
             }
             videoCaptureStartBeep.start();
+            AppLog.d(TAG,"duration:" + duration);
+            try {
+                Thread.sleep(duration);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             lastRecodeTime = System.currentTimeMillis();
             if (cameraAction.startMovieRecord()) {
                 AppLog.i(TAG, "startRecordingLapseTimeTimer(0)");
@@ -299,7 +306,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                 startRecordingLapseTimeTimer(0);
             }
         } else if (curAppStateMode == PreviewMode.APP_STATE_VIDEO_CAPTURE) {
-            videoCaptureStartBeep.start();
+
             if (System.currentTimeMillis() - lastRecodeTime < 2000) {
                 return;
             }
@@ -309,6 +316,8 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                 stopRecordingLapseTimeTimer();
                 previewView.setRemainRecordingTimeText(ConvertTools.secondsToMinuteOrHours(cameraProperties.getRecordingRemainTime()));
             }
+            videoCaptureStartBeep.start();
+
         } else if (curAppStateMode == PreviewMode.APP_STATE_STILL_PREVIEW) {
             previewView.hideZoomView();
             if (cameraProperties.isSDCardExist() == false) {
