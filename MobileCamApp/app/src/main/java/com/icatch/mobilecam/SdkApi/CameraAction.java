@@ -254,17 +254,15 @@ public class CameraAction {
 
     public boolean addEventListener(int eventID, ICatchCameraListener listener) {
         AppLog.i(TAG, "begin addEventListener eventID=" + eventID);
-
         boolean retValue = false;
         try {
-
             retValue = cameraControl.addEventListener(eventID, listener);
-
         } catch (IchListenerExistsException e) {
             // TODO Auto-generated catch block
             AppLog.e(TAG, "IchListenerExistsException");
             e.printStackTrace();
         } catch (IchInvalidSessionException e) {
+            AppLog.e(TAG, "IchInvalidSessionException");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -286,6 +284,7 @@ public class CameraAction {
             e.printStackTrace();
         } catch (IchInvalidSessionException e) {
             // TODO Auto-generated catch block
+            AppLog.e(TAG, "IchInvalidSessionException");
             e.printStackTrace();
         }
         AppLog.i(TAG, "end delEventListener retValue = " + retValue);

@@ -290,10 +290,10 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
                 AppInfo.isDownloading = false;
                 return;
             }
-            MediaRefresh.scanFileAsync(activity, downloadingFilename);
+            MediaRefresh.scanFileAsync(activity, curFilePath);
             AppLog.d(TAG, "end downloadFile temp =" + temp);
             AppInfo.isDownloading = false;
-            final String message = activity.getResources().getString(R.string.message_download_to).replace("$1$", path);
+            final String message = activity.getResources().getString(R.string.message_download_to).replace("$1$", curFilePath);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -363,7 +363,7 @@ public class PhotoPbPresenter extends BasePresenter implements SensorEventListen
     public void showDownloadEnsureDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setCancelable(false);
-        builder.setTitle(R.string.dialog_downloading_single);
+        builder.setTitle(R.string.gallery_download);
         long videoFileSize = 0;
         videoFileSize = fileList.get(curPhotoIdx).getFileSizeInteger() / 1024 / 1024;
         long minute = videoFileSize / 60;

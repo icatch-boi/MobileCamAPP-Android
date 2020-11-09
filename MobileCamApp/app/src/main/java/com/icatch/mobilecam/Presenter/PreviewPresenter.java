@@ -199,7 +199,6 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         stillCaptureStartBeep = MediaPlayer.create(activity, R.raw.captureshutter);
         continuousCaptureBeep = MediaPlayer.create(activity, R.raw.captureburst);
         modeSwitchBeep = MediaPlayer.create(activity, R.raw.focusbeep);
-        GlobalInfo.getInstance().enableConnectCheck(true);
         previewHandler = new PreviewHandler();
         sdkEvent = new SDKEvent(previewHandler);
         if (cameraProperties.hasFuction(0xD7F0)) {
@@ -281,7 +280,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 
 
     public void startOrStopCapture() {
-        int duration = videoCaptureStartBeep.getDuration();
+        final int duration = videoCaptureStartBeep.getDuration();
         if (curAppStateMode == PreviewMode.APP_STATE_VIDEO_PREVIEW) {
             if (cameraProperties.isSDCardExist() == false) {
                 AppDialog.showDialogWarn(activity, R.string.dialog_card_not_exist);
@@ -291,32 +290,65 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                 AppDialog.showDialogWarn(activity, R.string.dialog_sd_card_is_full);
                 return;
             }
-            videoCaptureStartBeep.start();
-            AppLog.d(TAG,"duration:" + duration);
-            try {
-                Thread.sleep(duration);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            lastRecodeTime = System.currentTimeMillis();
-            if (cameraAction.startMovieRecord()) {
-                AppLog.i(TAG, "startRecordingLapseTimeTimer(0)");
-                curAppStateMode = PreviewMode.APP_STATE_VIDEO_CAPTURE;
-                startVideoCaptureButtomChangeTimer();
-                startRecordingLapseTimeTimer(0);
-            }
+            MyProgressDialog.showProgressDialog(activity,R.string.action_processing);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    videoCaptureStartBeep.start();
+                    AppLog.d(TAG,"duration:" + duration);
+                    try {
+                        Thread.sleep(duration);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    lastRecodeTime = System.currentTimeMillis();
+                    final boolean ret = cameraAction.startMovieRecord();
+                    previewHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyProgressDialog.closeProgressDialog();
+                            if (ret) {
+                                AppLog.i(TAG, "startRecordingLapseTimeTimer(0)");
+                                curAppStateMode = PreviewMode.APP_STATE_VIDEO_CAPTURE;
+                                startVideoCaptureButtomChangeTimer();
+                                startRecordingLapseTimeTimer(0);
+                            }else {
+                                MyToast.show(activity,R.string.text_operation_failed);
+                            }
+                        }
+                    });
+
+                }
+            }).start();
+
         } else if (curAppStateMode == PreviewMode.APP_STATE_VIDEO_CAPTURE) {
 
             if (System.currentTimeMillis() - lastRecodeTime < 2000) {
                 return;
             }
-            if (cameraAction.stopVideoCapture()) {
-                curAppStateMode = PreviewMode.APP_STATE_VIDEO_PREVIEW;
-                stopVideoCaptureButtomChangeTimer();
-                stopRecordingLapseTimeTimer();
-                previewView.setRemainRecordingTimeText(ConvertTools.secondsToMinuteOrHours(cameraProperties.getRecordingRemainTime()));
-            }
-            videoCaptureStartBeep.start();
+            MyProgressDialog.showProgressDialog(activity,R.string.action_processing);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final boolean ret = cameraAction.stopVideoCapture();
+                    videoCaptureStartBeep.start();
+                    previewHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyProgressDialog.closeProgressDialog();
+                            if (ret) {
+                                curAppStateMode = PreviewMode.APP_STATE_VIDEO_PREVIEW;
+                                stopVideoCaptureButtomChangeTimer();
+                                stopRecordingLapseTimeTimer();
+                                previewView.setRemainRecordingTimeText(ConvertTools.secondsToMinuteOrHours(cameraProperties.getRecordingRemainTime()));
+                            }else {
+                                MyToast.show(activity,R.string.text_operation_failed);
+                            }
+
+                        }
+                    });
+                }
+            }).start();
 
         } else if (curAppStateMode == PreviewMode.APP_STATE_STILL_PREVIEW) {
             previewView.hideZoomView();
@@ -763,15 +795,32 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 //
 //                }
 //            }, 500);
-            if(!cameraAction.capturePhoto()){
-                MyToast.show(activity,R.string.text_operation_failed);
-            }
-            previewView.setCaptureBtnEnability(true);
+            MyProgressDialog.showProgressDialog(activity,R.string.dialog_capturing);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final boolean ret = cameraAction.capturePhoto();
+                    previewHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!ret){
+                                MyToast.show(activity,R.string.text_operation_failed);
+                            }
+                            previewView.setCaptureBtnEnability(true);
+                            MyProgressDialog.closeProgressDialog();
+                        }
+                    });
+                }
+            }).start();
         }
     }
 
     public synchronized boolean disconnectCamera() {
         if(curCamera != null){
+            GlobalInfo.getInstance().delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_REMOVED);
+            GlobalInfo.getInstance().delEventListener(ICatchCamEventID.ICH_CAM_EVENT_SDCARD_IN);
+            GlobalInfo.getInstance().delEventListener(ICatchCamEventID.ICH_CAM_EVENT_CONNECTION_DISCONNECTED);
+            GlobalInfo.getInstance().delete();
             return curCamera.disconnect();
         }else {
             return false;
@@ -1704,7 +1753,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
 //            cacheTime = 200;
 //        }
 
-        cacheTime = 0;
+        cacheTime = 400;
         AppLog.d(TAG,"setPreviewCacheParam cacheTime:" +cacheTime);
         ICatchPancamConfig.getInstance().setPreviewCacheParam(cacheTime,200);
 //        ICatchPancamConfig.getInstance().enableRTPOverTCP();

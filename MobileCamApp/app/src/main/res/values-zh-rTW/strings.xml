@@ -99,13 +99,9 @@ $1$"</string>
     <string name="gallery_selection_count">已選取$1$/$2$個檔案</string>
     <string name="gallery_delete_des">確認刪除所選擇的$1$個檔案?</string>
     <string name="gallery_download_msg">確認下載$1$個檔案?</string>
-    <string name="gallery_download_with_vid_msg">"檔案數: $1$
-預計需要下載時間: $2$分$3$秒
-
-是否確認下載?"</string>
+    <string name="gallery_download_with_vid_msg">"檔案數: $1$，預計需要下載時間: $2$分$3$秒，是否確認下載?"</string>
     <string name="gallery_download_pic_msg">確認下載$1$張圖片?</string>
-    <string name="gallery_download_msg_2">"確認下載$1$個檔案?
-(跳過$2$個影片檔)"</string>
+    <string name="gallery_download_msg_2">"確認下載$1$個檔案?(跳過$2$個影片檔)"</string>
     <string name="gallery_download">下載</string>
     <string name="gallery_delete">刪除</string>
     <string name="gallery_cancel">取消</string>

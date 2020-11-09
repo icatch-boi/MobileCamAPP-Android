@@ -43,4 +43,6 @@ public interface VideoPbView {
     void setEisSwitchChecked(boolean checked);
 
     void setSeekbarEnabled(boolean b);
+
+    void setDownloadBtnEnabled(boolean b);
 }

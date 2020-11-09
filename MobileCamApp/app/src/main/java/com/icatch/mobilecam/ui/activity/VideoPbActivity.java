@@ -387,6 +387,16 @@ public class VideoPbActivity extends AppCompatActivity implements VideoPbView {
     }
 
     @Override
+    public void setDownloadBtnEnabled(boolean enabled) {
+        downloadBtn.setEnabled(enabled);
+        if (enabled) {
+            downloadBtn.setImageResource(R.drawable.ic_file_download_white_24dp);
+        } else {
+            downloadBtn.setImageResource(R.drawable.ic_file_download_grey_600_24dp);
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         new Handler().postDelayed(new Runnable() {

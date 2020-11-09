@@ -72,17 +72,10 @@ public class ExitApp {
     }
 
     public void finishAllActivity() {
-        List<MyCamera> cameraList = GlobalInfo.getInstance().getCameraList();
-        if (cameraList != null && cameraList.isEmpty() == false) {
-            for (MyCamera camera : cameraList) {
-                if (camera.isConnected() == true) {
-                    FileOperation fileOperation = camera.getFileOperation();
-                    fileOperation.cancelDownload();
-                    camera.disconnect();
-                }
-            }
+        MyCamera curCamera = CameraManager.getInstance().getCurCamera();
+        if(curCamera != null && curCamera.isConnected()){
+            curCamera.disconnect();
         }
-
         AppLog.i(TAG, "start finsh activity");
         if (activityList != null && activityList.isEmpty() == false) {
             for (Activity activity : activityList) {

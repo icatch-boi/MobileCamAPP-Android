@@ -97,11 +97,9 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
     private int curVideoPosition;
     private ExecutorService executor;
     protected Timer downloadProgressTimer;
-    private String downloadingFilename = "";
     private List<MultiPbItemInfo> fileList;
     private SingleDownloadDialog singleDownloadDialog;
     private SDKEvent sdkEvent;
-    private String curFilePath = "";
     private VideoStreaming videoStreaming;
     private boolean enableRender = AppInfo.enableRender;
     private int curPanoramaType = ICatchGLPanoramaType.ICH_GL_PANORAMA_TYPE_SPHERE;
@@ -122,6 +120,12 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         }
         AppLog.i(TAG, "cur video fileType=" + fileType + " position=" + curVideoPosition + " video name=" + curVideoFile.getFileName());
         initClint();
+    }
+
+    @Override
+    public void isAppBackground() {
+        stopVideoStream();
+        super.isAppBackground();
     }
 
     public void updatePbSeekbar(double pts) {
@@ -237,6 +241,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
             videoPbView.setTimeLapsedValue("00:00");
             videoPbView.setTimeDurationValue(ConvertTools.secondsToMinuteOrHours(tempDuration / 100));
             videoPbView.setSeekBarMaxValue(tempDuration);
+            videoPbView.setDownloadBtnEnabled(false);
             // temp attemp to avoid sdk
 //            startVideoPb();
             AppLog.i(TAG, "has start the GetVideoFrameThread() to get play video");
@@ -258,6 +263,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
 //            needUpdateSeekBar = true;
         videoPbView.setPlayBtnSrc(R.drawable.ic_pause_white_36dp);
         videoPbMode = VideoPbMode.MODE_VIDEO_PLAY;
+        videoPbView.setDownloadBtnEnabled(false);
     }
 
     private void pauseVideoPb() {
@@ -272,6 +278,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         videoPbView.setPlayBtnSrc(R.drawable.ic_play_arrow_white_36dp);
         videoPbMode = VideoPbMode.MODE_VIDEO_PAUSE;
         videoPbView.showLoadingCircle(false);
+        videoPbView.setDownloadBtnEnabled(true);
         return;
     }
 
@@ -310,7 +317,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
                             videoPbView.setPlayBtnSrc(R.drawable.ic_pause_white_36dp);
 //                            videoPbView.setPlayCircleImageViewVisibility(View.GONE);
 //                            videoPbView.setDeleteBtnEnabled(false);
-//                            videoPbView.setDownloadBtnEnabled(false);
+                            videoPbView.setDownloadBtnEnabled(false);
                             videoPbView.showLoadingCircle(true);
                         }
                     });
@@ -404,6 +411,7 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         videoPbView.showLoadingCircle(false);
         videoPbView.setSeekbarEnabled(false);
         videoPbMode = VideoPbMode.MODE_VIDEO_IDLE;
+        videoPbView.setDownloadBtnEnabled(true);
         AppLog.i(TAG, "End stopVideoStream");
     }
 
@@ -555,38 +563,19 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
 
     private class DownloadThread implements Runnable {
         private String TAG = "DownloadThread";
-        long fileSize;
         String fileType;
+        private String targetPath;
+
+        DownloadThread(String targetPath){
+            this.targetPath = targetPath;
+        }
 
         @Override
         public void run() {
             AppLog.d(TAG, "begin DownloadThread");
             AppInfo.isDownloading = true;
-            final String path = StorageUtil.getRootPath(activity)  + AppInfo.DOWNLOAD_PATH_VIDEO;
-//            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-//                path = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO;
-//            } else {
-//                handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (singleDownloadDialog != null) {
-//                            singleDownloadDialog.dismissDownloadDialog();
-//                        }
-//                        if (downloadProgressTimer != null) {
-//                            downloadProgressTimer.cancel();
-//                        }
-//                        MyToast.show(activity, R.string.message_download_failed);
-//                    }
-//                });
-//                return;
-//            }
-            String fileName = curVideoFile.getFileName();
-            AppLog.d(TAG, "------------fileName =" + fileName);
-            FileOper.createDirectory(path);
-            downloadingFilename = path + fileName;
-            fileSize = curVideoFile.getFileSize();
-            curFilePath = FileTools.chooseUniqueFilename(downloadingFilename);
-            boolean temp = fileOperation.downloadFile(curVideoFile, curFilePath);
+
+            boolean temp = fileOperation.downloadFile(curVideoFile, targetPath);
             //ICOM-4116 End modify by b.jiang 20170315
             if (temp == false) {
                 handler.post(new Runnable() {
@@ -604,15 +593,15 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
                 AppInfo.isDownloading = false;
                 return;
             }
-            if (fileName.endsWith(".mov") || fileName.endsWith(".MOV")) {
+            if (targetPath.endsWith(".mov") || targetPath.endsWith(".MOV")) {
                 fileType = "video/mov";
             } else {
                 fileType = "video/mp4";
             }
-            MediaRefresh.addMediaToDB(activity, downloadingFilename, fileType);
+            MediaRefresh.addMediaToDB(activity, targetPath, fileType);
             AppLog.d(TAG, "end downloadFile temp =" + temp);
             AppInfo.isDownloading = false;
-            final String message = activity.getResources().getString(R.string.message_download_to).replace("$1$", path);
+            final String message = activity.getResources().getString(R.string.message_download_to).replace("$1$", targetPath);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -696,9 +685,14 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
                     singleDownloadDialog.showDownloadDialog();
 
                     executor = Executors.newSingleThreadExecutor();
-                    executor.submit(new DownloadThread(), null);
+                    String path = StorageUtil.getRootPath(activity)  + AppInfo.DOWNLOAD_PATH_VIDEO;
+                    String fileName = curVideoFile.getFileName();
+                    AppLog.d(TAG, "------------fileName =" + fileName);
+                    FileOper.createDirectory(path);
+                    String downloadFilePath = FileTools.chooseUniqueFilename(path + fileName);
+                    executor.submit(new DownloadThread(downloadFilePath), null);
                     downloadProgressTimer = new Timer();
-                    downloadProgressTimer.schedule(new DownloadProcessTask(), 0, 1000);
+                    downloadProgressTimer.schedule(new DownloadProcessTask(downloadFilePath), 0, 1000);
                 }
             }
         });
@@ -747,13 +741,18 @@ public class VideoPbPresenter extends BasePresenter implements SensorEventListen
         int downloadProgress = 0;
         long fileSize;
         long curFileLength;
+        String curDownloadFile ;
+
+        public DownloadProcessTask(String downloadFile){
+            curDownloadFile = downloadFile;
+        }
 
         @Override
         public void run() {
             //ICOM-4116 Begin Medify by b.jiang 20170315
 //            String path;
 //            path = Environment.getExternalStorageDirectory().toString() + AppInfo.DOWNLOAD_PATH_VIDEO;
-            File file = new File(curFilePath);
+            File file = new File(curDownloadFile);
             //ICOM-4116 End Medify by b.jiang 20170315
             fileSize = curVideoFile.getFileSize();
             curFileLength = file.length();

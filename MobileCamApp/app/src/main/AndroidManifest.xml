@@ -44,16 +44,6 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/FullScreenTheme">
-        <activity android:name=".ui.activity.LaunchHelpActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/help"></activity>
-        <activity
-            android:name=".ui.activity.LicenseAgreementActivity"
-            android:label="@string/title_privacy_policy"
-            android:launchMode="singleTask"
-            android:theme="@style/FullScreenTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.LaunchActivity"
             android:launchMode="singleTask"
@@ -64,11 +54,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
-
-             <meta-data
+            <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter"/>
         </activity>
+        <activity android:name=".ui.activity.LaunchHelpActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/help"></activity>
+        <activity
+            android:name=".ui.activity.LicenseAgreementActivity"
+            android:label="@string/title_privacy_policy"
+            android:launchMode="singleTask"
+            android:theme="@style/FullScreenTheme.NoActionBar" />
+
         <activity
             android:name=".ui.activity.PreviewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

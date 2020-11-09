@@ -2,27 +2,17 @@ package com.icatch.mobilecam.data.GlobalApp;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
-import android.util.LruCache;
 
-import com.icatch.mobilecam.data.type.FileType;
-import com.icatch.mobilecam.ui.appdialog.AppDialog;
-import com.icatch.mobilecam.data.AppInfo.AppInfo;
-import com.icatch.mobilecam.data.entity.LocalPbItemInfo;
-import com.icatch.mobilecam.data.entity.MultiPbItemInfo;
+import com.icatch.mobilecam.Function.SDKEvent;
 import com.icatch.mobilecam.Listener.ScreenListener;
 import com.icatch.mobilecam.Log.AppLog;
-import com.icatch.mobilecam.Function.SDKEvent;
-import com.icatch.mobilecam.MyCamera.MyCamera;
-import com.icatch.mobilecam.R;
+import com.icatch.mobilecam.data.AppInfo.AppInfo;
+import com.icatch.mobilecam.data.entity.LocalPbItemInfo;
 import com.icatch.mobilecam.utils.WifiCheck;
 import com.icatchtek.control.customer.type.ICatchCamEventID;
 
-
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,26 +22,12 @@ public class GlobalInfo {
     private final static String TAG = "GlobalInfo";
     private static GlobalInfo instance;
     private Activity activity;
-    private List<MyCamera> cameraList;
     private SDKEvent sdkEvent;
-    private List<MultiPbItemInfo> remotePhotoList;
-    public List<MultiPbItemInfo> remoteVideoList;
-    private List<MultiPbItemInfo> remoteCommonPhotoList;
-    private List<MultiPbItemInfo> remotePanoramaPhotoList;
-    public LruCache<Integer, Bitmap> mLruCache;
     private List<LocalPbItemInfo> localPhotoList;
     private List<LocalPbItemInfo> localVideoList;
-    private List<LocalPbItemInfo> localCommonPhotoList;
-    private List<LocalPbItemInfo> localPanoramaPhotoList;
-    private String ssid;
     private WifiCheck wifiCheck;
-    private HashMap<Integer, Integer> panoramaPhotoPositionMap;
-    private HashMap<Integer, Integer> commonPhotoPositionMap;
     ScreenListener listener;
-    private HashMap<Integer, Integer> videoPositionMap;
     private OnEventListener onEventListener;
-
-
 
     public static GlobalInfo getInstance() {
         if (instance == null) {
@@ -76,109 +52,16 @@ public class GlobalInfo {
         return activity;
     }
 
-    public List<MyCamera> getCameraList() {
-        return cameraList;
-    }
-
     public List<LocalPbItemInfo> getLocalPhotoList() {
         return localPhotoList;
     }
 
     public void setLocalPhotoList(List<LocalPbItemInfo> localPhotoList) {
         this.localPhotoList = localPhotoList;
-//        initLocalPhotoListInfo();
-    }
-
-    public List<LocalPbItemInfo> getLocalVideoList() {
-        return localVideoList;
     }
 
     public void setLocalVideoList(List<LocalPbItemInfo> localVideoList) {
         this.localVideoList = localVideoList;
-//        initLocalPhotoListInfo();
-    }
-
-
-    private List<MultiPbItemInfo> getRemotePhotoList() {
-        return remotePhotoList;
-    }
-
-    public List<MultiPbItemInfo> getRemoteFileList(FileType fileType) {
-        if(fileType == FileType.FILE_PHOTO){
-            return remotePhotoList;
-        }else {
-            return remoteVideoList;
-        }
-
-    }
-
-    private void setRemotePhotoList(List<MultiPbItemInfo> remotePhotoList) {
-        this.remotePhotoList = remotePhotoList;
-    }
-
-    public void setRemoteFileList(List<MultiPbItemInfo> remoteFileList,FileType fileType) {
-        if(fileType == FileType.FILE_PHOTO){
-            this.remotePhotoList = remoteFileList;
-        }else {
-            this.remoteVideoList = remoteFileList;
-        }
-
-    }
-
-    public void initLocalPhotoListInfo() {
-        if (localPhotoList == null || localPhotoList.isEmpty()) {
-            return;
-        }
-        localCommonPhotoList = new LinkedList<LocalPbItemInfo>();
-        localPanoramaPhotoList = new LinkedList<LocalPbItemInfo>();
-        panoramaPhotoPositionMap = new HashMap<Integer, Integer>();
-        commonPhotoPositionMap = new HashMap<Integer, Integer>();
-        int jj = 0, kk = 0;
-        for (int ii = 0; ii < localPhotoList.size(); ii++) {
-            if (localPhotoList.get( ii ).isPanorama()) {
-                localPanoramaPhotoList.add( localPhotoList.get( ii ) );
-                panoramaPhotoPositionMap.put( ii, jj++ );
-            } else {
-                localCommonPhotoList.add( localPhotoList.get( ii ) );
-                commonPhotoPositionMap.put( ii, kk++ );
-            }
-        }
-    }
-
-    public HashMap<Integer, Integer> getPanoramaPhotoPositionMap() {
-        return panoramaPhotoPositionMap;
-    }
-
-    public HashMap<Integer, Integer> getCommonPhotoPositionMap() {
-        return commonPhotoPositionMap;
-    }
-
-    public void initRemotePhotoListInfo() {
-        if (remotePhotoList == null || remotePhotoList.isEmpty()) {
-            return;
-        }
-        remoteCommonPhotoList = new LinkedList<MultiPbItemInfo>();
-        remotePanoramaPhotoList = new LinkedList<MultiPbItemInfo>();
-        panoramaPhotoPositionMap = new HashMap<Integer, Integer>();
-        commonPhotoPositionMap = new HashMap<Integer, Integer>();
-        int jj = 0, kk = 0;
-        for (int ii = 0; ii < remotePhotoList.size(); ii++) {
-            if (remotePhotoList.get( ii ).isPanorama()) {
-                remotePanoramaPhotoList.add( remotePhotoList.get( ii ) );
-                panoramaPhotoPositionMap.put( ii, jj++ );
-            } else {
-                remoteCommonPhotoList.add( remotePhotoList.get( ii ) );
-                commonPhotoPositionMap.put( ii, kk++ );
-            }
-        }
-    }
-
-    public List<MultiPbItemInfo> getRemoteCommonPhotoList() {
-        return remoteCommonPhotoList;
-    }
-
-    public List<MultiPbItemInfo> getRemotePanoramaPhotoList() {
-        return remotePanoramaPhotoList;
     }
 
     public void startScreenListener() {
@@ -252,13 +135,6 @@ public class GlobalInfo {
         }
     };
 
-    public void enableConnectCheck(boolean enable) {
-        if (sdkEvent == null) {
-            sdkEvent = new SDKEvent( globalHandler );
-        }
-        sdkEvent.addEventListener(ICatchCamEventID.ICH_CAM_EVENT_CONNECTION_DISCONNECTED );
-    }
-
     public void addEventListener(int eventId){
         if (sdkEvent == null) {
             sdkEvent = new SDKEvent(globalHandler);
@@ -270,6 +146,9 @@ public class GlobalInfo {
         if (sdkEvent != null) {
             sdkEvent.delEventListener(eventId);
         }
+    }
+    public void delete(){
+        sdkEvent = null;
     }
 
     public interface OnEventListener{

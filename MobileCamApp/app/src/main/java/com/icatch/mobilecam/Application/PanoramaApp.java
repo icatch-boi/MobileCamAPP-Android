@@ -33,7 +33,7 @@ public class PanoramaApp extends Application {
         Log.d( TAG, "arch =" + arch);
         instance = getApplicationContext();
         //CrashHandler.getInstance().init(this);
-        //initBuglyCrash(this);
+        initBuglyCrash(this);
         ImageLoaderConfig.initImageLoader(getApplicationContext(), null);
     }
 
