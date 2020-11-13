@@ -3,10 +3,10 @@
  */
 package com.icatch.mobilecam.SdkApi;
 
-import android.util.Log;
-
 import com.icatch.mobilecam.DataConvert.BurstConvert;
 import com.icatch.mobilecam.Log.AppLog;
+import com.icatch.mobilecam.MyCamera.CameraManager;
+import com.icatch.mobilecam.MyCamera.MyCamera;
 import com.icatch.mobilecam.data.PropertyId.PropertyId;
 import com.icatchtek.control.customer.ICatchCameraControl;
 import com.icatchtek.control.customer.ICatchCameraProperty;
@@ -21,6 +21,7 @@ import com.icatchtek.reliant.customer.type.ICatchCodec;
 import com.icatchtek.reliant.customer.type.ICatchVideoFormat;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -1311,6 +1312,74 @@ public class CameraProperties {
         }
         AppLog.i(tag, "end setCameraDate retValue =" + retValue);
         return retValue;
+    }
+
+    public boolean setCameraDateTimeZone() {
+        long time = System.currentTimeMillis();
+        Date date = new Date(time);
+        SimpleDateFormat myFmt = new SimpleDateFormat("Z");
+        String tempZone= myFmt.format(date);
+//      以下机型设置会卡住
+//        "Victure/AC920"
+//        "Victure/AC940"
+//        "Crosstour/CT9900"
+//        "Niceboy"
+//        "Model : YDOL3"
+//        "Action Cam"
+//        "Action Cam - 078"
+//        "Action Cam - 258"
+//        "Action Cam - 278"
+//        "Action Cam - 317"
+//        "Action Cam - 386"
+//        "Action Cam - 458"
+        List<String> stringList = Arrays.asList(
+                "Victure/AC920",
+                "Victure/AC940",
+                "Crosstour/CT9900",
+                "Niceboy",
+                "Model : YDOL3",
+                "Action Cam",
+                "Action Cam - 078",
+                "Action Cam - 258",
+                "Action Cam - 278",
+                "Action Cam - 317",
+                "Action Cam - 386",
+                "Action Cam - 458",
+                "Action Camera",
+                "V40");
+        CameraFixedInfo cameraFixedInfo  = CameraManager.getInstance().getCurCamera().getCameraFixedInfo();
+        if(cameraFixedInfo != null){
+            String curCameraName = cameraFixedInfo.getCameraName();
+            if(curCameraName != null && stringList.contains(curCameraName)){
+                AppLog.i(tag, "start setCameraDateTimeZone contains curCameraName:" + curCameraName);
+                return false;
+            }
+        }
+        AppLog.i(tag, "start setCameraDateTimeZone date = " + tempZone);
+        //String tempZoneTest= "--700";
+        boolean retValue = false;
+        try {
+            retValue = cameraProperty.setStringPropertyValue(PropertyId.CAMERA_DATE_TIMEZONE, tempZone);
+        } catch (IchSocketException e) {
+            AppLog.e(tag, "IchSocketException");
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IchCameraModeException e) {
+            AppLog.e(tag, "IchCameraModeException");
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IchInvalidSessionException e) {
+            AppLog.e(tag, "IchInvalidSessionException");
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IchDevicePropException e) {
+            AppLog.e(tag, "IchDevicePropException");
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        AppLog.i(tag, "end setCameraDateTimeZone retValue =" + retValue);
+        return retValue;
+
     }
 
     public boolean setCameraEssidName(String ssidName) {

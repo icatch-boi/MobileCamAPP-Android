@@ -57,9 +57,18 @@ public class PropertyId {
     public final static int CAMERA_SWITCH = 0xD733;
 
 
-
+    //JIRA BSP-1906
+    public final static int CAMERA_DATE_TIMEZONE = 0xD83E;
     //是否进入pv页面
     public final static int DEFALUT_TO_PREVIEW = 0xD72C;
     //pb 分段获取文件
     public final static int CAMERA_PB_LIMIT_NUMBER = 0xD83F;//55359
+
+
+    //-------------------------
+
+    // JIRA ICOM-2246
+    public static final int TIMELAPSE_VIDEO_SIZE_LIST_MASK = 0xD7FB;
+    //Multiple  sensor
+    public final static int MULTIPLE_CAMERA_SENSOR = 0xD729;
 }

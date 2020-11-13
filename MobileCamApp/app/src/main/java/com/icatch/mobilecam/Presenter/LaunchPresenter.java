@@ -499,6 +499,9 @@ public class LaunchPresenter extends BasePresenter {
         if (currentCamera.getCameraProperties().hasFuction(PropertyId.CAMERA_DATE)) {
             currentCamera.getCameraProperties().setCameraDate();
         }
+        if (currentCamera.getCameraProperties().hasFuction(PropertyId.CAMERA_DATE_TIMEZONE)) {
+            currentCamera.getCameraProperties().setCameraDateTimeZone();
+        }
         CameraSlotSQLite.getInstance().update(new CameraSlot(position, true, wifiSsid, CameraType.WIFI_CAMERA, null, true));
         launchHandler.post(new Runnable() {
             @Override
@@ -577,6 +580,9 @@ public class LaunchPresenter extends BasePresenter {
         }
         if (currentCamera.getCameraProperties().hasFuction(PropertyId.CAMERA_DATE)) {
             currentCamera.getCameraProperties().setCameraDate();
+        }
+        if (currentCamera.getCameraProperties().hasFuction(PropertyId.CAMERA_DATE_TIMEZONE)) {
+            currentCamera.getCameraProperties().setCameraDateTimeZone();
         }
         CameraSlotSQLite.getInstance().update(new CameraSlot(position, true, currentCamera.getCameraName(), CameraType.USB_CAMERA, null, true));
         launchHandler.post(new Runnable() {
