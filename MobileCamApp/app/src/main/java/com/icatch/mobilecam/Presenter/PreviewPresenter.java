@@ -805,6 +805,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                         public void run() {
                             if(!ret){
                                 MyToast.show(activity,R.string.text_operation_failed);
+                                curAppStateMode = PreviewMode.APP_STATE_STILL_PREVIEW;
                             }
                             previewView.setCaptureBtnEnability(true);
                             MyProgressDialog.closeProgressDialog();
@@ -1285,20 +1286,33 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
                 case SDKEvent.EVENT_CAPTURE_COMPLETED:
                     AppLog.i(TAG, "receive EVENT_CAPTURE_COMPLETED:curAppStateMode=" + curAppStateMode);
                     if (curAppStateMode == PreviewMode.APP_STATE_STILL_CAPTURE) {
-                        previewView.setCaptureBtnEnability(true);
-                        if (!cameraProperties.hasFuction(0xd704)) {
-                            startPreview();
-                        }
-                        previewView.setCaptureBtnBackgroundResource(R.drawable.still_capture_btn);
-
-                        previewView.setRemainCaptureCount(new Integer(cameraProperties.getRemainImageNum()).toString());
                         curAppStateMode = PreviewMode.APP_STATE_STILL_PREVIEW;
+                        MyProgressDialog.showProgressDialog(activity,R.string.action_processing);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!cameraProperties.hasFuction(0xd704)) {
+                                    startPreview();
+                                }
+                                final String remainImageNum = String.valueOf(cameraProperties.getRemainImageNum());
+                                previewHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        previewView.setCaptureBtnEnability(true);
+                                        previewView.setCaptureBtnBackgroundResource(R.drawable.still_capture_btn);
+                                        previewView.setRemainCaptureCount(remainImageNum);
+                                        MyProgressDialog.closeProgressDialog();
+                                    }
+                                });
+                            }
+                        }).start();
+
                         return;
                     }
                     if (curAppStateMode == PreviewMode.APP_STATE_TIMELAPSE_STILL_CAPTURE) {
                         previewView.setCaptureBtnEnability(true);
                         previewView.setCaptureBtnBackgroundResource(R.drawable.still_capture_btn);
-                        previewView.setRemainCaptureCount(new Integer(cameraProperties.getRemainImageNum()).toString());
+                        previewView.setRemainCaptureCount(String.valueOf(cameraProperties.getRemainImageNum()));
                         MyToast.show(activity, R.string.capture_completed);
                     }
 
@@ -1716,6 +1730,16 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     public void startPreview() {
         AppLog.d(TAG, "start startPreview hasInitSurface=" + hasInitSurface);
         //ICOM-4274 begin add 20170906 b.jiang
+        if (hasInitSurface == false) {
+            return;
+        }
+        if (panoramaPreviewPlayback == null) {
+            AppLog.d(TAG, "null point");
+            return;
+        }
+        if (curCamera.isStreamReady) {
+            return;
+        }
         boolean isSupportPreview = cameraProperties.isSupportPreview();
         AppLog.d(TAG, "start startPreview isSupportPreview=" + isSupportPreview);
         if (!isSupportPreview) {
@@ -1728,16 +1752,7 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
             return;
         }
         //ICOM-4274 end add 20170906 b.jiang
-        if (hasInitSurface == false) {
-            return;
-        }
-        if (panoramaPreviewPlayback == null) {
-            AppLog.d(TAG, "null point");
-            return;
-        }
-        if (curCamera.isStreamReady) {
-            return;
-        }
+
         if (AppInfo.enableDumpVideo) {
             String streamOutputPath = Environment.getExternalStorageDirectory().toString() + AppInfo.STREAM_OUTPUT_DIRECTORY_PATH;
             FileOper.createDirectory(streamOutputPath);

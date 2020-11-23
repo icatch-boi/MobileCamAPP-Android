@@ -12,6 +12,7 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.widget.Toast;
 
 import com.icatch.mobilecam.Function.SDKEvent;
 import com.icatch.mobilecam.Function.streaming.VideoStreaming;
@@ -353,15 +354,24 @@ public class LocalVideoPbPresenter extends BasePresenter implements SensorEventL
             streamStablization.disableStablization();
         }
     }
-
+    private Toast codeInfoToast = null;
+    private long codeInfoLastShowTime = 0;
     private class VideoPbHandler extends Handler {
         public void handleMessage(Message msg) {
             switch (msg.what) {
 
                 case AppMessage.MESSAGE_VIDEO_STREAM_CODEC_INFO:
+                    AppLog.i(TAG, "receive MESSAGE_VIDEO_STREAM_CODEC_INFO");
                     if(msg.obj instanceof String){
+                        if(codeInfoToast == null){
+                            codeInfoToast = MyToast.getToast(activity,(String)msg.obj);
+                        }
+                        if(System.currentTimeMillis() - codeInfoLastShowTime >10000){
+                            codeInfoToast.show();
+                            codeInfoLastShowTime = System.currentTimeMillis();
+                        }
 //                        MyToast.show(activity,(String)msg.obj);
-                        localVideoPbView.setCodecInfoTxv((String)msg.obj);
+//                        localVideoPbView.setCodecInfoTxv((String)msg.obj);
                     }
                     break;
                 case AppMessage.MESSAGE_UPDATE_VIDEOPB_BAR:

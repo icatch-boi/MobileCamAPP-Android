@@ -48,4 +48,16 @@ public class MyToast {
         toast.show();
 
     }
+
+    public static Toast getToast(Context context,String message){
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.my_toast, null);
+        TextView textView = (TextView) view.findViewById(R.id.message_text);
+        Toast toast = new Toast(context);
+        textView.setText(message);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(view);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        return toast;
+    }
 }

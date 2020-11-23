@@ -507,7 +507,7 @@ public class SDKEvent {
 
         @Override
         public void eventNotify(ICatchGLEvent iCatchGLEvent) {
-            AppLog.i( TAG, "--------------receive VideoStreamStatusListener  iCatchGLEvent.getDoubleValue1()="+iCatchGLEvent.getDoubleValue1() );
+//            AppLog.i( TAG, "--------------receive VideoStreamStatusListener  iCatchGLEvent.getDoubleValue1()="+iCatchGLEvent.getDoubleValue1() );
             handler.obtainMessage(EVENT_VIDEO_PLAY_PTS, iCatchGLEvent.getDoubleValue1()).sendToTarget();
         }
     }

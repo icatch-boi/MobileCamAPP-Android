@@ -511,7 +511,7 @@ public class CameraProperties {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        AppLog.i(tag, "end getCurrentVideoSize retValue =" + retValue);
+        AppLog.i(tag, "end setDateStampType retValue =" + retValue);
         return retValue;
     }
 
@@ -863,7 +863,7 @@ public class CameraProperties {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        AppLog.i(tag, "end getsupportedDateStamps list.size() =" + list.size());
+        AppLog.i(tag, "end getsupportedDateStamps list=" + list);
         return list;
     }
 
