@@ -33,7 +33,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <!--如果是安卓10.0，需要后台获取连接的wifi名称则添加进程获取位置信息权限 -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+<!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
     <uses-feature android:name="android.hardware.usb.host" />
 
     <application

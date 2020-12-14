@@ -45,7 +45,7 @@ public class AppInfo {
     public static boolean isDownloading = false;
 //    public static String liveAddress = "";
 
-    public static PhotoWallLayoutType photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
+    public static PhotoWallLayoutType photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
     public static int currentViewpagerPosition = 0;
     public static int curVisibleItem = 0;
     public static boolean enableSoftwareDecoder = false;

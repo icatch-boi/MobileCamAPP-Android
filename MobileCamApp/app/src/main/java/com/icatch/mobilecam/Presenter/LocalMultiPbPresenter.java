@@ -56,7 +56,7 @@ public class LocalMultiPbPresenter extends BasePresenter {
     }
 
     public void reset() {
-        AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
+        AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_LIST;
         AppInfo.currentViewpagerPosition = 0;
         AppInfo.curVisibleItem = 0;
     }

@@ -245,7 +245,7 @@ public class MultiPbFragmentPresenter extends BasePresenter {
     }
 
     public void refreshPhotoWall() {
-        Log.i("1122", "refreshPhotoWall layoutType=" + AppInfo.photoWallLayoutType);
+        Log.i("1122", "refreshPhotoWall");
         if (pbItemInfoList == null || pbItemInfoList.size() <= 0) {
             multiPbPhotoView.setRecyclerViewVisibility(View.GONE);
             multiPbPhotoView.setNoContentTxvVisibility(View.VISIBLE);
@@ -297,7 +297,7 @@ public class MultiPbFragmentPresenter extends BasePresenter {
     }
 
     public synchronized void itemClick(final int position) {
-        AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position + " AppInfo.photoWallPreviewType=" + AppInfo.photoWallLayoutType);
+        AppLog.i(TAG, "listViewSelectOrCancelOnce positon=" + position );
         if (curOperationMode == OperationMode.MODE_BROWSE) {
             AppLog.i(TAG, "listViewSelectOrCancelOnce curOperationMode=" + curOperationMode);
 

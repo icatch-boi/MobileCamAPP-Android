@@ -6,9 +6,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.SimpleTarget;
 
 public class GlideUtils {
 
@@ -82,9 +79,9 @@ public class GlideUtils {
      */
 
     //设置加载动画
-    public static void loadImageViewAnim(Context mContext, String path, int anim, ImageView mImageView) {
-        Glide.with(mContext).load(path).animate(anim).into(mImageView);
-    }
+//    public static void loadImageViewAnim(Context mContext, String path, int anim, ImageView mImageView) {
+//        Glide.with(mContext).load(path).animate(anim).into(mImageView);
+//    }
 
     /**
      * 会先加载缩略图
@@ -106,27 +103,27 @@ public class GlideUtils {
 
     //设置动态GIF加载方式
     public static void loadImageViewDynamicGif(Context mContext, String path, ImageView mImageView) {
-        Glide.with(mContext).load(path).asGif().into(mImageView);
+//        Glide.with(mContext).load(path).asGif().into(mImageView);
     }
 
     //设置静态GIF加载方式
     public static void loadImageViewStaticGif(Context mContext, String path, ImageView mImageView) {
-        Glide.with(mContext).load(path).asBitmap().into(mImageView);
+//        Glide.with(mContext).load(path).asBitmap().into(mImageView);
     }
 
     //设置监听的用处 可以用于监控请求发生错误来源，以及图片来源 是内存还是磁盘
 
     //设置监听请求接口
-    public static void loadImageViewListener(Context mContext, String path, ImageView mImageView, RequestListener<String, GlideDrawable> requstlistener) {
-        Glide.with(mContext).load(path).listener(requstlistener).into(mImageView);
-    }
+//    public static void loadImageViewListener(Context mContext, String path, ImageView mImageView, RequestListener<String, GlideDrawable> requstlistener) {
+//        Glide.with(mContext).load(path).listener(requstlistener).into(mImageView);
+//    }
 
     //项目中有很多需要先下载图片然后再做一些合成的功能，比如项目中出现的图文混排
 
     //设置要加载的内容
-    public static void loadImageViewContent(Context mContext, String path, SimpleTarget<GlideDrawable> simpleTarget) {
-        Glide.with(mContext).load(path).centerCrop().into(simpleTarget);
-    }
+//    public static void loadImageViewContent(Context mContext, String path, SimpleTarget<GlideDrawable> simpleTarget) {
+//        Glide.with(mContext).load(path).centerCrop().into(simpleTarget);
+//    }
 
     //清理磁盘缓存
     public static void GuideClearDiskCache(Context mContext) {

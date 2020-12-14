@@ -74,7 +74,6 @@ public class RemoteMultiPbPresenter extends BasePresenter {
     }
 
     public void reset() {
-        AppInfo.photoWallLayoutType = PhotoWallLayoutType.PREVIEW_TYPE_GRID;
         AppInfo.currentViewpagerPosition = 0;
         AppInfo.curVisibleItem = 0;
         RemoteFileHelper.getInstance().setFileFilter(null);
