@@ -120,7 +120,7 @@ public class LocalMultiPbActivity extends AppCompatActivity implements LocalMult
     @Override
     protected void onStop() {
         super.onStop();
-//        presenter.isAppBackground();
+        presenter.isAppBackground();
     }
 
     @Override

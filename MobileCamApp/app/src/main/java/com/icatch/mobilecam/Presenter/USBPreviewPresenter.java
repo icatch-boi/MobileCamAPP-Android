@@ -556,7 +556,13 @@ public class USBPreviewPresenter extends BasePresenter implements SensorEventLis
                     initImageSize();
                     curImageSize = panoramaPreviewPlayback.getCurImageSize();
                 }
-                ICatchFrameBuffer frameBuffer = new ICatchFrameBuffer(1024 * 1024 * 9);
+                ICatchFrameBuffer frameBuffer;
+                if(curImageSize != null){
+                    AppLog.d(TAG, "startPhotoCapture curImageSize w=" + curImageSize.getImageW() + " h=" + curImageSize.getImageH());
+                    frameBuffer = new ICatchFrameBuffer(curImageSize.getImageW() * curImageSize.getImageH() * 2);
+                }else {
+                    frameBuffer = new ICatchFrameBuffer(3840 * 1920 * 2);
+                }
                 final boolean retValue = panoramaPreviewPlayback.snapImage(frameBuffer, 5000);
                 if (retValue) {
                     if (frameBuffer != null && frameBuffer.getFrameSize() > 0) {
@@ -592,7 +598,7 @@ public class USBPreviewPresenter extends BasePresenter implements SensorEventLis
             }
         }
 //        path = Environment.getExternalStorageDirectory().toString() + "/bitmapSave11/";
-        String fileName = "snap_" + System.currentTimeMillis() + ".jpg";
+        String fileName = "snap_" + System.currentTimeMillis() + ".JPG";
         File file = new File(directory, fileName);
         if (!file.exists()) {
             try {

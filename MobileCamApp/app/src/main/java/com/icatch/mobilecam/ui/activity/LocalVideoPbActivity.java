@@ -247,6 +247,7 @@ public class LocalVideoPbActivity extends AppCompatActivity implements LocalVide
     @Override
     protected void onStop() {
         super.onStop();
+        presenter.isAppBackground();
 
     }
 

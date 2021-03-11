@@ -65,7 +65,7 @@ public class SdkLog {
 
     private void initUsbLog(String path) {
         ICatchUsbTransportLog.getInstance().setFileLogPath(path);
-        ICatchUsbTransportLog.getInstance().setDebugMode(false);
+        ICatchUsbTransportLog.getInstance().setDebugMode(true);
         ICatchUsbTransportLog.getInstance().setFileLogOutput(true);
         ICatchUsbTransportLog.getInstance().setSystemLogOutput(true);
     }
