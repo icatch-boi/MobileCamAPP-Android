@@ -302,7 +302,7 @@
             android:layout_margin="10dp"
             android:text="@string/google_account"
             android:textSize="@dimen/space_10"
-            android:theme="@style/ThemeOverlay.MyDarkButton"/>
+            android:theme="@style/ThemeOverlay.MyDarkButton" />
 
         <Button
             android:id="@+id/youtube_live_btn"
@@ -312,7 +312,7 @@
             android:layout_margin="10dp"
             android:text="@string/start_youtube_live"
             android:textSize="@dimen/space_10"
-            android:theme="@style/ThemeOverlay.MyDarkButton"/>
+            android:theme="@style/ThemeOverlay.MyDarkButton" />
 
         <Button
             android:id="@+id/facebook_live_btn"
@@ -324,7 +324,19 @@
             android:textSize="@dimen/space_10"
             android:theme="@style/ThemeOverlay.MyDarkButton"
             />
+        <Button
+            android:id="@+id/customer_live_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:text="Start customer live"
+            android:textSize="@dimen/space_10"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            />
     </LinearLayout>
+
+
 
     <RelativeLayout
         android:id="@+id/buttomBar"

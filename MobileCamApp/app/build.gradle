@@ -9,12 +9,12 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 2
-        versionName "V1.2.0_beta34"
+        versionName "V1.2.0_beta35"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
         ndk {
             //设置支持的SO库架构
-            abiFilters 'armeabi-v7a', 'arm64-v8a','armeabi', 'x86','x86_64'
+            abiFilters  'armeabi-v7a','arm64-v8a','armeabi', 'x86','x86_64'
         }
     }
     buildTypes {

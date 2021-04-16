@@ -51,6 +51,7 @@ public class SdkLog {
         ICatchPancamLog.getInstance().setLogLevel(ICatchGLLogType.ICH_GL_LOG_TYPE_STREAM, ICatchGLLogLevel.ICH_GL_LOG_LEVEL_INFO);
     }
 
+
     private void initCameraLog(String path) {
         ICatchCameraLog.getInstance().setDebugMode(true);
         ICatchCameraLog.getInstance().setFileLogPath(path);

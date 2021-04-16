@@ -106,6 +106,7 @@ public interface PreviewView {
     void setMinZoomRate(float minZoomRate);
 	void setFacebookBtnTxv(String value);
     void setYouTubeBtnTxv(String value);
+    void setCustomerLiveBtnTxv(String value);
 	void setFacebookBtnTxv(int resId);
     void setYouTubeBtnTxv(int resId);
 

@@ -58,6 +58,7 @@ import com.icatch.mobilecam.SdkApi.CameraState;
 import com.icatch.mobilecam.SdkApi.FileOperation;
 import com.icatch.mobilecam.SdkApi.PanoramaPreviewPlayback;
 import com.icatch.mobilecam.data.AppInfo.AppInfo;
+import com.icatch.mobilecam.data.AppInfo.AppSharedPreferences;
 import com.icatch.mobilecam.data.CustomException.NullPointerException;
 import com.icatch.mobilecam.data.GlobalApp.GlobalInfo;
 import com.icatch.mobilecam.data.Message.AppMessage;
@@ -97,6 +98,7 @@ import com.icatchtek.control.customer.type.ICatchCamProperty;
 import com.icatchtek.pancam.customer.ICatchPancamConfig;
 import com.icatchtek.pancam.customer.exception.IchGLSurfaceNotSetException;
 import com.icatchtek.pancam.customer.surface.ICatchSurfaceContext;
+import com.icatchtek.pancam.customer.type.ICatchGLCredential;
 import com.icatchtek.pancam.customer.type.ICatchGLPanoramaType;
 import com.icatchtek.pancam.customer.type.ICatchGLPoint;
 import com.icatchtek.pancam.customer.type.ICatchGLSurfaceType;
@@ -1133,6 +1135,214 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
         }).start();
     }
 
+    public void startOrStopYouTubeLiveForSdk() {
+        if (!isLive) {
+            final String directoryPath = activity.getExternalCacheDir() + AppInfo.PROPERTY_CFG_DIRECTORY_PATH;
+            final String fileName = AppInfo.FILE_GOOGLE_TOKEN;
+            final GoogleToken googleToken = (GoogleToken) FileTools.readSerializable(directoryPath + fileName);
+            AppLog.d(TAG, "refreshAccessToken googleToken=" + googleToken);
+            final String accessToken = googleToken.getAccessToken();
+            final String refreshToken = googleToken.getRefreshToken();
+            AppLog.d(TAG, "readSerializable accessToken=" + accessToken);
+            AppLog.d(TAG, "readSerializable refreshToken=" + refreshToken);
+
+//            final GoogleToken googleToken = null;
+            if (googleToken != null && googleToken.getAccessToken() != null) {
+//                final String refreshToken = googleToken.getRefreshToken();
+                MyToast.show(activity, "readSerializable RefreshToken=" + refreshToken);
+                MyProgressDialog.showProgressDialog(activity, R.string.action_processing);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        AppLog.d(TAG, "refreshAccessToken accessToken=" + accessToken);
+                        googleToken.setCurrentAccessToken(accessToken);
+                        FileTools.saveSerializable(directoryPath + fileName, googleToken);
+                        final String finalAccessToken = accessToken;
+                        previewHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                MyProgressDialog.closeProgressDialog();
+                                MyToast.show(activity, "start live");
+//                                    startYoutubeLive();
+                                startYoutubeLiveForSdk(finalAccessToken,refreshToken);
+                            }
+                        }, 1000);
+
+                    }
+                }).start();
+
+            } else {
+                MyToast.show(activity, "You are not logged in, please login to google account!");
+            }
+
+        } else {
+            if (liveMode != LiveMode.MODE_YOUTUBE_LIVE) {
+                MyToast.show(activity, "Please stop other live!");
+                return;
+            }
+            AppLog.d(TAG, "stop push publish...");
+            MyProgressDialog.showProgressDialog(activity, R.string.action_processing);
+            stopYoutubeLiveForSdk();
+        }
+    }
+
+    void startYoutubeLiveForSdk(final String accessToken,final String refreshToken ) {
+        AppLog.d(TAG, "startYoutubeLiveForSdk");
+        final String client_id = GoogleAuthTool.CLIENT_ID;
+        final String client_secret = GoogleAuthTool.CLIENT_SECRET;
+        MyProgressDialog.showProgressDialog(activity, R.string.wait);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ICatchGLCredential credential = new ICatchGLCredential(accessToken, refreshToken, client_id, client_secret);
+                AppLog.d(TAG, "credential getAccessToken=" + credential.getAccessToken());
+                AppLog.d(TAG, "credential getRefreshToken=" + credential.getRefreshToken());
+                AppLog.d(TAG, "credential getClientId=" + credential.getClientId());
+                AppLog.d(TAG, "credential getClientSecret=" + credential.getClientSecret());
+                String push_addr = panoramaPreviewPlayback.createChannel(credential, "720p", "360Live", true);
+                if (push_addr == null || push_addr.equals("")) {
+                    previewHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyProgressDialog.closeProgressDialog();
+                            previewView.setYouTubeBtnTxv(R.string.start_youtube_live);
+                            MyToast.show(activity, "Failed to Youtube live,pushUrl is null!");
+                        }
+                    });
+                    return;
+                }
+                AppLog.d(TAG, " publish broadcast stream push addr: " + push_addr);
+                boolean ret = panoramaPreviewPlayback.startPublishStreaming(push_addr);// 开始推流
+                if (!ret) {
+                    previewHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyProgressDialog.closeProgressDialog();
+                            previewView.setYouTubeBtnTxv(R.string.start_youtube_live);
+                            MyToast.show(activity, "Failed to startPublishStreaming!");
+                        }
+                    });
+                    return;
+                }
+                final String shared_addr = panoramaPreviewPlayback.startLive();//开始直播
+                AppLog.d(TAG, "publish broadcast stream share addr: " + shared_addr);
+                if (shared_addr == null || shared_addr.equals("")) {//直播失败
+                    panoramaPreviewPlayback.stopPublishStreaming();//停止推流
+                    panoramaPreviewPlayback.deleteChannel();//删除直播频道
+                    previewHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyProgressDialog.closeProgressDialog();
+                            previewView.setYouTubeBtnTxv(R.string.start_youtube_live);
+                            MyToast.show(activity, "Failed to YouTube live,shareUrl is null!");
+                        }
+                    });
+                    return;
+                } else {
+                    previewHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyProgressDialog.closeProgressDialog();
+                            isLive = true;
+                            liveMode = LiveMode.MODE_YOUTUBE_LIVE;
+                            previewView.setYouTubeBtnTxv(R.string.end_youtube_live);
+                            showSharedUrlDialog(activity, shared_addr);
+                        }
+                    });
+                    return;
+                }
+            }
+        }).start();
+    }
+
+    void stopYoutubeLiveForSdk() {
+        AppLog.d(TAG, "stopYoutubeLiveForSdk");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final boolean ret = panoramaPreviewPlayback.stopPublishStreaming();
+                panoramaPreviewPlayback.stopLive();
+                previewHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyProgressDialog.closeProgressDialog();
+                        if (ret == false) {
+                            MyToast.show(activity, "Failed to stop living publish!");
+                        } else {
+                            MyToast.show(activity, "Succed to stop living publish!");
+                        }
+                        isLive = false;
+                        previewView.setYouTubeBtnTxv(R.string.start_youtube_live);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    public void startCustomerUrlPublish() {
+        AppLog.d(TAG, "startStreamPublishUrl");
+        if(!isLive){
+            String defUrl ="rtmp://push.bgaitech.com/bgvs/9be27b7ae50d341b726243f3b9fdafe2?auth_key=1618371419-571081517ce24b409983f4ad4b67d077-0-b7bc46565ad46613fe6eb405b8f4c839";
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
+            View contentView = View.inflate(activity, R.layout.input_ip, null);
+            final EditText resetTxv = (EditText) contentView.findViewById(R.id.ip_address);
+            resetTxv.setText(defUrl);
+            builder.setTitle("Set rtmp url");
+            builder.setView(contentView);
+            builder.setCancelable(false);
+            builder.setPositiveButton(activity.getResources().getString(R.string.ok)
+                    // 为按钮设置监听器
+                    , new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final String url  = resetTxv.getText().toString();
+                            if(url == null ||url.isEmpty()){
+                                MyToast.show(activity,"Url cannot be empty.");
+                                return;
+                            }
+                            MyProgressDialog.showProgressDialog(activity,"开始直播");
+                            previewView.setCustomerLiveBtnTxv("Stop customer live");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final boolean ret = panoramaPreviewPlayback.startPublishStreaming(url);
+                                    isLive = ret;
+                                    previewHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            MyProgressDialog.closeProgressDialog();
+                                            if (ret == false) {
+                                                MyToast.show(activity, R.string.message_failed_to_start_publish_streaming);
+                                                previewView.setCustomerLiveBtnTxv("Start customer live");
+                                            }
+                                        }
+                                    });
+                                }
+                            }).start();
+
+                        }
+                    });
+            // 为对话框设置一个“取消”按钮
+            builder.setNegativeButton(activity.getResources().getString(R.string.gallery_cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //取消登录，不做任何事情。
+                }
+            });
+            //创建、并显示对话框
+            builder.create().show();
+
+
+        }else {
+            boolean ret = panoramaPreviewPlayback.stopPublishStreaming();
+            isLive = false;
+            previewView.setCustomerLiveBtnTxv("Start customer live");
+        }
+
+    }
+
     public void gotoGoogleAccountManagement() {
         if (isLive) {
             MyToast.show(activity, R.string.message_please_stop_live);
@@ -1579,6 +1789,10 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     @Override
     public void finishActivity() {
         Tristate ret = Tristate.NORMAL;
+        if(isLive){
+            panoramaPreviewPlayback.stopPublishStreaming();
+            isLive = false;
+        }
         if (previewView.getSetupMainMenuVisibility() == View.VISIBLE) {
             AppLog.i(TAG, "onKeyDown curAppStateMode==" + curAppStateMode);
             previewView.setSetupMainMenuVisibility(View.GONE);

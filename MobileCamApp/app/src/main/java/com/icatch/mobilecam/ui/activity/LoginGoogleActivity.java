@@ -301,7 +301,7 @@ public class LoginGoogleActivity extends AppCompatActivity implements GoogleApiC
                 try {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     final String message = jsonObject.toString(5);
-                    Log.i(TAG, message);
+                    AppLog.i(TAG, message);
                     refreshToken = getRefreshTokenFromJson(jsonObject);
                     accessToken = getAccessTokenFromJson(jsonObject);
 

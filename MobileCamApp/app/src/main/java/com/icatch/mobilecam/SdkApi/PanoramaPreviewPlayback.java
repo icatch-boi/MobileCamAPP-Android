@@ -306,14 +306,16 @@ public class PanoramaPreviewPlayback {
     }
 
     public boolean startPublishStreaming(String rtmpUrl) {
-        AppLog.d(TAG, "start startPublishStreaming ");
+
         boolean ret = false;
         ICatchIStreamPublish streamPublish = getStreamPublish();
         if (streamPublish == null) {
             AppLog.d(TAG, "streamPublish is null");
             return false;
         }
+        AppLog.d(TAG, "start startPublishStreaming ");
         try {
+
             ret = streamPublish.startPublishStreaming(rtmpUrl);
         } catch (Exception e) {
             AppLog.d(TAG, "Exception e:" + e.getClass().getSimpleName());
@@ -324,7 +326,7 @@ public class PanoramaPreviewPlayback {
     }
 
     public boolean stopPublishStreaming() {
-        AppLog.d(TAG, "start stopPublishStreaming ");
+
         boolean ret = false;
         ICatchIStreamPublish streamPublish = getStreamPublish();
         if (streamPublish == null) {
@@ -332,6 +334,7 @@ public class PanoramaPreviewPlayback {
             return false;
         }
         try {
+            AppLog.d(TAG, "start stopPublishStreaming ");
             ret = streamPublish.stopPublishStreaming();
         } catch (Exception e) {
             AppLog.d(TAG, "Exception e:" + e.getClass().getSimpleName());

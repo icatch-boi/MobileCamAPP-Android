@@ -85,6 +85,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 	private Button facebookLiveBtn;
     private Button youtubeLiveBtn;
     private Button googleAccountBtn;
+    private Button customerLiveBtn;
     private LinearLayout liveLayout;
     private ImageButton panoramaTypeBtn;
 
@@ -107,6 +108,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         facebookLiveBtn = (Button) findViewById(R.id.facebook_live_btn);
         youtubeLiveBtn = (Button) findViewById(R.id.youtube_live_btn);
+        customerLiveBtn = findViewById(R.id.customer_live_btn);
         googleAccountBtn = (Button) findViewById(R.id.google_account_btn);
         liveLayout = (LinearLayout) findViewById(R.id.live_layout);
         mSurfaceView = (SurfaceView) findViewById(R.id.preview);
@@ -162,9 +164,17 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         youtubeLiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                presenter.startOrStopYouTubeLive();
                 if (!ClickUtils.isFastDoubleClick(view)) {
-                    presenter.startYouTubeLive();
+                    presenter.startOrStopYouTubeLiveForSdk();
+                }
+            }
+        });
+
+        customerLiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!ClickUtils.isFastDoubleClick(view)) {
+                    presenter.startCustomerUrlPublish();
                 }
             }
         });
@@ -622,6 +632,11 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void setYouTubeBtnTxv(String value) {
         youtubeLiveBtn.setText(value);
+    }
+
+    @Override
+    public void setCustomerLiveBtnTxv(String value){
+        customerLiveBtn.setText(value);
     }
 
     @Override
