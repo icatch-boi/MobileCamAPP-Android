@@ -233,8 +233,8 @@ public class LocalVideoPbPresenter extends BasePresenter implements SensorEventL
                 AppLog.i(TAG, "failed to pausePlayback");
                 return;
             }
-            removeEventListener();
-            removeGyroscopeListener();
+//            removeEventListener();
+//            removeGyroscopeListener();
             localVideoPbView.setPlayBtnSrc(R.drawable.ic_play_arrow_white_36dp);
 //            localVideoPbView.showZoomView(View.VISIBLE);
             videoPbMode = VideoPbMode.MODE_VIDEO_PAUSE;

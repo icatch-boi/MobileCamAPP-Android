@@ -1284,11 +1284,12 @@ public class PreviewPresenter extends BasePresenter implements SensorEventListen
     public void startCustomerUrlPublish() {
         AppLog.d(TAG, "startStreamPublishUrl");
         if(!isLive){
+            String youtubeUrl = "rtmp://a.rtmp.youtube.com/live2/3fur-h6bh-as8j-w7wd-d7us";
             String defUrl ="rtmp://push.bgaitech.com/bgvs/9be27b7ae50d341b726243f3b9fdafe2?auth_key=1618371419-571081517ce24b409983f4ad4b67d077-0-b7bc46565ad46613fe6eb405b8f4c839";
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
             View contentView = View.inflate(activity, R.layout.input_ip, null);
             final EditText resetTxv = (EditText) contentView.findViewById(R.id.ip_address);
-            resetTxv.setText(defUrl);
+            resetTxv.setText(youtubeUrl);
             builder.setTitle("Set rtmp url");
             builder.setView(contentView);
             builder.setCancelable(false);
