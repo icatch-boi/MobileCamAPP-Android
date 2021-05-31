@@ -326,7 +326,22 @@ public class WifiAPUtil {
     }
 
 
+    public static String getLocalIPAddressFromWifiInfo(Context context)
+    {
+        WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+        if(wifi != null){
+            WifiInfo info = wifi.getConnectionInfo();
+//            String macAdress = info.getMacAddress(); //获取mac地址
+            int ipAddress = info.getIpAddress();  //获取ip地址
+            String ip = intIP2StringIP(ipAddress);
+            return ip;
+        }else {
+            return "";
+        }
+    }
 
-
+    public static String intIP2StringIP(int ip) {
+        return (ip & 0xFF) + "." +  ((ip >> 8) & 0xFF) + "." +  ((ip >> 16) & 0xFF) + "." + (ip >> 24 & 0xFF);
+    }
 
 }

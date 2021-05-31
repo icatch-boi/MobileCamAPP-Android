@@ -16,6 +16,7 @@ import com.icatch.mobilecam.SdkApi.PanoramaPhotoPlayback;
 import com.icatch.mobilecam.SdkApi.PanoramaPreviewPlayback;
 import com.icatch.mobilecam.SdkApi.PanoramaVideoPlayback;
 import com.icatch.mobilecam.data.type.TimeLapseMode;
+import com.icatch.mobilecam.utils.WifiAPUtil;
 import com.icatchtek.control.customer.ICatchCameraSession;
 import com.icatchtek.pancam.customer.ICatchPancamSession;
 import com.icatchtek.reliant.customer.exception.IchInvalidArgumentException;
@@ -94,7 +95,9 @@ public class MyCamera {
         panoramaSession = new PanoramaSession();
 //        ICatchITransport transport = null;
         if (cameraType == CameraType.WIFI_CAMERA) {
-            transport = new ICatchINETTransport(ipAddress);
+            String localIP = WifiAPUtil.getLocalIPAddressFromWifiInfo(PanoramaApp.getContext());
+            AppLog.d(TAG,"getLocalIPAddressFromWifiInfo:" + localIP);
+            transport = new ICatchINETTransport(ipAddress,localIP);
         } else if (cameraType == CameraType.USB_CAMERA) {
             USBHost_Feature feature = new USBHost_Feature(PanoramaApp.getContext());
             feature.setUsbDevice(usbDevice.getVendorId(), usbDevice.getProductId());
